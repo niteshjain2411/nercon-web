@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NERCON 2026 | Online Registration</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0ea5e9;
+            --accent: #059669;
+            --light-bg: #f0f9ff;
+            --dark-text: #1f2937;
+            --border-color: #e5e7eb;
+            --danger: #dc2626;
+            --success: #059669;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-text);
+            background: #f5f5f5;
+        }
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+        /* Main Container */
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .form-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .form-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .form-header p {
+            opacity: 0.95;
+            margin: 0;
+        }
+        .form-content {
+            padding: 2rem;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--dark-text);
+        }
+        label .required {
+            color: var(--danger);
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* Category Selection */
+        .category-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .category-card {
+            position: relative;
+        }
+        .category-card input[type="radio"] {
+            display: none;
+        }
+        .category-label {
+            display: block;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .category-card input[type="radio"]:checked + .category-label {
+            border-color: var(--secondary);
+            background: var(--light-bg);
+            color: var(--primary);
+        }
+        /* Workshop Selection */
+        .workshop-item {
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .workshop-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--secondary);
+        }
+        .workshop-details {
+            flex: 1;
+        }
+        .workshop-details h4 {
+            margin: 0 0 0.25rem;
+            color: var(--primary);
+        }
+        .workshop-details p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        .fee-badge {
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+        /* Terms Box */
+        .terms-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .terms-box ul {
+            margin: 0.5rem 0 0 1.5rem;
+            padding: 0;
+        }
+        .terms-box li {
+            margin-bottom: 0.5rem;
+        }
+        /* Summary */
+        .summary-box {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        .summary-box h3 {
+            margin: 0 0 0.5rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        .summary-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        button,
+        .btn {
+            flex: 1;
+            padding: 0.9rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.3);
+        }
+        /* Success Message */
+        .success-message {
+            background: var(--light-bg);
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            display: none;
+        }
+        .success-message h2 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        .success-message p {
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+        .delegate-id {
+            background: white;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        /* Page Sections */
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        /* Terms Page Styles */
+        .terms-content h2 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 1rem;
+            text-align: center;
+        }
+        .terms-content ol {
+            margin-left: 1.5rem;
+            line-height: 2;
+        }
+        .terms-content li {
+            margin-bottom: 1.5rem;
+            color: var(--dark-text);
+            font-size: 0.95rem;
+        }
+        .terms-content strong {
+            color: var(--primary);
+        }
+        @media (max-width: 768px) {
+            .form-content {
+                padding: 1.5rem;
+            }
+            .form-header h1 {
+                font-size: 1.5rem;
+            }
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+<div class="container">
+    <div class="form-header">
+        <h1>NERCON 2026 Registration</h1>
+        <p>Complete this form to register for the 35th Annual Conference</p>
+    </div>
+    <div class="form-content">
+
+        <!-- PAGE 1: TERMS AND CONDITIONS -->
+        <div id="page1" class="page active">
+            <div class="terms-content">
+                <h2>TERMS AND CONDITIONS</h2>
+                <ol>
+                    <li><strong>Delegates registering under PG student category</strong> will need to upload a letter/certificate signed by Head of Department.</li>
+                    <li><strong>Registered accompanying persons</strong> will enjoy access to the Conference venue along with the meal services and banquet dinner.</li>
+                    <li><strong>Payment can be made</strong> using the UPI transfer or NEFT transfer. Please check the total amount carefully before transfer. Please note the Transaction ID and date. It is preferable to preserve the screenshot of the transaction details till you receive confirmation mail from the organizing team.</li>
+                    <li><strong>For any difficulty in Registration process,</strong> kindly e-mail <strong>nercon2026@gmail.com</strong></li>
+                </ol>
+            </div>
+            <div class="button-group" style="margin-top: 2rem;">
+                <button type="button" class="btn-primary" onclick="proceedToRegistration()">PROCEED</button>
+            </div>
+        </div>
+
+        <!-- PAGE 2: REGISTRATION FORM -->
+        <div id="page2" class="page">
+            <form id="registrationForm" onsubmit="handleSubmit(event)">
+                <!-- Personal Information -->
+                <div class="section-title">1. Personal Information</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullname">Full Name <span class="required">*</span></label>
+                        <input type="text" id="fullname" name="fullname" placeholder="Dr./Mr./Ms. Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" placeholder="your.email@domain.com" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Mobile (preferably WhatsApp enabled)<span class="required">*</span></label>
+                        <input type="tel" id="phone" name="phone" placeholder="+91 XXXXXXXXXX" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender <span class="required">*</span></label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="institute">Institute/Hospital <span class="required">*</span></label>
+                        <input type="text" id="institute" name="institute" placeholder="Name of Institute/Hospital" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City <span class="required">*</span></label>
+                        <input type="text" id="city" name="city" placeholder="City" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="state">State <span class="required">*</span></label>
+                        <input type="text" id="state" name="state" placeholder="State/Province" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="medcouncil">Name of Medical Council <span class="required">*</span></label>
+                        <input type="text" id="medcouncil" name="medcouncil" placeholder="e.g., MCI, State Medical Council" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="registration">Medical Council Reg. No. <span class="required">*</span></label>
+                        <input type="text" id="registration" name="registration" placeholder="Registration Number" required>
+                    </div>
+                </div>
+
+                <!-- Workshop Selection -->
+                <div class="section-title">2. Workshop Selection (Max 2)</div>
+                <div class="form-group">
+                    <label>Select up to 2 non-overlapping workshops:</label>
+                    <div class="workshop-item">
+                        <input type="checkbox" id="ws0" name="workshop" value="ws0" data-fee="0">
+                        <div class="workshop-details">
+                            <h4>No workshop</h4>
+                            <p>I DO NOT WISH TO ATTEND ANY WORKSHOP</p>
+                        </div>
+                    </div>
+                    <div class="workshop-item">
+                        <input type="checkbox" id="ws1" name="workshop" value="ws1" data-fee="2000">
+                        <div class="workshop-details">
+                            <h4>Workshop 1: GI Pathology</h4>
+                            <p>9:00 AM - 12:30 PM | Advanced diagnostic techniques</p>
+                        </div>
+                        <span class="fee-badge">Rs 2,000</span>
+                    </div>
+                    <div class="workshop-item">
+                        <input type="checkbox" id="ws2" name="workshop" value="ws2" data-fee="2000">
+                        <div class="workshop-details">
+                            <h4>Workshop 2: Neuropathology</h4>
+                            <p>1:30 PM - 5:00 PM | Specialized techniques</p>
+                        </div>
+                        <span class="fee-badge">Rs 2,000</span>
+                    </div>
+                    <div class="workshop-item">
+                        <input type="checkbox" id="ws3" name="workshop" value="ws3" data-fee="2000">
+                        <div class="workshop-details">
+                            <h4>Workshop 3: Digital Pathology & AI</h4>
+                            <p>9:00 AM - 4:00 PM | Full-day comprehensive session</p>
+                        </div>
+                        <span class="fee-badge">Rs 2,000</span>
+                    </div>
+                </div>
+
+                <!-- Accompanying Persons -->
+                <div class="section-title">3. Accompanying Persons</div>
+                <div class="form-group">
+                    <label for="accompany">Number of Accompanying Persons <span class="required">*</span></label>
+                    <select id="accompany" name="accompany" onchange="updateTotal()" required>
+                        <option value="0">None</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+
+                <!-- Fee Summary -->
+                <div class="summary-box">
+                    <h3>Total Payable Amount</h3>
+                    <p class="summary-amount">Rs <span id="totalAmount">0</span></p>
+                </div>
+
+                <!-- Payment Details -->
+                <div class="section-title">4. Payment & Documents</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="txnid">Transaction ID <span class="required">*</span></label>
+                        <input type="text" id="txnid" name="txnid" placeholder="UPI/NEFT Reference" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txndate">Transaction Date <span class="required">*</span></label>
+                        <input type="date" id="txndate" name="txndate" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hoddoc">HOD Certificate (PG Students Only)</label>
+                        <input type="file" id="hoddoc" name="hoddoc" accept=".pdf,.jpg,.jpeg,.png">
+                    </div>
+                    <div class="form-group">
+                        <label for="paymentss">Payment Screenshot <span class="required">*</span></label>
+                        <input type="file" id="paymentss" name="paymentss" accept="image/*" required>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="button-group">
+                    <button type="button" class="btn-primary" onclick="backToTerms()" style="background: #6b7280;">BACK</button>
+                    <button type="submit" class="btn-primary">SUBMIT APPLICATION</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="success-message">
+            <h2>✓ Registration Successful!</h2>
+            <p>Thank you for registering for NERCON 2026</p>
+            <div class="delegate-id">
+                Delegate ID: <span id="delegateId">NER-2026-XXXXX</span>
+            </div>
+            <p>A confirmation email will be sent within 2-3 working days with further details.</p>
+        </div>
+    </div>
+</div>
+<div id="footer-placeholder"></div>
+<script src="./template-loader.js"></script>
+<script>
+    const workshopCheckboxes = document.querySelectorAll("input[name='workshop']");
+    const totalAmountSpan = document.getElementById("totalAmount");
+    const form = document.getElementById("registrationForm");
+    const successMessage = document.getElementById("successMessage");
+
+    // Page Navigation Functions
+    function proceedToRegistration() {
+        document.getElementById("page1").classList.remove("active");
+        document.getElementById("page2").classList.add("active");
+        window.scrollTo(0, 0);
+    }
+
+    function backToTerms() {
+        document.getElementById("page2").classList.remove("active");
+        document.getElementById("page1").classList.add("active");
+        window.scrollTo(0, 0);
+    }
+
+    // Workshop validation
+    workshopCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", function() {
+            const checked = document.querySelectorAll("input[name='workshop']:checked").length;
+            if (checked > 2) {
+                this.checked = false;
+                alert("Maximum 2 workshops allowed");
+            }
+            updateTotal();
+        });
+    });
+
+    // Calculate total fee
+    function updateTotal() {
+        let total = 0;
+        workshopCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                total += parseInt(checkbox.getAttribute("data-fee")) || 0;
+            }
+        });
+        const accompanyCnt = parseInt(document.getElementById("accompany").value) || 0;
+        total += accompanyCnt * 1500;
+        totalAmountSpan.textContent = total.toLocaleString();
+    }
+
+    // Form submission
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        // Collect form data
+        const workshopCheckboxes = document.querySelectorAll("input[name='workshop']:checked");
+        const selectedWorkshops = Array.from(workshopCheckboxes).map(cb => cb.value);
+
+        const delegateId = "NER-2026-" + Math.floor(100000 + Math.random() * 900000);
+
+        const registrationData = {
+            fullname: document.getElementById("fullname").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            gender: document.getElementById("gender").value,
+            institute: document.getElementById("institute").value,
+            city: document.getElementById("city").value,
+            state: document.getElementById("state").value,
+            medcouncil: document.getElementById("medcouncil").value,
+            registration: document.getElementById("registration").value,
+            workshops: selectedWorkshops,
+            accompany: document.getElementById("accompany").value,
+            txnid: document.getElementById("txnid").value,
+            txndate: document.getElementById("txndate").value,
+            totalAmount: document.getElementById("totalAmount").textContent,
+            delegateId: delegateId
+        };
+
+        // Send data to backend
+        fetch('/nercon/api/registration/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(registrationData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Show success message
+            document.getElementById("page2").classList.remove("active");
+            document.getElementById("successMessage").style.display = "block";
+            document.getElementById("delegateId").textContent = delegateId;
+            document.getElementById("successMessage").scrollIntoView({ behavior: "smooth" });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Error submitting registration. Please try again.');
+        });
+    }
+
+    // Initialize
+    updateTotal();
+</script>
+</body>
+</html>
+

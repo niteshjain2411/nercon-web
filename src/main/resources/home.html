@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NERCON 2026 | Medical Conference - AIIMS Guwahati</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0ea5e9;
+            --accent: #059669;
+            --light-bg: #f0f9ff;
+            --dark-text: #1f2937;
+            --border-color: #e5e7eb;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-text);
+            background: #ffffff;
+        }
+        /* Header & Navigation */
+        header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .hero .subtitle {
+            font-size: 1.3rem;
+            margin: 0.5rem 0;
+            opacity: 0.95;
+        }
+        .hero .dates {
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            font-weight: 600;
+        }
+        .cta-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.9rem 2.5rem;
+            background: white;
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        .section {
+            padding: 4rem 0;
+        }
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        .about-text p {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        .theme-box {
+            background: linear-gradient(135deg, var(--accent) 0%, #10b981 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .highlight-item {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+        .highlight-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(14,165,233,0.1);
+        }
+        .highlight-item h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        /* Key Info Section */
+        .key-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        .info-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            text-align: center;
+            border-top: 4px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+        .info-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            transform: translateY(-5px);
+        }
+        .info-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+        .info-card p {
+            color: #6b7280;
+            margin: 0;
+        }
+        /* Program Section */
+        .program-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .program-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .program-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            border-color: var(--secondary);
+        }
+        .program-card-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+        }
+        .program-card-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+        .program-card-body {
+            padding: 1.5rem;
+        }
+        .program-card-body p {
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            .highlight-grid {
+                grid-template-columns: 1fr;
+            }
+            .section {
+                padding: 2rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+<section class="hero">
+    <div class="hero-content">
+        <h1>NERCON 2026</h1>
+        <p class="subtitle">35th Annual Conference of the North Eastern Regional Chapter</p>
+        <p class="subtitle">Indian Association of Pathologists and Microbiologists</p>
+        <div class="dates">
+            <strong>November 12-14, 2026</strong><br>
+            AIIMS Guwahati, India
+        </div>
+        <a href="./registration.html" class="cta-button">Register Now</a>
+    </div>
+</section>
+<div class="container">
+    <section class="section" id="about">
+        <h2 class="section-title">About the Conference</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>The Department of Pathology and Laboratory Medicine at AIIMS Guwahati cordially invites delegates, practitioners, and specialists to the 35th Annual Conference of NERCON 2026. This premier event brings together pathologists, microbiologists, and healthcare professionals from across the Northeast region.</p>
+                <p>Guwahati, situated on the banks of the majestic Brahmaputra River, offers the perfect backdrop for this prestigious conference. The city is known for its natural beauty, welcoming hospitality, and growing medical infrastructure.</p>
+                <p>NERCON 2026 is designed to enhance your knowledge and keep you updated with the latest advances in pathology and microbiology. The conference will feature keynote lectures from renowned experts, interactive workshops, panel discussions, and cutting-edge research presentations.</p>
+            </div>
+            <div>
+                <div class="theme-box">
+                    🔬 Theme<br>
+                    "Cells, Tissues, Insights"
+                </div>
+                <div class="highlight-grid">
+                    <div class="highlight-item">
+                        <h4>✓ Expert Speakers</h4>
+                        <p>National & International leaders in pathology</p>
+                    </div>
+                    <div class="highlight-item">
+                        <h4>✓ Workshops</h4>
+                        <p>Hands-on learning sessions</p>
+                    </div>
+                    <div class="highlight-item">
+                        <h4>✓ Digital Pathology</h4>
+                        <p>AI & emerging technologies</p>
+                    </div>
+                    <div class="highlight-item">
+                        <h4>✓ Networking</h4>
+                        <p>Connect with peers & colleagues</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section" id="key-info">
+        <h2 class="section-title">Key Information</h2>
+        <div class="key-info">
+            <div class="info-card">
+                <h3>📅 Event Dates</h3>
+                <p>November 12-14, 2026</p>
+            </div>
+            <div class="info-card">
+                <h3>📍 Venue</h3>
+                <p>AIIMS Guwahati, India</p>
+            </div>
+            <div class="info-card">
+                <h3>👥 Expected Attendees</h3>
+                <p>500+ Delegates</p>
+            </div>
+            <div class="info-card">
+                <h3>🎓 CME Credits</h3>
+                <p>Accredited Program</p>
+            </div>
+        </div>
+    </section>
+    <section class="section" id="program">
+        <h2 class="section-title">Conference Highlights</h2>
+        <div class="program-grid">
+            <div class="program-card">
+                <div class="program-card-header">
+                    <h3>Keynote Sessions</h3>
+                </div>
+                <div class="program-card-body">
+                    <p><strong>Eminent speakers</strong> presenting latest research and clinical updates in pathology and microbiology.</p>
+                    <p>Topics include digital pathology, precision medicine, and diagnostic innovations.</p>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-card-header">
+                    <h3>Interactive Workshops</h3>
+                </div>
+                <div class="program-card-body">
+                    <p><strong>Hands-on sessions</strong> covering GI Pathology, Neuropathology, and specialized diagnostic techniques.</p>
+                    <p>Maximum 2 workshops per delegate with flexible scheduling.</p>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-card-header">
+                    <h3>Research Presentations</h3>
+                </div>
+                <div class="program-card-body">
+                    <p><strong>Original research</strong> and case presentations by pathologists and microbiologists.</p>
+                    <p>Opportunity to showcase your work to the medical community.</p>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-card-header">
+                    <h3>Panel Discussions</h3>
+                </div>
+                <div class="program-card-body">
+                    <p><strong>Expert panels</strong> discussing emerging challenges and opportunities in the field.</p>
+                    <p>Interactive Q&A sessions with leading professionals.</p>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-card-header">
+                    <h3>Networking Events</h3>
+                </div>
+                <div class="program-card-body">
+                    <p><strong>Social gatherings</strong> to connect with colleagues and peers.</p>
+                    <p>Welcoming banquet and cultural evening highlighting local traditions.</p>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-card-header">
+                    <h3>Explore Guwahati</h3>
+                </div>
+                <div class="program-card-body">
+                    <p><strong>Post-conference tours</strong> to iconic landmarks and cultural sites.</p>
+                    <p>Experience Assam's heritage, including the famous Kamakhya Temple.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<div id="footer-placeholder"></div>
+<script src="./template-loader.js"></script>
+</body>
+</html>
