@@ -15,6 +15,12 @@ import java.util.List;
 public class ExcelService {
     private static final String EXCEL_FILE_PATH = "registrations/NERCON_2026_Registrations.xlsx";
     private static final String BACKUP_FOLDER = "registrations";
+    private static final String[] HEADERS = {
+        "S.No", "Delegate ID", "Full Name", "Email", "Phone", "Gender",
+        "Institute", "City", "State", "Medical Council", "Registration No.",
+        "Workshops", "Accompanying Persons", "Total Amount", "Transaction ID",
+        "Transaction Date", "Submission Time", "Designation"
+    };
 
     public ExcelService() {
         // Create backup folder if it doesn't exist
@@ -41,12 +47,13 @@ public class ExcelService {
                 FileInputStream fis = new FileInputStream(file);
                 workbook = new XSSFWorkbook(fis);
                 sheet = workbook.getSheetAt(0);
+                ensureHeaderRow(sheet);
                 rowCount = sheet.getPhysicalNumberOfRows();
                 fis.close();
             } else {
                 workbook = new XSSFWorkbook();
                 sheet = workbook.createSheet("Registrations");
-                createHeaderRow(sheet);
+                ensureHeaderRow(sheet);
                 rowCount = 1;
             }
 
@@ -55,7 +62,7 @@ public class ExcelService {
             fillRegistrationRow(row, registration, rowCount);
 
             // Auto-size columns
-            for (int i = 0; i < 15; i++) {
+            for (int i = 0; i < 18; i++) {
                 sheet.autoSizeColumn(i);
             }
 
@@ -80,12 +87,6 @@ public class ExcelService {
      */
     private void createHeaderRow(Sheet sheet) {
         Row headerRow = sheet.createRow(0);
-        String[] headers = {
-            "S.No", "Delegate ID", "Full Name", "Email", "Phone", "Gender",
-            "Institute", "City", "State", "Medical Council", "Registration No.",
-            "Workshops", "Accompanying Persons", "Total Amount", "Transaction ID",
-            "Transaction Date", "Submission Time"
-        };
 
         CellStyle headerStyle = sheet.getWorkbook().createCellStyle();
         Font headerFont = sheet.getWorkbook().createFont();
@@ -97,10 +98,16 @@ public class ExcelService {
         headerStyle.setAlignment(HorizontalAlignment.CENTER);
         headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 
-        for (int i = 0; i < headers.length; i++) {
+        for (int i = 0; i < HEADERS.length; i++) {
             Cell cell = headerRow.createCell(i);
-            cell.setCellValue(headers[i]);
+            cell.setCellValue(HEADERS[i]);
             cell.setCellStyle(headerStyle);
+        }
+    }
+
+    private void ensureHeaderRow(Sheet sheet) {
+        if (sheet.getRow(0) == null || sheet.getRow(0).getPhysicalNumberOfCells() < HEADERS.length) {
+            createHeaderRow(sheet);
         }
     }
 
@@ -186,6 +193,10 @@ public class ExcelService {
         // Submission Time
         Cell cell16 = row.createCell(16);
         cell16.setCellValue(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        // Designation
+        Cell cell17 = row.createCell(17);
+        cell17.setCellValue(registration.getDesignation());
     }
 
     /**
@@ -221,6 +232,7 @@ public class ExcelService {
                     reg.setTotalAmount(getCellValueAsString(row.getCell(13)));
                     reg.setTxnid(getCellValueAsString(row.getCell(14)));
                     reg.setTxndate(getCellValueAsString(row.getCell(15)));
+                    reg.setDesignation(getCellValueAsString(row.getCell(17)));
 
                     registrations.add(reg);
                 }

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NERCON 2026 | Medical Conference - AIIMS Guwahati</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #1e3a8a;
@@ -48,6 +50,17 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .header-logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
         nav ul {
             list-style: none;
             display: flex;
@@ -76,7 +89,9 @@
         }
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background:
+                linear-gradient(135deg, rgba(8, 24, 58, 0.78) 0%, rgba(13, 39, 92, 0.58) 45%, rgba(9, 26, 63, 0.82) 100%),
+                url('./AIIMS-Guwahati.jpg') center center / cover no-repeat;
             color: white;
             padding: 6rem 2rem;
             text-align: center;
@@ -86,12 +101,9 @@
         .hero::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 500px;
-            height: 500px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 35%, rgba(0,0,0,0.18) 100%);
+            z-index: 1;
         }
         .hero-content {
             position: relative;
@@ -99,37 +111,103 @@
             max-width: 900px;
             margin: 0 auto;
         }
+        .hero-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .hero-logos img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: white;
+            padding: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
         .hero h1 {
-            font-size: 3rem;
+            font-size: 3.8rem;
             margin-bottom: 1rem;
-            font-weight: 700;
+            font-weight: 900;
             line-height: 1.2;
+            font-family: 'Cinzel', 'Georgia', serif;
+            background: linear-gradient(180deg,
+                #fff5c0 0%,
+                #f5d060 20%,
+                #d4a017 50%,
+                #b8860b 75%,
+                #8b6400 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.06em;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
         }
         .hero .subtitle {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             margin: 0.5rem 0;
+            font-family: 'Cinzel', 'Georgia', serif;
+                color: #f5d060;
+                background: none;
+                -webkit-text-fill-color: #f5d060;
+                -webkit-background-clip: border-box;
+                background-clip: border-box;
+                text-shadow: 0 2px 6px rgba(0,0,0,0.35);
             opacity: 0.95;
         }
         .hero .dates {
-            font-size: 1.1rem;
+            font-size: 1.6rem;
             margin-top: 1.5rem;
             font-weight: 600;
         }
         .cta-button {
             display: inline-block;
             margin-top: 2rem;
-            padding: 0.9rem 2.5rem;
-            background: white;
-            color: var(--primary);
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, #f5d060 0%, #d4a017 50%, #f5d060 100%);
+            background-size: 200% auto;
+            color: #1a1a00;
             text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 20px rgba(212,160,23,0.6), 0 6px 20px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.4);
+            animation: pulse-glow 2s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -75%;
+            width: 50%;
+            height: 200%;
+            background: rgba(255,255,255,0.25);
+            transform: skewX(-20deg);
+            animation: shine 3s ease-in-out infinite;
+        }
+        @keyframes shine {
+            0%   { left: -75%; }
+            50%  { left: 125%; }
+            100% { left: 125%; }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(212,160,23,0.6), 0 6px 20px rgba(0,0,0,0.3); }
+            50%      { box-shadow: 0 0 35px rgba(245,208,96,0.9), 0 8px 30px rgba(0,0,0,0.4); }
         }
         .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background-position: right center;
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 0 45px rgba(245,208,96,1), 0 12px 35px rgba(0,0,0,0.4);
+            color: #0a0a00;
         }
         /* Main Content */
         .container {
@@ -285,8 +363,12 @@
                 gap: 1rem;
                 text-align: center;
             }
+            .hero-logos img {
+                width: 70px;
+                height: 70px;
+            }
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.4rem;
             }
             .about-content {
                 grid-template-columns: 1fr;
@@ -303,13 +385,13 @@
 <body>
 <div id="header-placeholder"></div>
 <section class="hero">
-    <div class="hero-content">
+    <div class="hero-content">       
         <h1>NERCON 2026</h1>
         <p class="subtitle">35th Annual Conference of the North Eastern Regional Chapter</p>
         <p class="subtitle">Indian Association of Pathologists and Microbiologists</p>
         <div class="dates">
             <strong>November 12-14, 2026</strong><br>
-            AIIMS Guwahati, India
+            All India Institute of Medical Sciences (AIIMS) Guwahati, Assam, India
         </div>
         <a href="./registration.html" class="cta-button">Register Now</a>
     </div>
@@ -324,9 +406,9 @@
                 <p>NERCON 2026 is designed to enhance your knowledge and keep you updated with the latest advances in pathology and microbiology. The conference will feature keynote lectures from renowned experts, interactive workshops, panel discussions, and cutting-edge research presentations.</p>
             </div>
             <div>
-                <div class="theme-box">
-                    🔬 Theme<br>
-                    "Cells, Tissues, Insights"
+                <div>
+                    <img src="./nercon_2026.gif" alt="NERCON 2026" style="max-width: 280px; width: 100%; margin: 0 auto 0.75rem; display: block; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));">
+                    
                 </div>
                 <div class="highlight-grid">
                     <div class="highlight-item">

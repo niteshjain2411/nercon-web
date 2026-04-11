@@ -13,6 +13,7 @@ public class RegistrationData implements Serializable {
     private String state;
     private String medcouncil;
     private String registration;
+    private String designation;
     private List<String> workshops;
     private String accompany;
     private String txnid;
@@ -26,7 +27,7 @@ public class RegistrationData implements Serializable {
 
     public RegistrationData(String fullname, String email, String phone, String gender,
                             String institute, String city, String state, String medcouncil,
-                            String registration, List<String> workshops, String accompany,
+                            String registration, String designation, List<String> workshops, String accompany,
                             String txnid, String txndate, String totalAmount, String delegateId) {
         this.fullname = fullname;
         this.email = email;
@@ -37,6 +38,7 @@ public class RegistrationData implements Serializable {
         this.state = state;
         this.medcouncil = medcouncil;
         this.registration = registration;
+        this.designation = designation;
         this.workshops = workshops;
         this.accompany = accompany;
         this.txnid = txnid;
@@ -116,6 +118,14 @@ public class RegistrationData implements Serializable {
 
     public void setRegistration(String registration) {
         this.registration = registration;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
     }
 
     public List<String> getWorkshops() {

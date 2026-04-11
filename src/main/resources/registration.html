@@ -50,6 +50,17 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .header-logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
         nav ul {
             list-style: none;
             display: flex;
@@ -473,7 +484,7 @@
                 <div class="section-title">1. Personal Information</div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="fullname">Full Name <span class="required">*</span></label>
+                        <label for="fullname">Full Name (as required on the certificate)<span class="required">*</span></label>
                         <input type="text" id="fullname" name="fullname" placeholder="Dr./Mr./Ms. Your Name" required>
                     </div>
                     <div class="form-group">
@@ -520,6 +531,10 @@
                     <div class="form-group">
                         <label for="registration">Medical Council Reg. No. <span class="required">*</span></label>
                         <input type="text" id="registration" name="registration" placeholder="Registration Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="designation">Designation <span class="required">*</span></label>
+                        <input type="text" id="designation" name="designation" placeholder="Designation" required>
                     </div>
                 </div>
 
@@ -706,6 +721,7 @@
             state: document.getElementById("state").value,
             medcouncil: document.getElementById("medcouncil").value,
             registration: document.getElementById("registration").value,
+            designation: document.getElementById("designation").value,
             workshops: selectedWorkshops,
             accompany: document.getElementById("accompany").value,
             txnid: document.getElementById("txnid").value,

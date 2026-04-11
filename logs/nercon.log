@@ -1,13 +1,26 @@
-2026-04-06T20:31:48.974+05:30  INFO 13340 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : Starting NerconApplication using Java 24.0.1 with PID 13340 (D:\Work\nercon-web\target\classes started by hp in D:\Work\nercon-web)
-2026-04-06T20:31:48.995+05:30 DEBUG 13340 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : Running with Spring Boot v3.2.0, Spring v6.1.1
-2026-04-06T20:31:48.998+05:30  INFO 13340 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : No active profile set, falling back to 1 default profile: "default"
-2026-04-06T20:31:52.158+05:30  INFO 13340 --- [NERCON 2026 Registration System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2026-04-06T20:31:52.194+05:30  INFO 13340 --- [NERCON 2026 Registration System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-04-06T20:31:52.195+05:30  INFO 13340 --- [NERCON 2026 Registration System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
-2026-04-06T20:31:52.415+05:30  INFO 13340 --- [NERCON 2026 Registration System] [main] o.a.c.c.C.[.[localhost].[/nercon]        : Initializing Spring embedded WebApplicationContext
-2026-04-06T20:31:52.416+05:30  INFO 13340 --- [NERCON 2026 Registration System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3176 ms
-2026-04-06T20:31:53.637+05:30  INFO 13340 --- [NERCON 2026 Registration System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/nercon'
-2026-04-06T20:31:53.653+05:30  INFO 13340 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : Started NerconApplication in 6.076 seconds (process running for 7.34)
-2026-04-06T20:32:00.838+05:30  INFO 13340 --- [NERCON 2026 Registration System] [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/nercon]        : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-04-06T20:32:00.840+05:30  INFO 13340 --- [NERCON 2026 Registration System] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-04-06T20:32:00.842+05:30  INFO 13340 --- [NERCON 2026 Registration System] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-04-11T18:53:01.146+05:30  INFO 12660 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : Starting NerconApplication using Java 23.0.2 with PID 12660 (D:\Karmicraft Workspace\nercon-web-main\target\classes started by Rupanjal Bhowmick in D:\Karmicraft Workspace\nercon-web-main)
+2026-04-11T18:53:01.158+05:30 DEBUG 12660 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-04-11T18:53:01.159+05:30  INFO 12660 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : No active profile set, falling back to 1 default profile: "default"
+2026-04-11T18:53:02.515+05:30  INFO 12660 --- [NERCON 2026 Registration System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-04-11T18:53:02.550+05:30  INFO 12660 --- [NERCON 2026 Registration System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-11T18:53:02.552+05:30  INFO 12660 --- [NERCON 2026 Registration System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-04-11T18:53:02.639+05:30  INFO 12660 --- [NERCON 2026 Registration System] [main] o.a.c.c.C.[.[localhost].[/nercon]        : Initializing Spring embedded WebApplicationContext
+2026-04-11T18:53:02.640+05:30  INFO 12660 --- [NERCON 2026 Registration System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1341 ms
+2026-04-11T18:53:03.174+05:30  INFO 12660 --- [NERCON 2026 Registration System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/nercon'
+2026-04-11T18:53:03.187+05:30  INFO 12660 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : Started NerconApplication in 2.65 seconds (process running for 3.153)
+2026-04-11T18:53:21.218+05:30  INFO 12660 --- [NERCON 2026 Registration System] [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/nercon]        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-11T18:53:21.227+05:30  INFO 12660 --- [NERCON 2026 Registration System] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-11T18:53:21.238+05:30  INFO 12660 --- [NERCON 2026 Registration System] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2026-04-11T19:27:24.754+05:30  INFO 2576 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : Starting NerconApplication using Java 23.0.2 with PID 2576 (D:\Karmicraft Workspace\nercon-web-main\target\classes started by Rupanjal Bhowmick in D:\Karmicraft Workspace\nercon-web-main)
+2026-04-11T19:27:24.757+05:30 DEBUG 2576 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-04-11T19:27:24.764+05:30  INFO 2576 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : No active profile set, falling back to 1 default profile: "default"
+2026-04-11T19:27:26.280+05:30  INFO 2576 --- [NERCON 2026 Registration System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-04-11T19:27:26.309+05:30  INFO 2576 --- [NERCON 2026 Registration System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-11T19:27:26.312+05:30  INFO 2576 --- [NERCON 2026 Registration System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-04-11T19:27:26.558+05:30  INFO 2576 --- [NERCON 2026 Registration System] [main] o.a.c.c.C.[.[localhost].[/nercon]        : Initializing Spring embedded WebApplicationContext
+2026-04-11T19:27:26.562+05:30  INFO 2576 --- [NERCON 2026 Registration System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1630 ms
+2026-04-11T19:27:27.383+05:30  INFO 2576 --- [NERCON 2026 Registration System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/nercon'
+2026-04-11T19:27:27.402+05:30  INFO 2576 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : Started NerconApplication in 3.539 seconds (process running for 4.463)
+2026-04-11T19:28:29.660+05:30  INFO 2576 --- [NERCON 2026 Registration System] [http-nio-8080-exec-2] o.a.c.c.C.[.[localhost].[/nercon]        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-11T19:28:29.662+05:30  INFO 2576 --- [NERCON 2026 Registration System] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-11T19:28:29.666+05:30  INFO 2576 --- [NERCON 2026 Registration System] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NERCON 2026 | Help</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0ea5e9;
+            --accent: #059669;
+            --light-bg: #f0f9ff;
+            --surface: #ffffff;
+            --dark-text: #1f2937;
+            --muted-text: #4b5563;
+            --border-color: #e5e7eb;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-text);
+            background:
+                radial-gradient(circle at top left, rgba(14, 165, 233, 0.12), transparent 28%),
+                radial-gradient(circle at bottom right, rgba(30, 58, 138, 0.10), transparent 32%),
+                linear-gradient(180deg, #f6fbff 0%, #ffffff 22%, #f8fbff 100%);
+        }
+        header { background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; }
+        .logo-text { font-weight: 700; font-size: 1.8rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .logo-area { display: flex; align-items: center; gap: 0.75rem; }
+        .header-logo { width: 48px; height: 48px; object-fit: contain; border-radius: 50%; }
+        nav ul { list-style: none; display: flex; gap: 2.5rem; }
+        nav ul li a { text-decoration: none; color: var(--dark-text); font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease; position: relative; }
+        nav ul li a:after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--secondary); transition: width 0.3s ease; }
+        nav ul li a:hover:after { width: 100%; }
+
+        .page-banner {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(135deg, rgba(8, 24, 58, 0.78), rgba(14, 165, 233, 0.50)),
+                url('./AIIMS-Guwahati.jpg') center center / cover no-repeat;
+            color: white;
+            padding: 4.5rem 2rem 4rem;
+            text-align: center;
+        }
+        .page-banner h1 {
+            position: relative;
+            font-size: 2.9rem;
+            font-weight: 700;
+            font-family: 'Cinzel', 'Georgia', serif;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.04em;
+        }
+        .page-banner p {
+            position: relative;
+            font-size: 1.05rem;
+            opacity: 0.96;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .help-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem 4.5rem;
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 2rem;
+            align-items: start;
+        }
+        .help-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(248,251,255,0.94));
+            border-radius: 24px;
+            box-shadow: 0 24px 56px rgba(15, 23, 42, 0.10);
+            border: 1px solid rgba(229, 231, 235, 0.85);
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 1.6rem 1.8rem 1.1rem;
+            background: radial-gradient(circle at top right, rgba(14, 165, 233, 0.16), transparent 35%), linear-gradient(180deg, #f4fbff, #eef8ff);
+            border-bottom: 1px solid rgba(14, 165, 233, 0.16);
+        }
+        .card-header h2 {
+            font-size: 1.55rem;
+            color: var(--primary);
+        }
+        .card-body {
+            padding: 1.7rem 1.8rem 1.9rem;
+        }
+        .address-block {
+            padding: 1rem 1.1rem;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.06), rgba(14, 165, 233, 0.08));
+            border: 1px solid rgba(14, 165, 233, 0.14);
+            margin-bottom: 1.25rem;
+        }
+        .address-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #0f4c81;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.35rem;
+        }
+        .address-text {
+            font-size: 1rem;
+            color: #1f2937;
+        }
+        .travel-list {
+            list-style: none;
+            display: grid;
+            gap: 0.95rem;
+            margin-top: 1rem;
+        }
+        .travel-list li {
+            padding: 1rem 1rem 1rem 3rem;
+            position: relative;
+            border-radius: 16px;
+            background: var(--surface);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+            color: #334155;
+        }
+        .travel-list li:before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 1.15rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            box-shadow: 0 0 0 6px rgba(14, 165, 233, 0.10);
+        }
+        .map-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .map-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 220px;
+            padding: 0.95rem 1.4rem;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .map-button.primary {
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 12px 28px rgba(30, 58, 138, 0.24);
+        }
+        .map-button.secondary {
+            color: var(--primary);
+            background: rgba(14, 165, 233, 0.08);
+            border: 1px solid rgba(14, 165, 233, 0.18);
+        }
+        .map-button:hover {
+            transform: translateY(-2px);
+        }
+        .route-image {
+            width: 100%;
+            display: block;
+            border-radius: 18px;
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+            border: 1px solid rgba(229, 231, 235, 0.85);
+        }
+        .image-caption {
+            margin-top: 0.9rem;
+            color: var(--muted-text);
+            font-size: 0.96rem;
+            text-align: center;
+        }
+
+        footer { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; text-align: center; padding: 2rem; margin-top: 0; }
+
+        @media (max-width: 900px) {
+            .help-container { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 1rem; }
+            nav ul { flex-direction: column; gap: 1rem; text-align: center; }
+            .page-banner { padding: 3.5rem 1rem 3rem; }
+            .page-banner h1 { font-size: 2rem; }
+            .help-container { padding: 1.5rem 1rem; }
+            .map-actions { flex-direction: column; }
+            .map-button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<section class="page-banner">
+    <h1>Help &amp; Directions</h1>
+    <p>Find the fastest way to reach AIIMS Guwahati and open directions instantly in Google Maps.</p>
+</section>
+
+<div class="help-container">
+    <div class="help-card">
+        <div class="card-header">
+            <h2>Reaching AIIMS Guwahati</h2>
+        </div>
+        <div class="card-body">
+            <div class="address-block">
+                <span class="address-label">Address</span>
+                <div class="address-text">All India Institute of Medical Sciences, Changsari, Kamrup, Assam 781101, India</div>
+            </div>
+
+            <ul class="travel-list">
+                <li><strong>From Lokpriya Gopinath Bordoloi Airport:</strong> AIIMS Guwahati is approximately 27 km away and can be reached by taxi or app-based cab services.</li>
+                <li><strong>From Kamakhya Railway Station:</strong> The campus is around 18 km away, making it a convenient drive by cab or local transport.</li>
+                <li><strong>By road:</strong> The institute is located at Changsari and is accessible from Guwahati city through NH routes with direct taxi connectivity.</li>
+            </ul>
+
+            <div class="map-actions">
+                <a class="map-button primary" href="https://www.google.com/maps/dir/?api=1&destination=AIIMS+Guwahati%2C+Changsari%2C+Kamrup%2C+Assam+781101" target="_blank" rel="noopener noreferrer">Open Google Maps Directions</a>
+                <a class="map-button secondary" href="https://www.google.com/maps/search/?api=1&query=AIIMS+Guwahati%2C+Changsari%2C+Kamrup%2C+Assam+781101" target="_blank" rel="noopener noreferrer">View Location on Google Maps</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="help-card">
+        <div class="card-header">
+            <h2>Getting To AIIMS Guwahati</h2>
+        </div>
+        <div class="card-body">
+            <img class="route-image" src="./GYPSICON%202026_files/Help/Getting%20to%20aiims%20guwahati.jpeg" alt="Getting to AIIMS Guwahati">
+            <div class="image-caption">Reference travel image showing approximate distance from the airport and Kamakhya railway station.</div>
+        </div>
+    </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="./template-loader.js"></script>
+</body>
+</html>

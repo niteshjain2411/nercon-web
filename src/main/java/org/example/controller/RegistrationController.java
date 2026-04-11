@@ -37,6 +37,10 @@ public class RegistrationController {
                 return ResponseEntity.badRequest().body(createErrorResponse("Email is required"));
             }
 
+            if (registration.getDesignation() == null || registration.getDesignation().isEmpty()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("Designation is required"));
+            }
+
             // Save to Excel
             boolean saved = excelService.saveRegistrationToExcel(registration);
 

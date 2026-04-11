@@ -1,12 +1,120 @@
+<style>
+    .nav-dropdown {
+        position: relative;
+    }
+    .nav-dropdown > a {
+        cursor: pointer;
+    }
+    .nav-dropdown > a::before {
+        content: '';
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 5px solid currentColor;
+        margin-right: 5px;
+        vertical-align: middle;
+        transition: transform 0.3s ease;
+    }
+    .nav-dropdown.open > a::before {
+        transform: rotate(180deg);
+    }
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        min-width: 240px;
+        border-radius: 8px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        border: 1px solid #e5e7eb;
+        padding: 0.5rem 0;
+        z-index: 200;
+    }
+    /* Invisible bridge to cover the gap between trigger and dropdown */
+    .dropdown-menu::after {
+        content: '';
+        position: absolute;
+        top: -12px;
+        left: 0;
+        width: 100%;
+        height: 12px;
+    }
+    .dropdown-menu::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 50%;
+        width: 12px;
+        height: 12px;
+        background: white;
+        border-left: 1px solid #e5e7eb;
+        border-top: 1px solid #e5e7eb;
+        transform: translateX(-50%) rotate(45deg);
+        z-index: 1;
+    }
+    .nav-dropdown.open .dropdown-menu {
+        display: block;
+    }
+    .dropdown-menu a {
+        display: block;
+        padding: 0.6rem 1.2rem;
+        text-decoration: none;
+        color: #1f2937;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .dropdown-menu a:hover {
+        background: #f0f9ff;
+        color: #0ea5e9;
+    }
+    .dropdown-menu a:after {
+        display: none !important;
+    }
+    nav ul li a.active {
+        color: #0ea5e9;
+    }
+    nav ul li a.active::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #0ea5e9;
+    }
+    .nav-dropdown > a.active::before {
+        border-top-color: #0ea5e9;
+    }
+</style>
 <header>
     <div class="nav-container">
-        <div class="logo-text">NERCON 2026</div>
+        <div class="logo-area">
+            <img src="./AIIMS%20Logo.jpeg" alt="AIIMS Guwahati Logo" class="header-logo">
+            <img src="./Nercon%20Logo.jpeg" alt="NERCON Logo" class="header-logo">
+            <div class="logo-text">NERCON 2026</div>
+        </div>
         <nav>
             <ul>
                 <li><a href="./home.html">About Us</a></li>
                 <li><a href="#">Events</a></li>
+                <li class="nav-dropdown">
+                    <a href="#">Abstracts</a>
+                    <div class="dropdown-menu">
+                        <a href="./abstract-guidelines.html">Abstract Guidelines</a>
+                        <a href="./awards.html">Awards</a>
+                        <a href="./accepted-abstracts.html">Accepted Abstracts for Poster Session</a>
+                        <a href="./submit-abstract.html">Submit Abstract</a>
+                    </div>
+                </li>
                 <li><a href="./registration.html">Registration</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a href="./culture-cuisine.html">Culture &amp; Cuisine</a></li>
+                <li><a href="./help.html">Help</a></li>
                 <li><a href="#">Contact Us</a></li>
             </ul>
         </nav>
