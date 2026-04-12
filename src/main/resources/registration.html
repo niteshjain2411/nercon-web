@@ -690,7 +690,7 @@
 
     // Calculate total fee
     function updateTotal() {
-        let total = 0;
+        let total = 6000; // Base registration fee
         workshopCheckboxes.forEach(checkbox => {
             if (checkbox.checked) {
                 total += parseInt(checkbox.getAttribute("data-fee")) || 0;
