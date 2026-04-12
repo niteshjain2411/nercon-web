@@ -2,6 +2,7 @@ package org.example.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class RegistrationData implements Serializable {
     private String fullname;
@@ -11,24 +12,29 @@ public class RegistrationData implements Serializable {
     private String institute;
     private String city;
     private String state;
-    private String medcouncil;
-    private String registration;
     private String designation;
+    private String medcouncil;
+    private String regstatus;
+    private String medcouncilregnum;
+    private boolean isattendworkshop;
     private List<String> workshops;
-    private String accompany;
-    private String txnid;
-    private String txndate;
+    private long accompanycount;
+    private Map<String, Transaction> txndetails;
     private String totalAmount;
     private String delegateId;
+    private String paymentimg;
+    private String pgbonafideimg;
 
     // Constructors
     public RegistrationData() {
     }
 
     public RegistrationData(String fullname, String email, String phone, String gender,
-                            String institute, String city, String state, String medcouncil,
-                            String registration, String designation, List<String> workshops, String accompany,
-                            String txnid, String txndate, String totalAmount, String delegateId) {
+                            String institute, String city, String state, String designation,
+                            String medcouncil, String regstatus, String medcouncilregnum,
+                            boolean isattendworkshop, List<String> workshops, long accompanycount,
+                            Map<String, Transaction> txndetails, String totalAmount,
+                            String delegateId, String paymentimg, String pgbonafideimg) {
         this.fullname = fullname;
         this.email = email;
         this.phone = phone;
@@ -36,144 +42,76 @@ public class RegistrationData implements Serializable {
         this.institute = institute;
         this.city = city;
         this.state = state;
-        this.medcouncil = medcouncil;
-        this.registration = registration;
         this.designation = designation;
+        this.medcouncil = medcouncil;
+        this.regstatus = regstatus;
+        this.medcouncilregnum = medcouncilregnum;
+        this.isattendworkshop = isattendworkshop;
         this.workshops = workshops;
-        this.accompany = accompany;
-        this.txnid = txnid;
-        this.txndate = txndate;
+        this.accompanycount = accompanycount;
+        this.txndetails = txndetails;
         this.totalAmount = totalAmount;
         this.delegateId = delegateId;
+        this.paymentimg = paymentimg;
+        this.pgbonafideimg = pgbonafideimg;
     }
 
     // Getters and Setters
-    public String getFullname() {
-        return fullname;
-    }
+    public String getFullname() { return fullname; }
+    public void setFullname(String fullname) { this.fullname = fullname; }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
 
-    public String getPhone() {
-        return phone;
-    }
+    public String getInstitute() { return institute; }
+    public void setInstitute(String institute) { this.institute = institute; }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
 
-    public String getGender() {
-        return gender;
-    }
+    public String getState() { return state; }
+    public void setState(String state) { this.state = state; }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+    public String getDesignation() { return designation; }
+    public void setDesignation(String designation) { this.designation = designation; }
 
-    public String getInstitute() {
-        return institute;
-    }
+    public String getMedcouncil() { return medcouncil; }
+    public void setMedcouncil(String medcouncil) { this.medcouncil = medcouncil; }
 
-    public void setInstitute(String institute) {
-        this.institute = institute;
-    }
+    public String getRegstatus() { return regstatus; }
+    public void setRegstatus(String regstatus) { this.regstatus = regstatus; }
 
-    public String getCity() {
-        return city;
-    }
+    public String getMedcouncilregnum() { return medcouncilregnum; }
+    public void setMedcouncilregnum(String medcouncilregnum) { this.medcouncilregnum = medcouncilregnum; }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+    public boolean isAttendworkshop() { return isattendworkshop; }
+    public void setAttendworkshop(boolean isattendworkshop) { this.isattendworkshop = isattendworkshop; }
 
-    public String getState() {
-        return state;
-    }
+    public List<String> getWorkshops() { return workshops; }
+    public void setWorkshops(List<String> workshops) { this.workshops = workshops; }
 
-    public void setState(String state) {
-        this.state = state;
-    }
+    public long getAccompanycount() { return accompanycount; }
+    public void setAccompanycount(long accompanycount) { this.accompanycount = accompanycount; }
 
-    public String getMedcouncil() {
-        return medcouncil;
-    }
+    public Map<String, Transaction> getTxndetails() { return txndetails; }
+    public void setTxndetails(Map<String, Transaction> txndetails) { this.txndetails = txndetails; }
 
-    public void setMedcouncil(String medcouncil) {
-        this.medcouncil = medcouncil;
-    }
+    public String getTotalAmount() { return totalAmount; }
+    public void setTotalAmount(String totalAmount) { this.totalAmount = totalAmount; }
 
-    public String getRegistration() {
-        return registration;
-    }
+    public String getDelegateId() { return delegateId; }
+    public void setDelegateId(String delegateId) { this.delegateId = delegateId; }
 
-    public void setRegistration(String registration) {
-        this.registration = registration;
-    }
+    public String getPaymentimg() { return paymentimg; }
+    public void setPaymentimg(String paymentimg) { this.paymentimg = paymentimg; }
 
-    public String getDesignation() {
-        return designation;
-    }
-
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
-
-    public List<String> getWorkshops() {
-        return workshops;
-    }
-
-    public void setWorkshops(List<String> workshops) {
-        this.workshops = workshops;
-    }
-
-    public String getAccompany() {
-        return accompany;
-    }
-
-    public void setAccompany(String accompany) {
-        this.accompany = accompany;
-    }
-
-    public String getTxnid() {
-        return txnid;
-    }
-
-    public void setTxnid(String txnid) {
-        this.txnid = txnid;
-    }
-
-    public String getTxndate() {
-        return txndate;
-    }
-
-    public void setTxndate(String txndate) {
-        this.txndate = txndate;
-    }
-
-    public String getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(String totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public String getDelegateId() {
-        return delegateId;
-    }
-
-    public void setDelegateId(String delegateId) {
-        this.delegateId = delegateId;
-    }
+    public String getPgbonafideimg() { return pgbonafideimg; }
+    public void setPgbonafideimg(String pgbonafideimg) { this.pgbonafideimg = pgbonafideimg; }
 }
 

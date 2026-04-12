@@ -702,55 +702,109 @@
     }
 
     // Form submission
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
 
-        // Collect form data
-        const workshopCheckboxes = document.querySelectorAll("input[name='workshop']:checked");
-        const selectedWorkshops = Array.from(workshopCheckboxes).map(cb => cb.value);
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
 
-        const delegateId = "NER-2026-" + Math.floor(100000 + Math.random() * 900000);
+        try {
+            // Collect selected workshops (exclude ws0 = no-workshop option)
+            const selectedWorkshops = Array.from(
+                document.querySelectorAll("input[name='workshop']:checked")
+            ).map(cb => cb.value);
 
-        const registrationData = {
-            fullname: document.getElementById("fullname").value,
-            email: document.getElementById("email").value,
-            phone: document.getElementById("phone").value,
-            gender: document.getElementById("gender").value,
-            institute: document.getElementById("institute").value,
-            city: document.getElementById("city").value,
-            state: document.getElementById("state").value,
-            medcouncil: document.getElementById("medcouncil").value,
-            registration: document.getElementById("registration").value,
-            designation: document.getElementById("designation").value,
-            workshops: selectedWorkshops,
-            accompany: document.getElementById("accompany").value,
-            txnid: document.getElementById("txnid").value,
-            txndate: document.getElementById("txndate").value,
-            totalAmount: document.getElementById("totalAmount").textContent,
-            delegateId: delegateId
-        };
+            const delegateId = "NER-2026-" + Math.floor(100000 + Math.random() * 900000);
 
-        // Send data to backend
-        fetch('/nercon/api/registration/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(registrationData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            // Show success message
+            // --- 1. Upload payment screenshot (required) ---
+            const paymentFile = document.getElementById("paymentss").files[0];
+            if (!paymentFile) {
+                alert("Please attach the payment screenshot.");
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'SUBMIT APPLICATION';
+                return;
+            }
+            const paymentForm = new FormData();
+            paymentForm.append("file", paymentFile);
+            paymentForm.append("delegateId", delegateId);
+
+            const paymentRes = await fetch('/nercon/api/registration/upload/payment', {
+                method: 'POST',
+                body: paymentForm
+            });
+            const paymentJson = await paymentRes.json();
+            if (!paymentJson.success) {
+                throw new Error("Payment screenshot upload failed: " + paymentJson.message);
+            }
+            const paymentimgUrl = paymentJson.url;
+
+            // --- 2. Upload bonafide / HOD certificate (optional) ---
+            let pgbonafideimgUrl = "";
+            const bonafideFile = document.getElementById("hoddoc").files[0];
+            if (bonafideFile) {
+                const bonafideForm = new FormData();
+                bonafideForm.append("file", bonafideFile);
+                bonafideForm.append("delegateId", delegateId);
+                const bonafideRes = await fetch('/nercon/api/registration/upload/bonafide', {
+                    method: 'POST',
+                    body: bonafideForm
+                });
+                const bonafideJson = await bonafideRes.json();
+                if (bonafideJson.success) {
+                    pgbonafideimgUrl = bonafideJson.url;
+                }
+            }
+
+            // --- 3. Build registration payload with correct field names ---
+            const registrationData = {
+                fullname:        document.getElementById("fullname").value,
+                email:           document.getElementById("email").value,
+                phone:           document.getElementById("phone").value,
+                gender:          document.getElementById("gender").value,
+                institute:       document.getElementById("institute").value,
+                city:            document.getElementById("city").value,
+                state:           document.getElementById("state").value,
+                medcouncil:      document.getElementById("medcouncil").value,
+                medcouncilregnum: document.getElementById("registration").value,
+                designation:     document.getElementById("designation").value,
+                workshops:       selectedWorkshops,
+                accompanycount:  parseInt(document.getElementById("accompany").value) || 0,
+                txndetails: {
+                    txn1: {
+                        txnid:   document.getElementById("txnid").value,
+                        txndate: document.getElementById("txndate").value
+                    }
+                },
+                totalAmount:    document.getElementById("totalAmount").textContent,
+                delegateId:     delegateId,
+                paymentimg:     paymentimgUrl,
+                pgbonafideimg:  pgbonafideimgUrl
+            };
+
+            // --- 4. Save registration to Firestore ---
+            const saveRes = await fetch('/nercon/api/registration/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(registrationData)
+            });
+            const saveJson = await saveRes.json();
+            if (!saveJson.success) {
+                throw new Error(saveJson.message || "Registration save failed");
+            }
+
+            // --- 5. Show success ---
             document.getElementById("page2").classList.remove("active");
             document.getElementById("successMessage").style.display = "block";
             document.getElementById("delegateId").textContent = delegateId;
             document.getElementById("successMessage").scrollIntoView({ behavior: "smooth" });
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('Error submitting registration. Please try again.');
-        });
+
+        } catch (error) {
+            console.error('Registration error:', error);
+            alert('Error submitting registration: ' + error.message + '\nPlease try again.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'SUBMIT APPLICATION';
+        }
     }
 
     // Initialize

@@ -2,14 +2,13 @@ package org.example.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.model.RegistrationData;
-import org.example.service.ExcelService;
+import org.example.service.FirestoreService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.lang.reflect.Field;
 import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -23,20 +22,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RegistrationControllerTest {
 
     private MockMvc mockMvc;
-    private ExcelService mockExcelService;
+    private FirestoreService mockFirestoreService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
-    void setUp() throws Exception {
-        // Create a mock for ExcelService (constructor not called by Mockito)
-        mockExcelService = mock(ExcelService.class);
-
-        // Instantiate controller (creates real ExcelService internally, then we replace it)
-        RegistrationController controller = new RegistrationController();
-        Field field = RegistrationController.class.getDeclaredField("excelService");
-        field.setAccessible(true);
-        field.set(controller, mockExcelService);
-
+    void setUp() {
+        mockFirestoreService = mock(FirestoreService.class);
+        RegistrationController controller = new RegistrationController(mockFirestoreService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -138,7 +130,7 @@ class RegistrationControllerTest {
     @Test
     void saveRegistration_whenServiceReturnsTrue_returnsOk() throws Exception {
         // Arrange
-        when(mockExcelService.saveRegistrationToExcel(any())).thenReturn(true);
+        when(mockFirestoreService.saveRegistration(any())).thenReturn(true);
         RegistrationData data = buildSampleRegistration();
 
         // Act & Assert
@@ -153,7 +145,7 @@ class RegistrationControllerTest {
     @Test
     void saveRegistration_whenServiceReturnsFalse_returnsInternalServerError() throws Exception {
         // Arrange
-        when(mockExcelService.saveRegistrationToExcel(any())).thenReturn(false);
+        when(mockFirestoreService.saveRegistration(any())).thenReturn(false);
         RegistrationData data = buildSampleRegistration();
 
         // Act & Assert
@@ -167,7 +159,7 @@ class RegistrationControllerTest {
     @Test
     void getAllRegistrations_returnsSuccessWithCountAndData() throws Exception {
         // Arrange
-        when(mockExcelService.getAllRegistrations())
+        when(mockFirestoreService.getAllRegistrations())
                 .thenReturn(Collections.singletonList(buildSampleRegistration()));
 
         // Act & Assert
@@ -180,7 +172,7 @@ class RegistrationControllerTest {
     @Test
     void getAllRegistrations_whenEmpty_returnsCountZero() throws Exception {
         // Arrange
-        when(mockExcelService.getAllRegistrations()).thenReturn(Collections.emptyList());
+        when(mockFirestoreService.getAllRegistrations()).thenReturn(Collections.emptyList());
 
         // Act & Assert
         mockMvc.perform(get("/api/registration/all"))

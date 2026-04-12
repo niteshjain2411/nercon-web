@@ -3,6 +3,11 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Firebase service account credentials (contains private key - NEVER commit)
+service-account.json
+firebase-service-account.json
+*.serviceaccount.json
+
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
