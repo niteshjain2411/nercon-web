@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NERCON 2026 | Admin Panel</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0ea5e9;
+            --accent: #059669;
+            --light-bg: #f0f9ff;
+            --dark-text: #1f2937;
+            --border-color: #e5e7eb;
+            --danger: #dc2626;
+            --success: #059669;
+            --warning: #d97706;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            background: #f5f5f5;
+            color: var(--dark-text);
+            font-size: 0.9rem;
+        }
+        /* ---------- Header ---------- */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header h1 { font-size: 1.3rem; font-weight: 700; }
+        header span { font-size: 0.85rem; opacity: 0.8; }
+        /* ---------- Toolbar ---------- */
+        .toolbar {
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .toolbar input[type=text] {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.85rem;
+            width: 200px;
+        }
+        .btn {
+            padding: 0.4rem 0.9rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .btn:hover { opacity: 0.85; }
+        .btn-primary  { background: var(--primary); color: white; }
+        .btn-success  { background: var(--success); color: white; }
+        .btn-danger   { background: var(--danger); color: white; }
+        .btn-warning  { background: var(--warning); color: white; }
+        .btn-secondary{ background: #6b7280; color: white; }
+        .btn-sm { padding: 0.25rem 0.55rem; font-size: 0.78rem; }
+        .ml-auto { margin-left: auto; }
+        /* ---------- Stats ---------- */
+        .stats-bar {
+            background: white;
+            padding: 0.5rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 2rem;
+            font-size: 0.82rem;
+            color: #6b7280;
+        }
+        .stats-bar strong { color: var(--dark-text); }
+        /* ---------- Table wrapper ---------- */
+        .table-wrapper {
+            overflow-x: auto;
+            padding: 1rem 1.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            min-width: 1400px;
+        }
+        thead tr { background: var(--primary); color: white; }
+        thead th {
+            padding: 0.65rem 0.6rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.78rem;
+            white-space: nowrap;
+        }
+        thead th.col-check { width: 36px; text-align: center; }
+        /* Filter row */
+        .filter-row th {
+            background: #f8fafc;
+            padding: 0.3rem 0.4rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .filter-row input {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.25rem 0.4rem;
+            font-size: 0.76rem;
+        }
+        tbody tr { border-bottom: 1px solid var(--border-color); transition: background 0.15s; }
+        tbody tr:hover { background: var(--light-bg); }
+        tbody td {
+            padding: 0.55rem 0.6rem;
+            font-size: 0.8rem;
+            vertical-align: middle;
+        }
+        tbody td.col-check { text-align: center; }
+        /* Status badges */
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.55rem;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .badge-success  { background: #dcfce7; color: #15803d; }
+        .badge-approved { background: #d1fae5; color: #065f46; }
+        .badge-rejected { background: #fee2e2; color: #991b1b; }
+        .badge-pending  { background: #fef9c3; color: #92400e; }
+        /* Action buttons in table */
+        .action-group { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+        /* Pagination */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 1rem 1.5rem 1.5rem;
+            flex-wrap: wrap;
+        }
+        .page-btn {
+            width: 34px; height: 34px;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s;
+        }
+        .page-btn:hover { background: var(--light-bg); }
+        .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); font-weight: 700; }
+        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .page-info { font-size: 0.82rem; color: #6b7280; padding: 0 0.5rem; }
+        /* Synopsis modal */
+        .modal-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        .modal h3 { margin-bottom: 1rem; color: var(--primary); }
+        .modal p  { line-height: 1.7; white-space: pre-wrap; }
+        .modal-close {
+            float: right; cursor: pointer; font-size: 1.1rem;
+            background: none; border: none; color: #6b7280;
+        }
+        /* Toast */
+        #toast {
+            position: fixed; bottom: 1.5rem; right: 1.5rem;
+            background: #1f2937; color: white;
+            padding: 0.65rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 2000;
+            pointer-events: none;
+        }
+        #toast.show { opacity: 1; }
+        /* Access denied screen */
+        #access-denied {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-size: 1.2rem;
+            color: var(--danger);
+        }
+        #main-content { display: none; }
+        /* Loading */
+        #loading {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Access denied view -->
+<div id="access-denied">
+    <div style="font-size:3rem;margin-bottom:1rem;">🔒</div>
+    <strong>Access Denied</strong>
+    <p style="margin-top:0.5rem;font-size:0.95rem;color:#6b7280;">Invalid or missing admin key.</p>
+</div>
+
+<!-- Main content (shown only when key is valid) -->
+<div id="main-content">
+    <header>
+        <h1>NERCON 2026 — Admin Panel</h1>
+        <span id="record-count-header"></span>
+    </header>
+
+    <div class="toolbar">
+        <strong style="font-size:0.9rem;">Registrations</strong>
+        <div style="margin-left:auto;display:flex;gap:0.6rem;flex-wrap:wrap;align-items:center;">
+            <label style="font-size:0.82rem;color:#6b7280;">Page size:
+                <select id="page-size-select" style="margin-left:0.3rem;border:1px solid var(--border-color);border-radius:4px;padding:0.3rem;">
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </label>
+            <button class="btn btn-success" onclick="exportSelected()">⬇ Export Selected as Excel</button>
+            <button class="btn btn-primary" onclick="loadData()">↻ Refresh</button>
+        </div>
+    </div>
+
+    <div class="stats-bar" id="stats-bar">
+        Loading...
+    </div>
+
+    <div id="loading">Loading registrations…</div>
+
+    <div class="table-wrapper">
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" id="select-all" title="Select all on this page" onchange="toggleSelectAll(this)"></th>
+                    <th data-col="delegateId">Delegate ID</th>
+                    <th data-col="fullname">Name</th>
+                    <th data-col="email">Email</th>
+                    <th data-col="phone">Phone</th>
+                    <th data-col="gender">Gender</th>
+                    <th data-col="designation">Designation</th>
+                    <th data-col="institute">Institute</th>
+                    <th data-col="city">City</th>
+                    <th data-col="state">State</th>
+                    <th data-col="medcouncil">Med Council</th>
+                    <th data-col="medcouncilregnum">MC Reg No.</th>
+                    <th data-col="workshops">Workshops</th>
+                    <th data-col="accompanycount">Accompany</th>
+                    <th data-col="totalAmount">Total (₹)</th>
+                    <th data-col="txnid">Txn ID</th>
+                    <th data-col="txndate">Txn Date</th>
+                    <th data-col="regstatus">Status</th>
+                    <th>Synopsis</th>
+                    <th>Payment</th>
+                    <th>Bonafide</th>
+                    <th>Actions</th>
+                </tr>
+                <tr class="filter-row" id="filter-row">
+                    <th></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="delegateId"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="fullname"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="email"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="phone"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="gender"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="designation"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="institute"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="city"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="state"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="medcouncil"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="medcouncilregnum"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="workshops"></th>
+                    <th></th>
+                    <th></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="txnid"></th>
+                    <th></th>
+                    <th>
+                        <select onchange="applyFilters()" id="filter-status" style="width:100%;border:1px solid var(--border-color);border-radius:4px;padding:0.25rem;font-size:0.76rem;">
+                            <option value="">All</option>
+                            <option value="success">success</option>
+                            <option value="approved">approved</option>
+                            <option value="rejected">rejected</option>
+                        </select>
+                    </th>
+                    <th></th><th></th><th></th><th></th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination" id="pagination"></div>
+</div>
+
+<!-- Synopsis modal -->
+<div class="modal-overlay" id="synopsis-modal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <h3>Synopsis</h3>
+        <p id="synopsis-content"></p>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+    // ---------------------------------------------------------------
+    // State
+    // ---------------------------------------------------------------
+    let allRecords   = [];   // raw from API
+    let filtered     = [];   // after column filters
+    let currentPage  = 1;
+    let pageSize     = 10;
+    const BASE       = '/nercon';
+
+    // ---------------------------------------------------------------
+    // Access control — require ?key=NERCON_GHY_2026
+    // ---------------------------------------------------------------
+    const ADMIN_KEY = 'NERCON_GHY_2026';
+
+    (function checkAccess() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('key') !== ADMIN_KEY) {
+            document.getElementById('access-denied').style.display = 'flex';
+        } else {
+            document.getElementById('main-content').style.display = 'block';
+            loadData();
+        }
+    })();
+
+    // ---------------------------------------------------------------
+    // Data loading
+    // ---------------------------------------------------------------
+    async function loadData() {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('table-body').innerHTML = '';
+        try {
+            const res  = await fetch(`${BASE}/api/registration/all`);
+            const json = await res.json();
+            allRecords = json.data || [];
+            applyFilters();
+            updateStats();
+        } catch (e) {
+            showToast('Failed to load data: ' + e.message);
+        } finally {
+            document.getElementById('loading').style.display = 'none';
+        }
+    }
+
+    // ---------------------------------------------------------------
+    // Filtering
+    // ---------------------------------------------------------------
+    function applyFilters() {
+        const filterInputs = document.querySelectorAll('#filter-row input[data-col]');
+        const statusFilter = document.getElementById('filter-status').value.toLowerCase();
+        const filterMap = {};
+        filterInputs.forEach(inp => { filterMap[inp.dataset.col] = inp.value.toLowerCase().trim(); });
+
+        filtered = allRecords.filter(r => {
+            // column text filters
+            for (const [col, val] of Object.entries(filterMap)) {
+                if (!val) continue;
+                let cellVal = '';
+                if (col === 'txnid') {
+                    cellVal = txnId(r).toLowerCase();
+                } else if (col === 'workshops') {
+                    cellVal = (r.workshops || []).join(', ').toLowerCase();
+                } else {
+                    cellVal = String(r[col] || '').toLowerCase();
+                }
+                if (!cellVal.includes(val)) return false;
+            }
+            // status dropdown filter
+            if (statusFilter && String(r.regstatus || '').toLowerCase() !== statusFilter) return false;
+            return true;
+        });
+
+        currentPage = 1;
+        renderPage();
+    }
+
+    // ---------------------------------------------------------------
+    // Rendering
+    // ---------------------------------------------------------------
+    function renderPage() {
+        const tbody = document.getElementById('table-body');
+        tbody.innerHTML = '';
+        document.getElementById('select-all').checked = false;
+
+        const start = (currentPage - 1) * pageSize;
+        const page  = filtered.slice(start, start + pageSize);
+
+        page.forEach(r => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="col-check"><input type="checkbox" class="row-check" value="${esc(r.delegateId)}"></td>
+                <td>${esc(r.delegateId)}</td>
+                <td>${esc(r.fullname)}</td>
+                <td>${esc(r.email)}</td>
+                <td>${esc(r.phone)}</td>
+                <td>${esc(r.gender)}</td>
+                <td>${esc(r.designation)}</td>
+                <td>${esc(r.institute)}</td>
+                <td>${esc(r.city)}</td>
+                <td>${esc(r.state)}</td>
+                <td>${esc(r.medcouncil)}</td>
+                <td>${esc(r.medcouncilregnum)}</td>
+                <td>${esc((r.workshops || []).join(', '))}</td>
+                <td style="text-align:center;">${r.accompanycount ?? 0}</td>
+                <td style="text-align:right;">₹${esc(r.totalAmount)}</td>
+                <td>${esc(txnId(r))}</td>
+                <td>${esc(txnDate(r))}</td>
+                <td>${statusBadge(r.regstatus)}</td>
+                <td>${synopsisCell(r)}</td>
+                <td>${imgBtn(r.paymentimg, 'Payment')}</td>
+                <td>${imgBtn(r.pgbonafideimg, 'Bonafide')}</td>
+                <td>
+                    <div class="action-group">
+                        <button class="btn btn-success btn-sm" onclick="updateStatus('${esc(r.delegateId)}', 'approved')">✓ Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="updateStatus('${esc(r.delegateId)}', 'rejected')">✕ Reject</button>
+                    </div>
+                </td>`;
+            tbody.appendChild(tr);
+        });
+
+        renderPagination();
+        updateStats();
+    }
+
+    function statusBadge(status) {
+        const s = (status || 'pending').toLowerCase();
+        const cls = s === 'approved' ? 'badge-approved'
+                  : s === 'rejected' ? 'badge-rejected'
+                  : s === 'success'  ? 'badge-success'
+                  : 'badge-pending';
+        return `<span class="badge ${cls}">${esc(s)}</span>`;
+    }
+
+    function synopsisCell(r) {
+        if (!r.synopsis || r.synopsis.trim() === '') return '<span style="color:#9ca3af;">—</span>';
+        const preview = r.synopsis.length > 40 ? r.synopsis.substring(0, 40) + '…' : r.synopsis;
+        return `<span style="cursor:pointer;color:var(--secondary);text-decoration:underline;"
+                     onclick="showSynopsis(\`${r.synopsis.replace(/`/g,'\\`')}\`)">${esc(preview)}</span>`;
+    }
+
+    function imgBtn(url, label) {
+        if (!url || url.trim() === '') return '<span style="color:#9ca3af;">—</span>';
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">
+                    <button class="btn btn-secondary btn-sm">⬇ ${label}</button>
+                </a>`;
+    }
+
+    function txnId(r)   { return firstTxn(r)?.txnid   || ''; }
+    function txnDate(r) { return firstTxn(r)?.txndate  || ''; }
+    function firstTxn(r) {
+        if (!r.txndetails) return null;
+        const keys = Object.keys(r.txndetails);
+        return keys.length ? r.txndetails[keys[0]] : null;
+    }
+
+    // ---------------------------------------------------------------
+    // Pagination
+    // ---------------------------------------------------------------
+    function renderPagination() {
+        const total = filtered.length;
+        const pages = Math.max(1, Math.ceil(total / pageSize));
+        const pg    = document.getElementById('pagination');
+        pg.innerHTML = '';
+
+        const prev = document.createElement('button');
+        prev.className = 'page-btn';
+        prev.textContent = '‹';
+        prev.disabled = currentPage === 1;
+        prev.onclick = () => { currentPage--; renderPage(); };
+        pg.appendChild(prev);
+
+        // Show at most 7 page buttons with ellipsis
+        const range = pageRange(currentPage, pages);
+        range.forEach(p => {
+            if (p === '…') {
+                const span = document.createElement('span');
+                span.className = 'page-info';
+                span.textContent = '…';
+                pg.appendChild(span);
+            } else {
+                const btn = document.createElement('button');
+                btn.className = 'page-btn' + (p === currentPage ? ' active' : '');
+                btn.textContent = p;
+                btn.onclick = () => { currentPage = p; renderPage(); };
+                pg.appendChild(btn);
+            }
+        });
+
+        const next = document.createElement('button');
+        next.className = 'page-btn';
+        next.textContent = '›';
+        next.disabled = currentPage === pages;
+        next.onclick = () => { currentPage++; renderPage(); };
+        pg.appendChild(next);
+
+        const info = document.createElement('span');
+        info.className = 'page-info';
+        const start = Math.min((currentPage - 1) * pageSize + 1, total);
+        const end   = Math.min(currentPage * pageSize, total);
+        info.textContent = total ? `Showing ${start}–${end} of ${total}` : 'No records';
+        pg.appendChild(info);
+    }
+
+    function pageRange(cur, last) {
+        if (last <= 7) return Array.from({length: last}, (_, i) => i + 1);
+        if (cur <= 4) return [1, 2, 3, 4, 5, '…', last];
+        if (cur >= last - 3) return [1, '…', last-4, last-3, last-2, last-1, last];
+        return [1, '…', cur-1, cur, cur+1, '…', last];
+    }
+
+    // ---------------------------------------------------------------
+    // Stats bar
+    // ---------------------------------------------------------------
+    function updateStats() {
+        const total    = allRecords.length;
+        const approved = allRecords.filter(r => r.regstatus === 'approved').length;
+        const rejected = allRecords.filter(r => r.regstatus === 'rejected').length;
+        const pending  = total - approved - rejected;
+        document.getElementById('stats-bar').innerHTML =
+            `Total: <strong>${total}</strong> &nbsp;|&nbsp;
+             Approved: <strong style="color:var(--success)">${approved}</strong> &nbsp;|&nbsp;
+             Rejected: <strong style="color:var(--danger)">${rejected}</strong> &nbsp;|&nbsp;
+             Pending: <strong style="color:var(--warning)">${pending}</strong> &nbsp;|&nbsp;
+             Filtered: <strong>${filtered.length}</strong>`;
+        document.getElementById('record-count-header').textContent = `${total} total registrations`;
+    }
+
+    // ---------------------------------------------------------------
+    // Select all / checkboxes
+    // ---------------------------------------------------------------
+    function toggleSelectAll(cb) {
+        document.querySelectorAll('.row-check').forEach(c => c.checked = cb.checked);
+    }
+
+    function getSelectedIds() {
+        return [...document.querySelectorAll('.row-check:checked')].map(c => c.value);
+    }
+
+    // ---------------------------------------------------------------
+    // Status update
+    // ---------------------------------------------------------------
+    async function updateStatus(delegateId, status) {
+        try {
+            const res = await fetch(`${BASE}/api/registration/${encodeURIComponent(delegateId)}/status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status })
+            });
+            const json = await res.json();
+            if (json.success) {
+                // Update local cache so UI reflects immediately without full reload
+                const rec = allRecords.find(r => r.delegateId === delegateId);
+                if (rec) rec.regstatus = status;
+                applyFilters();
+                showToast(`${delegateId} marked as ${status}`);
+            } else {
+                showToast('Error: ' + json.message);
+            }
+        } catch (e) {
+            showToast('Network error: ' + e.message);
+        }
+    }
+
+    // ---------------------------------------------------------------
+    // Excel export
+    // ---------------------------------------------------------------
+    async function exportSelected() {
+        let ids = getSelectedIds();
+        // If nothing selected, confirm exporting all filtered rows
+        if (ids.length === 0) {
+            if (!confirm(`No rows selected. Export all ${filtered.length} filtered rows?`)) return;
+            ids = filtered.map(r => r.delegateId);
+        }
+        try {
+            const res = await fetch(`${BASE}/api/registration/export`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ delegateIds: ids })
+            });
+            if (!res.ok) { showToast('Export failed'); return; }
+            const blob = await res.blob();
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = 'registrations.xlsx';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast(`Exported ${ids.length} row(s)`);
+        } catch (e) {
+            showToast('Export error: ' + e.message);
+        }
+    }
+
+    // ---------------------------------------------------------------
+    // Page-size selector
+    // ---------------------------------------------------------------
+    document.getElementById('page-size-select').addEventListener('change', function () {
+        pageSize = parseInt(this.value, 10);
+        currentPage = 1;
+        renderPage();
+    });
+
+    // ---------------------------------------------------------------
+    // Synopsis modal
+    // ---------------------------------------------------------------
+    function showSynopsis(text) {
+        document.getElementById('synopsis-content').textContent = text;
+        document.getElementById('synopsis-modal').classList.add('open');
+    }
+    function closeModal() {
+        document.getElementById('synopsis-modal').classList.remove('open');
+    }
+    document.getElementById('synopsis-modal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
+    // ---------------------------------------------------------------
+    // Toast
+    // ---------------------------------------------------------------
+    let toastTimer;
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ---------------------------------------------------------------
+    // Utility: HTML-escape
+    // ---------------------------------------------------------------
+    function esc(str) {
+        if (str == null) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+</script>
+</body>
+</html>

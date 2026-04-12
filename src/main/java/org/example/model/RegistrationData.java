@@ -24,6 +24,7 @@ public class RegistrationData implements Serializable {
     private String delegateId;
     private String paymentimg;
     private String pgbonafideimg;
+    private String synopsis;
 
     // Constructors
     public RegistrationData() {
@@ -113,5 +114,8 @@ public class RegistrationData implements Serializable {
 
     public String getPgbonafideimg() { return pgbonafideimg; }
     public void setPgbonafideimg(String pgbonafideimg) { this.pgbonafideimg = pgbonafideimg; }
+
+    public String getSynopsis() { return synopsis; }
+    public void setSynopsis(String synopsis) { this.synopsis = synopsis; }
 }
 

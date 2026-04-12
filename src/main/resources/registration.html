@@ -613,8 +613,19 @@
                     <p class="summary-amount">Rs <span id="totalAmount">0</span></p>
                 </div>
 
+                <!-- Synopsis -->
+                <div class="section-title">4. Synopsis (Optional)</div>
+                <div class="form-group">
+                    <label for="synopsis">Brief Synopsis <span style="color:#6b7280;font-weight:400;">(max 500 words)</span></label>
+                    <textarea id="synopsis" name="synopsis" rows="6"
+                        placeholder="Enter a brief synopsis (optional, max 500 words)..."
+                        oninput="checkWordCount(this)"
+                        style="width:100%;padding:0.75rem;border:1px solid var(--border-color);border-radius:6px;font-size:0.95rem;resize:vertical;"></textarea>
+                    <div id="synopsis-word-count" style="text-align:right;font-size:0.85rem;color:#6b7280;margin-top:0.25rem;">0 / 500 words</div>
+                </div>
+
                 <!-- Payment Details -->
-                <div class="section-title">4. Payment & Documents</div>
+                <div class="section-title">5. Payment &amp; Documents</div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="txnid">Transaction ID <span class="required">*</span></label>
@@ -713,7 +724,7 @@
             // Collect selected workshops (exclude ws0 = no-workshop option)
             const selectedWorkshops = Array.from(
                 document.querySelectorAll("input[name='workshop']:checked")
-            ).map(cb => cb.value);
+            ).map(cb => cb.value).filter(v => v !== 'ws0');
 
             const delegateId = "NER-2026-" + Math.floor(100000 + Math.random() * 900000);
 
@@ -776,6 +787,7 @@
                         txndate: document.getElementById("txndate").value
                     }
                 },
+                synopsis:       document.getElementById("synopsis").value.trim(),
                 totalAmount:    document.getElementById("totalAmount").textContent,
                 delegateId:     delegateId,
                 paymentimg:     paymentimgUrl,
@@ -804,6 +816,23 @@
             alert('Error submitting registration: ' + error.message + '\nPlease try again.');
             submitBtn.disabled = false;
             submitBtn.textContent = 'SUBMIT APPLICATION';
+        }
+    }
+
+    function checkWordCount(textarea) {
+        const words = textarea.value.trim() === '' ? [] : textarea.value.trim().split(/\s+/);
+        const count = words.length;
+        const counter = document.getElementById('synopsis-word-count');
+        counter.textContent = count + ' / 500 words';
+        if (count > 500) {
+            // Trim to 500 words
+            textarea.value = words.slice(0, 500).join(' ');
+            counter.textContent = '500 / 500 words';
+            counter.style.color = 'var(--danger)';
+        } else if (count >= 450) {
+            counter.style.color = 'var(--danger)';
+        } else {
+            counter.style.color = '#6b7280';
         }
     }
 

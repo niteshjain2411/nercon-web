@@ -82,6 +82,16 @@ public class FirestoreService {
     }
 
     /**
+     * Update the regstatus field for a registration document.
+     */
+    public void updateRegistrationStatus(String delegateId, String status)
+            throws ExecutionException, InterruptedException {
+        DocumentReference docRef = firestore.collection(COLLECTION_NAME).document(delegateId);
+        ApiFuture<WriteResult> future = docRef.update("regstatus", status);
+        future.get();
+    }
+
+    /**
      * Upload an image to Firebase Storage and return its public URL.
      *
      * @param file       the multipart file to upload
@@ -128,6 +138,7 @@ public class FirestoreService {
         data.put("delegateId", reg.getDelegateId());
         data.put("paymentimg", reg.getPaymentimg());
         data.put("pgbonafideimg", reg.getPgbonafideimg());
+        data.put("synopsis", reg.getSynopsis() != null ? reg.getSynopsis() : "");
 
         // Serialize txndetails as a nested map: { "key": { txnid, txndate } }
         if (reg.getTxndetails() != null) {
@@ -168,6 +179,7 @@ public class FirestoreService {
         reg.setTotalAmount(getString(data, "totalAmount"));
         reg.setPaymentimg(getString(data, "paymentimg"));
         reg.setPgbonafideimg(getString(data, "pgbonafideimg"));
+        reg.setSynopsis(getString(data, "synopsis"));
 
         // Deserialize txndetails
         Object txnRaw = data.get("txndetails");
