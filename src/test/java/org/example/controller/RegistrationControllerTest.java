@@ -2,6 +2,7 @@ package org.example.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.model.RegistrationData;
+import org.example.service.EmailService;
 import org.example.service.FirestoreService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,12 +24,14 @@ class RegistrationControllerTest {
 
     private MockMvc mockMvc;
     private FirestoreService mockFirestoreService;
+    private EmailService mockEmailService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
         mockFirestoreService = mock(FirestoreService.class);
-        RegistrationController controller = new RegistrationController(mockFirestoreService);
+        mockEmailService = mock(EmailService.class);
+        RegistrationController controller = new RegistrationController(mockFirestoreService, mockEmailService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

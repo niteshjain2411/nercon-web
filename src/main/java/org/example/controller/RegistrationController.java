@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.model.RegistrationData;
+import org.example.service.EmailService;
 import org.example.service.FirestoreService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,11 @@ import java.util.UUID;
 public class RegistrationController {
 
     private final FirestoreService firestoreService;
+    private final EmailService emailService;
 
-    public RegistrationController(FirestoreService firestoreService) {
+    public RegistrationController(FirestoreService firestoreService, EmailService emailService) {
         this.firestoreService = firestoreService;
+        this.emailService = emailService;
     }
 
     /**
@@ -48,7 +51,8 @@ public class RegistrationController {
 
             // Auto-generate delegateId if not supplied by the client
             if (registration.getDelegateId() == null || registration.getDelegateId().isBlank()) {
-                registration.setDelegateId("NERCON-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+                long totalPeople = 1 + registration.getAccompanycount();
+                registration.setDelegateId("NERCON-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase() + "-Rg-" + totalPeople);
             }
 
             // Mark registration as successful before persisting
@@ -133,7 +137,7 @@ public class RegistrationController {
      */
     @PatchMapping("/{delegateId}/status")
     public ResponseEntity<?> updateStatus(
-            @PathVariable String delegateId,
+            @PathVariable("delegateId") String delegateId,
             @RequestBody Map<String, String> body) {
         try {
             String status = body.get("status");
@@ -141,6 +145,20 @@ public class RegistrationController {
                 return ResponseEntity.badRequest().body(createErrorResponse("status must be 'approved' or 'rejected'"));
             }
             firestoreService.updateRegistrationStatus(delegateId, status);
+
+            // When approved: generate barcode and send confirmation email
+            if ("approved".equals(status)) {
+                RegistrationData registration = firestoreService.getRegistrationById(delegateId);
+                if (registration != null && registration.getEmail() != null && !registration.getEmail().isBlank()) {
+                    try {
+                        emailService.sendApprovalEmail(registration);
+                    } catch (Exception emailEx) {
+                        // Log but don't fail the approval — the status is already updated
+                        System.err.println("Approval email failed for " + delegateId + ": " + emailEx.getMessage());
+                    }
+                }
+            }
+
             Map<String, Object> res = new HashMap<>();
             res.put("success", true);
             res.put("delegateId", delegateId);

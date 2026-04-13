@@ -92,6 +92,18 @@ public class FirestoreService {
     }
 
     /**
+     * Fetch a single registration document by delegateId.
+     * Returns null if the document does not exist.
+     */
+    public RegistrationData getRegistrationById(String delegateId)
+            throws ExecutionException, InterruptedException {
+        DocumentReference docRef = firestore.collection(COLLECTION_NAME).document(delegateId);
+        DocumentSnapshot snapshot = docRef.get().get();
+        if (!snapshot.exists()) return null;
+        return fromFirestoreMap(Objects.requireNonNull(snapshot.getData()), snapshot.getId());
+    }
+
+    /**
      * Upload an image to Firebase Storage and return its public URL.
      *
      * @param file       the multipart file to upload
