@@ -614,11 +614,11 @@
                 </div>
 
                 <!-- Synopsis -->
-                <div class="section-title">4. Synopsis (Optional)</div>
+                <div class="section-title">4. Abstract (Optional)</div>
                 <div class="form-group">
-                    <label for="synopsis">Brief Synopsis <span style="color:#6b7280;font-weight:400;">(max 500 words)</span></label>
+                    <label for="synopsis">Brief Abstract <span style="color:#6b7280;font-weight:400;">(max 500 words)</span></label>
                     <textarea id="synopsis" name="synopsis" rows="6"
-                        placeholder="Enter a brief synopsis (optional, max 500 words)..."
+                        placeholder="Enter a brief abstract (optional, max 500 words)..."
                         oninput="checkWordCount(this)"
                         style="width:100%;padding:0.75rem;border:1px solid var(--border-color);border-radius:6px;font-size:0.95rem;resize:vertical;"></textarea>
                     <div id="synopsis-word-count" style="text-align:right;font-size:0.85rem;color:#6b7280;margin-top:0.25rem;">0 / 500 words</div>
@@ -638,11 +638,11 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="hoddoc">HOD Certificate (PG Students Only)</label>
+                        <label for="hoddoc">HOD Certificate (PG Students Only) <small style="color:#6b7280;font-weight:400;">(PDF/JPG/PNG, max 5 MB)</small></label>
                         <input type="file" id="hoddoc" name="hoddoc" accept=".pdf,.jpg,.jpeg,.png">
                     </div>
                     <div class="form-group">
-                        <label for="paymentss">Payment Screenshot <span class="required">*</span></label>
+                        <label for="paymentss">Payment Screenshot <span class="required">*</span> <small style="color:#6b7280;font-weight:400;">(JPG/PNG, max 5 MB)</small></label>
                         <input type="file" id="paymentss" name="paymentss" accept="image/*" required>
                     </div>
                 </div>
@@ -726,12 +726,20 @@
                 document.querySelectorAll("input[name='workshop']:checked")
             ).map(cb => cb.value).filter(v => v !== 'ws0');
 
-            const delegateId = "NER-2026-" + Math.floor(100000 + Math.random() * 900000);
+            const accompanyCount = parseInt(document.getElementById("accompany").value) || 0;
+            const totalPeople = accompanyCount + 1;
+            const delegateId = "NER-2026-" + Math.floor(100000 + Math.random() * 900000) + "-Rg-" + totalPeople;
 
             // --- 1. Upload payment screenshot (required) ---
             const paymentFile = document.getElementById("paymentss").files[0];
             if (!paymentFile) {
                 alert("Please attach the payment screenshot.");
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'SUBMIT APPLICATION';
+                return;
+            }
+            if (paymentFile.size > 5 * 1024 * 1024) {
+                alert("Payment screenshot exceeds the 5 MB limit. Please compress or crop the image and try again.");
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'SUBMIT APPLICATION';
                 return;
@@ -753,6 +761,12 @@
             // --- 2. Upload bonafide / HOD certificate (optional) ---
             let pgbonafideimgUrl = "";
             const bonafideFile = document.getElementById("hoddoc").files[0];
+            if (bonafideFile && bonafideFile.size > 5 * 1024 * 1024) {
+                alert("HOD Certificate exceeds the 5 MB limit. Please use a smaller file and try again.");
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'SUBMIT APPLICATION';
+                return;
+            }
             if (bonafideFile) {
                 const bonafideForm = new FormData();
                 bonafideForm.append("file", bonafideFile);
@@ -780,7 +794,7 @@
                 medcouncilregnum: document.getElementById("registration").value,
                 designation:     document.getElementById("designation").value,
                 workshops:       selectedWorkshops,
-                accompanycount:  parseInt(document.getElementById("accompany").value) || 0,
+                accompanycount:  accompanyCount,
                 txndetails: {
                     txn1: {
                         txnid:   document.getElementById("txnid").value,

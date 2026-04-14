@@ -146,16 +146,13 @@ public class RegistrationController {
             }
             firestoreService.updateRegistrationStatus(delegateId, status);
 
-            // When approved: generate barcode and send confirmation email
+            // When approved: fetch registration and dispatch async email
+            boolean emailQueued = false;
             if ("approved".equals(status)) {
                 RegistrationData registration = firestoreService.getRegistrationById(delegateId);
                 if (registration != null && registration.getEmail() != null && !registration.getEmail().isBlank()) {
-                    try {
-                        emailService.sendApprovalEmail(registration);
-                    } catch (Exception emailEx) {
-                        // Log but don't fail the approval — the status is already updated
-                        System.err.println("Approval email failed for " + delegateId + ": " + emailEx.getMessage());
-                    }
+                    emailService.sendApprovalEmail(registration); // runs async — exceptions logged in EmailService
+                    emailQueued = true;
                 }
             }
 
@@ -163,6 +160,7 @@ public class RegistrationController {
             res.put("success", true);
             res.put("delegateId", delegateId);
             res.put("status", status);
+            res.put("emailQueued", emailQueued);
             return ResponseEntity.ok(res);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

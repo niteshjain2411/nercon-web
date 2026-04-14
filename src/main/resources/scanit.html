@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NERCON 2026 | Scan-It</title>
+    <!-- html5-qrcode for camera-based barcode / QR scanning -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary:  #1e3a8a;
+            --secondary:#0ea5e9;
+            --accent:   #059669;
+            --danger:   #dc2626;
+            --light-bg: #f0f9ff;
+            --dark-text:#1f2937;
+            --border:   #e5e7eb;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            background: #f5f5f5;
+            color: var(--dark-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ---- Header ---- */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header h1 { font-size: 1.3rem; font-weight: 700; }
+        header span { font-size: 0.85rem; opacity: 0.8; }
+
+        /* ---- Access denied ---- */
+        #access-denied {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            font-size: 1.2rem;
+            color: var(--danger);
+            gap: 0.5rem;
+        }
+
+        /* ---- Main content ---- */
+        #main-content {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            gap: 1.5rem;
+        }
+
+        /* ---- Scanner card ---- */
+        .card {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 1.75rem 2rem;
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+        }
+        .card h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.25rem;
+        }
+
+        /* Camera viewport */
+        #reader {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+        }
+
+        /* ---- Result card ---- */
+        #result-card {
+            display: none;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 2rem;
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+        }
+        .result-label {
+            font-size: 0.88rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.5rem;
+        }
+        .delegate-id-display {
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: #374151;
+            background: #f3f4f6;
+            border-radius: 6px;
+            padding: 0.45rem 0.75rem;
+            word-break: break-all;
+            margin-bottom: 1.5rem;
+        }
+        .count-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin: 0 auto 0.5rem;
+            box-shadow: 0 4px 18px rgba(30,58,138,0.3);
+        }
+        .count-desc {
+            font-size: 0.95rem;
+            color: #6b7280;
+            margin-bottom: 1.75rem;
+        }
+        .error-text {
+            color: var(--danger);
+            font-size: 0.9rem;
+            margin-bottom: 1.75rem;
+        }
+
+        /* ---- Buttons ---- */
+        .btn {
+            display: inline-block;
+            padding: 0.65rem 1.6rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn:hover  { opacity: 0.88; }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary  { background: var(--primary); color: white; }
+        .btn-success  { background: var(--accent);  color: white; }
+        .btn-secondary{ background: #6b7280;        color: white; }
+
+        /* ---- Reader wrap for overlay ---- */
+        .reader-wrap { position: relative; }
+        #scan-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ---- Running total ---- */
+        .running-total {
+            background: var(--accent);
+            color: white;
+            border-radius: 10px;
+            padding: 0.65rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-align: center;
+            width: 100%;
+            max-width: 520px;
+        }
+
+        /* ---- History ---- */
+        #history-section {
+            width: 100%;
+            max-width: 520px;
+        }
+        #history-section h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+        #history-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        #history-list li {
+            background: white;
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            font-size: 0.84rem;
+            gap: 0.5rem;
+        }
+        .hist-id  { font-family: 'Courier New', monospace; color: #374151; word-break: break-all; }
+        .hist-cnt {
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            padding: 0.1rem 0.65rem;
+            font-weight: 700;
+            font-size: 0.82rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .hist-cnt.error-cnt { background: var(--danger); }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 600px) {
+            .count-badge { width: 88px; height: 88px; font-size: 2.2rem; }
+            .card { padding: 1.25rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Access denied view -->
+<div id="access-denied">
+    <div style="font-size:3rem;">&#128274;</div>
+    <strong>Access Denied</strong>
+    <p style="font-size:0.95rem;color:#6b7280;margin-top:0.25rem;">Invalid or missing scan key.</p>
+</div>
+
+<!-- Header -->
+<header id="app-header" style="display:none;">
+    <h1>NERCON 2026 &#8212; Scan-It</h1>
+    <span>Barcode / QR Scanner</span>
+</header>
+
+<!-- Main content -->
+<div id="main-content">
+
+    <!-- Scanner card -->
+    <div class="card">
+        <h2>&#128247; Point camera at badge barcode / QR code</h2>
+        <div class="reader-wrap">
+            <div id="reader"></div>
+            <div id="scan-overlay">Scanner paused</div>
+        </div>
+    </div>
+
+    <!-- Result display -->
+    <div id="result-card">
+        <div class="result-label">Scanned Delegate ID</div>
+        <div class="delegate-id-display" id="scanned-id-display">&#8212;</div>
+
+        <div id="parse-success" style="display:none;">
+            <div class="count-badge" id="count-display">0</div>
+            <div class="count-desc">Total registered person(s) for this delegation</div>
+        </div>
+
+        <div id="parse-error" class="error-text" style="display:none;">
+            Could not extract person count from this Delegate ID.
+        </div>
+
+        <button class="btn btn-success" onclick="scanNext()">
+            &#8617; Scan Next Barcode
+        </button>
+    </div>
+
+    <!-- Running total -->
+    <div class="running-total" id="running-total" style="display:none;">
+        Total persons scanned: <span id="running-total-val">0</span>
+        &nbsp;|&nbsp;
+        Scans: <span id="scan-count-val">0</span>
+        &nbsp;&nbsp;
+        <button class="btn btn-secondary" onclick="clearHistory()"
+                style="font-size:0.78rem;padding:0.25rem 0.75rem;margin-left:0.5rem;">
+            Clear
+        </button>
+    </div>
+
+    <!-- History -->
+    <div id="history-section" style="display:none;">
+        <h3>Scan History (newest first)</h3>
+        <ul id="history-list"></ul>
+    </div>
+
+</div>
+
+<script>
+// ---------------------------------------------------------------
+// Access control — require ?key=NERCON_SCANIT_2026
+// ---------------------------------------------------------------
+const SCAN_KEY = 'NERCON_SCANIT_2026';
+
+(function checkAccess() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('key') !== SCAN_KEY) {
+        document.getElementById('access-denied').style.display = 'flex';
+    } else {
+        document.getElementById('app-header').style.display = 'flex';
+        document.getElementById('main-content').style.display = 'flex';
+        initScanner();
+    }
+})();
+
+// ---------------------------------------------------------------
+// State
+// ---------------------------------------------------------------
+let scanner      = null;
+let scanHistory  = [];
+let scannerReady = false;
+
+// ---------------------------------------------------------------
+// Scanner initialisation
+// ---------------------------------------------------------------
+function initScanner() {
+    scanner = new Html5Qrcode('reader');
+    startScan();
+}
+
+function startScan() {
+    document.getElementById('scan-overlay').style.display = 'none';
+
+    const config = {
+        fps: 10,
+        qrbox: { width: 280, height: 180 },
+        rememberLastUsedCamera: true
+    };
+
+    scanner.start(
+        { facingMode: 'environment' },
+        config,
+        onScanSuccess,
+        () => {}   // suppress per-frame errors
+    ).catch(() => {
+        // Fall back to front camera if rear unavailable
+        scanner.start(
+            { facingMode: 'user' },
+            config,
+            onScanSuccess,
+            () => {}
+        ).catch(err => {
+            alert('Camera access denied or unavailable.\n' + err);
+        });
+    });
+
+    scannerReady = true;
+}
+
+// ---------------------------------------------------------------
+// Scan success
+// ---------------------------------------------------------------
+function onScanSuccess(decodedText) {
+    if (!scannerReady) return;
+    scannerReady = false;
+
+    // Pause the camera stream visually
+    scanner.pause();
+    document.getElementById('scan-overlay').style.display = 'flex';
+
+    const delegateId = decodedText.trim();
+    const count      = extractCount(delegateId);
+
+    // Populate result card
+    document.getElementById('scanned-id-display').textContent = delegateId;
+
+    if (count !== null) {
+        document.getElementById('count-display').textContent       = count;
+        document.getElementById('parse-success').style.display     = 'block';
+        document.getElementById('parse-error').style.display       = 'none';
+    } else {
+        document.getElementById('parse-success').style.display     = 'none';
+        document.getElementById('parse-error').style.display       = 'block';
+    }
+
+    document.getElementById('result-card').style.display = 'block';
+
+    // Push to history
+    scanHistory.push({ id: delegateId, count, valid: count !== null });
+    renderHistory();
+}
+
+// ---------------------------------------------------------------
+// Extract count — matches -Rg-<number> (case-insensitive)
+// e.g. NERCON-ABCD1234-Rg-3  =>  3
+// ---------------------------------------------------------------
+function extractCount(id) {
+    const match = id.match(/-Rg-(\d+)/i);
+    if (!match) return null;
+    const n = parseInt(match[1], 10);
+    return isNaN(n) ? null : n;
+}
+
+// ---------------------------------------------------------------
+// Scan Next — hide result, resume scanner
+// ---------------------------------------------------------------
+function scanNext() {
+    document.getElementById('result-card').style.display          = 'none';
+    document.getElementById('parse-success').style.display        = 'none';
+    document.getElementById('parse-error').style.display          = 'none';
+    document.getElementById('scan-overlay').style.display         = 'none';
+
+    scanner.resume();
+    scannerReady = true;
+}
+
+// ---------------------------------------------------------------
+// Render history list + running totals
+// ---------------------------------------------------------------
+function renderHistory() {
+    const list = document.getElementById('history-list');
+    list.innerHTML = '';
+
+    let runningTotal = 0;
+
+    [...scanHistory].reverse().forEach(entry => {
+        const li      = document.createElement('li');
+        const idSpan  = document.createElement('span');
+        const cntSpan = document.createElement('span');
+
+        idSpan.className   = 'hist-id';
+        idSpan.textContent = entry.id;
+
+        cntSpan.className   = entry.valid ? 'hist-cnt' : 'hist-cnt error-cnt';
+        cntSpan.textContent = entry.valid ? entry.count + ' person(s)' : '?';
+
+        li.appendChild(idSpan);
+        li.appendChild(cntSpan);
+        list.appendChild(li);
+
+        if (entry.valid) runningTotal += entry.count;
+    });
+
+    document.getElementById('running-total-val').textContent  = runningTotal;
+    document.getElementById('scan-count-val').textContent     = scanHistory.length;
+    document.getElementById('running-total').style.display    = 'block';
+    document.getElementById('history-section').style.display  = 'block';
+}
+
+// ---------------------------------------------------------------
+// Clear history
+// ---------------------------------------------------------------
+function clearHistory() {
+    scanHistory = [];
+    document.getElementById('history-list').innerHTML         = '';
+    document.getElementById('running-total').style.display   = 'none';
+    document.getElementById('history-section').style.display = 'none';
+}
+</script>
+</body>
+</html>

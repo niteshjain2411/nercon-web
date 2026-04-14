@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -42,20 +43,26 @@ public class EmailService {
      * registration-approval email to registration.getEmail() with the
      * barcode attached as "food-coupon-barcode.png".
      */
-    public void sendApprovalEmail(RegistrationData registration) throws Exception {
+    @Async
+    public void sendApprovalEmail(RegistrationData registration) {
         String delegateId = registration.getDelegateId();
-        byte[] barcodeBytes = generateBarcode(delegateId);
+        try {
+            byte[] barcodeBytes = generateBarcode(delegateId);
 
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        helper.setFrom(fromAddress);
-        helper.setTo(registration.getEmail());
-        helper.setSubject("NERCON 2026 — Registration Approved! | Delegate ID: " + delegateId);
-        helper.setText(buildEmailBody(registration), true);
-        helper.addAttachment("food-coupon-barcode.png", new ByteArrayResource(barcodeBytes));
+            helper.setFrom(fromAddress);
+            helper.setTo(registration.getEmail());
+            helper.setSubject("NERCON 2026 — Registration Approved! | Delegate ID: " + delegateId);
+            helper.setText(buildEmailBody(registration), true);
+            helper.addAttachment("food-coupon-barcode.png", new ByteArrayResource(barcodeBytes));
 
-        mailSender.send(message);
+            mailSender.send(message);
+            System.out.println("Approval email sent successfully to " + registration.getEmail() + " for " + delegateId);
+        } catch (Exception e) {
+            System.err.println("Approval email FAILED for " + delegateId + " (" + registration.getEmail() + "): " + e.getMessage());
+        }
     }
 
     private String buildEmailBody(RegistrationData r) {
