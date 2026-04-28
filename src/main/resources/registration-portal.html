@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NERCON 2026 | Registration Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0ea5e9;
+            --accent: #059669;
+            --light-bg: #f0f9ff;
+            --dark-text: #1f2937;
+            --border-color: #e5e7eb;
+            --danger: #dc2626;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-text);
+            background: #f5f5f5;
+        }
+        header { background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; }
+        .logo-text { font-weight: 700; font-size: 1.8rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .logo-area { display: flex; align-items: center; gap: 0.75rem; }
+        .header-logo { width: 48px; height: 48px; object-fit: contain; border-radius: 50%; }
+        nav ul { list-style: none; display: flex; gap: 2.5rem; }
+        nav ul li a { text-decoration: none; color: var(--dark-text); font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease; position: relative; }
+        nav ul li a:after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--secondary); transition: width 0.3s ease; }
+        nav ul li a:hover:after { width: 100%; }
+
+        .page-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; padding: 3rem 2rem; text-align: center;
+        }
+        .page-banner h1 { font-size: 2.5rem; font-weight: 700; font-family: 'Cinzel', 'Georgia', serif; margin-bottom: 0.5rem; }
+        .page-banner p { font-size: 1.1rem; opacity: 0.9; }
+
+        .portal-wrapper {
+            max-width: 900px; margin: 3rem auto 5rem; padding: 0 1.5rem;
+        }
+        .portal-heading {
+            text-align: center; margin-bottom: 2.5rem;
+        }
+        .portal-heading h2 { font-size: 1.6rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .portal-heading p { color: #6b7280; font-size: 1rem; }
+
+        .portal-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .portal-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border: 2px solid var(--border-color);
+            padding: 2.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .portal-card:hover { border-color: var(--secondary); box-shadow: 0 8px 28px rgba(14,165,233,0.15); }
+        .portal-card .card-icon { font-size: 3.5rem; margin-bottom: 1.2rem; }
+        .portal-card h3 { font-size: 1.4rem; color: var(--primary); margin-bottom: 0.75rem; font-weight: 700; }
+        .portal-card p { color: #6b7280; font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.7; flex: 1; }
+
+        .btn-primary {
+            display: inline-block; padding: 0.85rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; border: none; border-radius: 6px; font-weight: 600;
+            font-size: 0.95rem; cursor: pointer; transition: all 0.3s ease;
+            text-decoration: none; width: 100%;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(30,58,138,0.3); }
+
+        /* Update card lookup form */
+        .lookup-form { width: 100%; margin-top: 0.5rem; }
+        .lookup-input {
+            width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border-color);
+            border-radius: 6px; font-size: 0.95rem; font-family: inherit;
+            margin-bottom: 0.75rem; transition: border-color 0.3s;
+        }
+        .lookup-input:focus { outline: none; border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(14,165,233,0.12); }
+        .lookup-input::placeholder { color: #9ca3af; }
+
+        .error-msg {
+            color: var(--danger); font-size: 0.88rem; margin-bottom: 0.75rem;
+            background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px;
+            padding: 0.6rem 1rem; display: none; text-align: left;
+        }
+        .spinner {
+            display: none; align-items: center; justify-content: center; gap: 0.5rem;
+            color: var(--secondary); font-size: 0.9rem; margin-top: 0.5rem;
+        }
+        .spinner.active { display: flex; }
+        .spinner::before {
+            content: '';
+            width: 18px; height: 18px;
+            border: 2px solid #e5e7eb; border-top-color: var(--secondary);
+            border-radius: 50%; animation: spin 0.7s linear infinite;
+            flex-shrink: 0;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        footer { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; text-align: center; padding: 2rem; }
+        @media (max-width: 650px) {
+            .portal-cards { grid-template-columns: 1fr; }
+            .page-banner h1 { font-size: 1.8rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+            nav ul { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<section class="page-banner">
+    <h1>Registration Portal</h1>
+    <p>NERCON 2026 — 35th Annual Conference</p>
+</section>
+
+<div class="portal-wrapper">
+    <div class="portal-heading">
+        <h2>How would you like to proceed?</h2>
+        <p>Choose an option below — register fresh or update an existing registration to add workshops.</p>
+    </div>
+
+    <div class="portal-cards">
+        <!-- NEW REGISTRATION -->
+        <div class="portal-card">
+            <div class="card-icon">📋</div>
+            <h3>New Registration</h3>
+            <p>Register for NERCON 2026 for the first time. You will receive a unique <strong>Delegate ID</strong> upon successful submission, which you can use later to update your registration.</p>
+            <a href="./registration.html" class="btn-primary">START REGISTRATION</a>
+        </div>
+
+        <!-- UPDATE REGISTRATION -->
+        <div class="portal-card">
+            <div class="card-icon">✏️</div>
+            <h3>Update Existing Registration</h3>
+            <p>Already registered? Enter your <strong>Delegate ID</strong> to retrieve your details and add workshop registrations you may have missed earlier.</p>
+            <div class="lookup-form">
+                <input
+                    type="text"
+                    id="delegateIdInput"
+                    class="lookup-input"
+                    placeholder="e.g. NERCON-AB12CD34-Rg-1"
+                    autocomplete="off"
+                    onkeydown="if(event.key==='Enter') lookupRegistration()"
+                >
+                <div id="lookupError" class="error-msg"></div>
+                <button class="btn-primary" onclick="lookupRegistration()">CONTINUE TO UPDATE</button>
+                <div id="lookupSpinner" class="spinner">Verifying Delegate ID…</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="./template-loader.js"></script>
+<script>
+    async function lookupRegistration() {
+        const input = document.getElementById('delegateIdInput');
+        const errorDiv = document.getElementById('lookupError');
+        const spinner = document.getElementById('lookupSpinner');
+        const delegateId = input.value.trim();
+
+        errorDiv.style.display = 'none';
+        errorDiv.textContent = '';
+
+        if (!delegateId) {
+            errorDiv.textContent = 'Please enter your Delegate ID.';
+            errorDiv.style.display = 'block';
+            input.focus();
+            return;
+        }
+
+        spinner.classList.add('active');
+
+        try {
+            const res = await fetch('/nercon/api/registration/fetch/' + encodeURIComponent(delegateId));
+            const json = await res.json();
+
+            if (res.ok && json.success) {
+                // Valid registration — redirect to edit mode
+                window.location.href = './registration.html?mode=edit&delegateId=' + encodeURIComponent(delegateId);
+            } else {
+                errorDiv.textContent = json.message || 'No registration found. Please check the Delegate ID and try again.';
+                errorDiv.style.display = 'block';
+                input.focus();
+            }
+        } catch (err) {
+            errorDiv.textContent = 'Could not connect to the server. Please try again.';
+            errorDiv.style.display = 'block';
+        } finally {
+            spinner.classList.remove('active');
+        }
+    }
+</script>
+</body>
+</html>

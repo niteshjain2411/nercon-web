@@ -1,19 +1,12 @@
 package org.example.service;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.oned.Code128Writer;
 import jakarta.mail.internet.MimeMessage;
 import org.example.model.RegistrationData;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import java.io.ByteArrayOutputStream;
 
 @Service
 public class EmailService {
@@ -28,35 +21,19 @@ public class EmailService {
     }
 
     /**
-     * Generates a CODE-128 barcode PNG for the given delegateId.
-     */
-    public byte[] generateBarcode(String delegateId) throws Exception {
-        Code128Writer writer = new Code128Writer();
-        BitMatrix matrix = writer.encode(delegateId, BarcodeFormat.CODE_128, 700, 175);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        MatrixToImageWriter.writeToStream(matrix, "PNG", out);
-        return out.toByteArray();
-    }
-
-    /**
-     * Generates a barcode for registration.getDelegateId() and sends a
-     * registration-approval email to registration.getEmail() with the
-     * barcode attached as "food-coupon-barcode.png".
+     * Sends a registration-approval email to registration.getEmail().
      */
     @Async
     public void sendApprovalEmail(RegistrationData registration) {
         String delegateId = registration.getDelegateId();
         try {
-            byte[] barcodeBytes = generateBarcode(delegateId);
-
             MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
 
             helper.setFrom(fromAddress);
             helper.setTo(registration.getEmail());
             helper.setSubject("NERCON 2026 — Registration Approved! | Delegate ID: " + delegateId);
             helper.setText(buildEmailBody(registration), true);
-            helper.addAttachment("food-coupon-barcode.png", new ByteArrayResource(barcodeBytes));
 
             mailSender.send(message);
             System.out.println("Approval email sent successfully to " + registration.getEmail() + " for " + delegateId);
@@ -66,6 +43,36 @@ public class EmailService {
     }
 
     private String buildEmailBody(RegistrationData r) {
+        // Build workshops list HTML
+        java.util.List<String> workshops = r.getWorkshops();
+        boolean hasWorkshops = workshops != null && !workshops.isEmpty()
+                && !(workshops.size() == 1 && "ws0".equalsIgnoreCase(workshops.get(0)));
+        StringBuilder workshopsHtml = new StringBuilder();
+        if (hasWorkshops) {
+            for (String w : workshops) {
+                workshopsHtml.append("        <li style=\"margin-bottom:0.3rem;\">").append(escHtml(w)).append("</li>\n");
+            }
+        }
+
+        // Accompanying persons
+        long accompany = r.getAccompanycount();
+        String accompanyText = accompany > 0 ? String.valueOf(accompany) : "None";
+
+        String workshopsSection = hasWorkshops
+                ? """
+                  <li style="margin-bottom:0.5rem;">
+                    <strong>Pre-Conference Workshops (12 November 2026):</strong>
+                    <ul style="margin:0.4rem 0 0 1.2rem; padding:0; list-style-type:disc;">
+                """ + workshopsHtml + """
+                    </ul>
+                  </li>
+                """
+                : """
+                  <li style="margin-bottom:0.5rem;">
+                    <strong>Pre-Conference Workshops:</strong> None
+                  </li>
+                """;
+
         return """
                 <html>
                 <body style="font-family: Arial, sans-serif; color: #1f2937; max-width: 620px; margin: 0 auto; padding: 0;">
@@ -74,60 +81,36 @@ public class EmailService {
                     <p style="color: #bfdbfe; margin: 0.25rem 0 0; font-size: 0.9rem;">35th Annual Conference of NERCON</p>
                   </div>
                   <div style="padding: 2rem;">
-                    <h2 style="color: #059669; margin-top: 0;">Registration Approved ✓</h2>
-                    <p style="margin-bottom: 1.4rem;">Dear <strong>%s</strong>,</p>
-                    <p>We are delighted to inform you that your registration for <strong>NERCON 2026</strong> has been
-                       successfully reviewed and <strong>approved</strong>.</p>
+                    <p style="font-size: 1rem; font-weight: 700; color: #1e3a8a; margin-top: 0;">Greetings from NERCON 2026!</p>
+                    <p>Dear <strong>%s</strong>,</p>
+                    <p>Thank you for registering for the conference. We are delighted to confirm your participation,
+                       and the details of your registration are as follows:</p>
 
-                    <table style="border-collapse: collapse; width: 100%%; margin: 1.5rem 0; background: #f0f9ff;
-                                  border-radius: 8px; overflow: hidden;">
-                      <tr>
-                        <td style="padding: 0.7rem 1rem; color: #6b7280; font-weight: 600; width: 40%%;">Delegate ID</td>
-                        <td style="padding: 0.7rem 1rem; font-weight: 700; color: #1e3a8a; font-size: 1rem; letter-spacing: 0.04em;">%s</td>
-                      </tr>
-                      <tr style="background: #e0f2fe;">
-                        <td style="padding: 0.7rem 1rem; color: #6b7280; font-weight: 600;">Name</td>
-                        <td style="padding: 0.7rem 1rem;">%s</td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 0.7rem 1rem; color: #6b7280; font-weight: 600;">Email</td>
-                        <td style="padding: 0.7rem 1rem;">%s</td>
-                      </tr>
-                      <tr style="background: #e0f2fe;">
-                        <td style="padding: 0.7rem 1rem; color: #6b7280; font-weight: 600;">Total Amount</td>
-                        <td style="padding: 0.7rem 1rem;">₹ %s</td>
-                      </tr>
-                    </table>
+                    <ol style="line-height: 1.9; padding-left: 1.4rem; margin: 1.2rem 0;">
+                      <li style="margin-bottom:0.5rem;"><strong>Conference:</strong> NERCON 2026 (13–14 November 2026)</li>
+                """ + workshopsSection + """
+                      <li style="margin-bottom:0.5rem;"><strong>Accompanying Persons:</strong> %s</li>
+                    </ol>
 
-                    <div style="background: #fef9c3; border-left: 4px solid #d97706; padding: 1rem 1.2rem;
-                                border-radius: 0 6px 6px 0; margin: 1.5rem 0;">
-                      <strong style="color: #92400e;">🍽 Food Coupon Barcode Attached</strong>
-                      <p style="margin: 0.5rem 0 0; color: #78350f; font-size: 0.9rem;">
-                        Your food coupon barcode is attached to this email as
-                        <em>food-coupon-barcode.png</em>. Please carry a printout or a digital copy
-                        of this barcode to the conference venue. It will be scanned at the meal
-                        counters and the banquet dinner to grant you access to catering services.
-                      </p>
-                    </div>
+                    <p>Your Delegate ID is <strong style="color: #1e3a8a; font-size: 1rem; letter-spacing: 0.04em;">%s</strong>.</p>
 
-                    <p style="font-size: 0.9rem;">We look forward to welcoming you at NERCON 2026. Should you have any
-                    questions, please reach out to us at
-                    <a href="mailto:nercon2026@gmail.com" style="color: #1e3a8a;">nercon2026@gmail.com</a>.</p>
+                    <p>We sincerely appreciate your interest and look forward to welcoming you. We are confident that
+                       the conference will provide a valuable and enriching experience.</p>
 
-                    <p>Warm regards,<br>
-                    <strong>NERCON 2026 Organising Committee</strong></p>
+                    <p style="margin-bottom: 0;">Warm regards,<br>
+                    <strong>Registration Committee</strong><br>
+                    NERCON 2026</p>
                   </div>
                   <div style="background: #f3f4f6; padding: 1rem 2rem; font-size: 0.78rem; color: #9ca3af; text-align: center;">
                     This is an automated message. Please do not reply to this email.
                   </div>
                 </body>
                 </html>
-                """.formatted(
-                        r.getFullname(),
-                        r.getDelegateId(),
-                        r.getFullname(),
-                        r.getEmail(),
-                        r.getTotalAmount() != null ? r.getTotalAmount() : "—"
-                );
+                """.formatted(r.getFullname(), accompanyText, r.getDelegateId());
+    }
+
+    private static String escHtml(String s) {
+        if (s == null) return "";
+        return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
     }
 }

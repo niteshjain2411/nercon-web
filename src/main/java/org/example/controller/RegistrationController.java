@@ -119,6 +119,73 @@ public class RegistrationController {
     }
 
     /**
+     * Fetch a single registration by delegateId (used by the registration portal for edit mode).
+     * GET /api/registration/fetch/{delegateId}
+     */
+    @GetMapping("/fetch/{delegateId}")
+    public ResponseEntity<?> fetchRegistration(@PathVariable("delegateId") String delegateId) {
+        try {
+            if (delegateId == null || delegateId.isBlank()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("delegateId is required"));
+            }
+            RegistrationData registration = firestoreService.getRegistrationById(delegateId.trim());
+            if (registration == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(createErrorResponse("No registration found with this Delegate ID"));
+            }
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("data", registration);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("Error fetching registration: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * Update workshop selection for an existing registration.
+     * Preserves all personal details and existing regstatus.
+     * PATCH /api/registration/{delegateId}/workshops
+     * Body: { "workshops": [...], "txnKey": "txn2", "txnid": "...", "txndate": "...",
+     *         "paymentimg": "...", "totalAmount": "..." }
+     */
+    @PatchMapping("/{delegateId}/workshops")
+    public ResponseEntity<?> updateWorkshops(
+            @PathVariable("delegateId") String delegateId,
+            @RequestBody Map<String, Object> body) {
+        try {
+            if (delegateId == null || delegateId.isBlank()) {
+                return ResponseEntity.badRequest().body(createErrorResponse("delegateId is required"));
+            }
+            RegistrationData existing = firestoreService.getRegistrationById(delegateId.trim());
+            if (existing == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(createErrorResponse("No registration found with this Delegate ID"));
+            }
+
+            @SuppressWarnings("unchecked")
+            List<String> workshops = (List<String>) body.get("workshops");
+            String txnKey    = (String) body.getOrDefault("txnKey", "txn2");
+            String txnid     = (String) body.getOrDefault("txnid", "");
+            String txndate   = (String) body.getOrDefault("txndate", "");
+            String paymentimg = (String) body.getOrDefault("paymentimg", "");
+            String totalAmount = (String) body.getOrDefault("totalAmount", "");
+
+            firestoreService.updateWorkshops(delegateId.trim(), workshops, txnKey, txnid, txndate, paymentimg, totalAmount);
+
+            Map<String, Object> res = new HashMap<>();
+            res.put("success", true);
+            res.put("delegateId", delegateId);
+            res.put("message", "Workshop registration updated successfully");
+            return ResponseEntity.ok(res);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("Error updating workshops: " + e.getMessage()));
+        }
+    }
+
+    /**
      * Health check endpoint.
      * GET /api/registration/health
      */

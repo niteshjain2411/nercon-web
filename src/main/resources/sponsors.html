@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NERCON 2026 | Sponsors</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0ea5e9;
+            --accent: #059669;
+            --light-bg: #f0f9ff;
+            --dark-text: #1f2937;
+            --border-color: #e5e7eb;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-text);
+            background: #ffffff;
+        }
+        header { background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; }
+        .logo-text { font-weight: 700; font-size: 1.8rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .logo-area { display: flex; align-items: center; gap: 0.75rem; }
+        .header-logo { width: 48px; height: 48px; object-fit: contain; border-radius: 50%; }
+        nav ul { list-style: none; display: flex; gap: 2.5rem; }
+        nav ul li a { text-decoration: none; color: var(--dark-text); font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease; position: relative; }
+        nav ul li a:after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--secondary); transition: width 0.3s ease; }
+        nav ul li a:hover:after { width: 100%; }
+
+        .page-banner { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 3rem 2rem; text-align: center; }
+        .page-banner h1 { font-size: 2.5rem; font-weight: 700; font-family: 'Cinzel', 'Georgia', serif; margin-bottom: 0.5rem; }
+        .page-banner p { font-size: 1.1rem; opacity: 0.9; }
+
+        .content-wrapper {
+            max-width: 900px; margin: 0 auto; padding: 3rem 2rem 4rem;
+        }
+        .content-card { background: white; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--border-color); overflow: hidden; }
+        .content-header { background: var(--light-bg); padding: 1.5rem 2rem; border-bottom: 2px solid var(--secondary); }
+        .content-header h2 { font-size: 1.5rem; color: var(--primary); font-weight: 700; }
+        .content-body { padding: 2rem; }
+        .coming-soon-box { text-align: center; padding: 4rem 2rem; }
+        .coming-soon-box .icon { font-size: 4rem; margin-bottom: 1.5rem; }
+        .coming-soon-box h3 { font-size: 1.8rem; color: var(--primary); margin-bottom: 1rem; }
+        .coming-soon-box p { font-size: 1.1rem; color: #6b7280; max-width: 550px; margin: 0 auto 1rem; line-height: 1.8; }
+        .coming-soon-box .highlight { color: var(--secondary); font-weight: 600; }
+        .contact-note { margin-top: 2rem; padding: 1.2rem 1.5rem; background: var(--light-bg); border-radius: 8px; border-left: 4px solid var(--secondary); display: inline-block; }
+        .contact-note p { font-size: 0.95rem; color: var(--dark-text); margin: 0; }
+        .contact-note a { color: var(--secondary); text-decoration: none; font-weight: 600; }
+        .contact-note a:hover { text-decoration: underline; }
+
+        footer { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; text-align: center; padding: 2rem; margin-top: 0; }
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 1rem; }
+            nav ul { flex-direction: column; gap: 1rem; text-align: center; }
+            .page-banner h1 { font-size: 1.8rem; }
+            .content-wrapper { padding: 1.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<section class="page-banner">
+    <h1>Sponsors</h1>
+    <p>NERCON 2026 — 35th Annual Conference</p>
+</section>
+
+<div class="content-wrapper">
+    <div class="content-card">
+        <div class="content-header">
+            <h2>Our Sponsors &amp; Partners</h2>
+        </div>
+        <div class="content-body">
+            <div class="coming-soon-box">
+                <div class="icon">🤝</div>
+                <h3>Coming Soon...</h3>
+                <p>We are thrilled to be partnering with leading organizations in the medical and healthcare industry for NERCON 2026. Our sponsors play a vital role in making this conference a grand success.</p>
+                <p><span class="highlight">Sponsorship tiers, partner logos, and collaboration details</span> will be unveiled here shortly. Stay tuned!</p>
+                <div class="contact-note">
+                    <p>Interested in sponsoring NERCON 2026? Reach out to us at <a href="mailto:nercon2026@gmail.com">nercon2026@gmail.com</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="./template-loader.js"></script>
+</body>
+</html>

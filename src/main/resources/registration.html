@@ -471,6 +471,12 @@
                     <li><strong>Payment can be made</strong> using the UPI transfer or NEFT transfer. Please check the total amount carefully before transfer. Please note the Transaction ID and date. It is preferable to preserve the screenshot of the transaction details till you receive confirmation mail from the organizing team.</li>
                     <li><strong>For any difficulty in Registration process,</strong> kindly e-mail <strong>nercon2026@gmail.com</strong></li>
                 </ol>
+                <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Cancellation Policy</h3>
+                <ol>
+                    <li>Cancellation requests, duly mailed to <strong>nercon2026@gmail.com</strong>, will be accepted till <strong>30th September 2026</strong>. After this date, no request for cancellation will be accepted.</li>
+                    <li>Eligible cancellation requests will be eligible for <strong>50% refund</strong> of the amount paid.</li>
+                    <li>Refund will be processed <strong>two weeks after the conference</strong>.</li>
+                </ol>
             </div>
             <div class="button-group" style="margin-top: 2rem;">
                 <button type="button" class="btn-primary" onclick="proceedToRegistration()">PROCEED</button>
@@ -613,19 +619,10 @@
                     <p class="summary-amount">Rs <span id="totalAmount">0</span></p>
                 </div>
 
-                <!-- Synopsis -->
-                <div class="section-title">4. Abstract (Optional)</div>
-                <div class="form-group">
-                    <label for="synopsis">Brief Abstract <span style="color:#6b7280;font-weight:400;">(max 500 words)</span></label>
-                    <textarea id="synopsis" name="synopsis" rows="6"
-                        placeholder="Enter a brief abstract (optional, max 500 words)..."
-                        oninput="checkWordCount(this)"
-                        style="width:100%;padding:0.75rem;border:1px solid var(--border-color);border-radius:6px;font-size:0.95rem;resize:vertical;"></textarea>
-                    <div id="synopsis-word-count" style="text-align:right;font-size:0.85rem;color:#6b7280;margin-top:0.25rem;">0 / 500 words</div>
-                </div>
+               
 
                 <!-- Payment Details -->
-                <div class="section-title">5. Payment &amp; Documents</div>
+                <div class="section-title">4. Payment &amp; Documents</div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="txnid">Transaction ID <span class="required">*</span></label>
@@ -701,20 +698,26 @@
 
     // Calculate total fee
     function updateTotal() {
-        let total = 6000; // Base registration fee
+        // In edit mode: base conference fee is already paid; only count NEW (non-disabled) workshops
+        let total = window._editMode ? 0 : 6000;
         workshopCheckboxes.forEach(checkbox => {
-            if (checkbox.checked) {
+            if (checkbox.checked && !checkbox.disabled) {
                 total += parseInt(checkbox.getAttribute("data-fee")) || 0;
             }
         });
-        const accompanyCnt = parseInt(document.getElementById("accompany").value) || 0;
-        total += accompanyCnt * 1500;
+        if (!window._editMode) {
+            const accompanyCnt = parseInt(document.getElementById("accompany").value) || 0;
+            total += accompanyCnt * 1500;
+        }
         totalAmountSpan.textContent = total.toLocaleString();
     }
 
     // Form submission
     async function handleSubmit(event) {
         event.preventDefault();
+        if (window._editMode) {
+            return handleSubmitEdit(event);
+        }
 
         const submitBtn = event.target.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
@@ -849,6 +852,207 @@
             counter.style.color = '#6b7280';
         }
     }
+
+    // -----------------------------------------------------------------------
+    // EDIT MODE — called when page loads with ?mode=edit&delegateId=XXX
+    // -----------------------------------------------------------------------
+    async function initEditMode(delegateId) {
+        // Skip terms, go straight to form
+        document.getElementById('page1').classList.remove('active');
+        document.getElementById('page2').classList.add('active');
+
+        // Update form header
+        document.querySelector('.form-header h1').textContent = 'Update Workshop Registration';
+        document.querySelector('.form-header p').textContent = 'Delegate ID: ' + delegateId;
+
+        // Fetch existing registration
+        let data;
+        try {
+            const res = await fetch('/nercon/api/registration/fetch/' + encodeURIComponent(delegateId));
+            const json = await res.json();
+            if (!res.ok || !json.success) {
+                alert('Could not load registration: ' + (json.message || 'Unknown error'));
+                window.location.href = './registration-portal.html';
+                return;
+            }
+            data = json.data;
+        } catch (err) {
+            alert('Failed to connect to server. Please try again.');
+            window.location.href = './registration-portal.html';
+            return;
+        }
+
+        // Pre-populate personal fields and make them read-only
+        const fieldMap = {
+            fullname:     data.fullname,
+            email:        data.email,
+            phone:        data.phone,
+            institute:    data.institute,
+            city:         data.city,
+            state:        data.state,
+            medcouncil:   data.medcouncil,
+            registration: data.medcouncilregnum,
+            designation:  data.designation
+        };
+        Object.entries(fieldMap).forEach(([id, val]) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.value = val || '';
+            el.readOnly = true;
+            el.style.background = '#f3f4f6';
+            el.style.color = '#6b7280';
+            el.removeAttribute('required');
+        });
+        const genderEl = document.getElementById('gender');
+        if (genderEl) {
+            genderEl.value = data.gender || '';
+            genderEl.disabled = true;
+            genderEl.style.background = '#f3f4f6';
+            genderEl.style.color = '#6b7280';
+            genderEl.removeAttribute('required');
+        }
+        const accompanyEl = document.getElementById('accompany');
+        if (accompanyEl) {
+            accompanyEl.value = data.accompanycount || 0;
+            accompanyEl.disabled = true;
+            accompanyEl.style.background = '#f3f4f6';
+            accompanyEl.style.color = '#6b7280';
+        }
+
+        // Pre-check existing workshops and lock them (cannot be removed)
+        const existingWorkshops = (data.workshops || []).filter(w => w !== 'ws0');
+        existingWorkshops.forEach(wsId => {
+            const wsEl = document.getElementById(wsId);
+            if (!wsEl) return;
+            wsEl.checked = true;
+            wsEl.disabled = true;
+            const label = wsEl.nextElementSibling;
+            if (label) {
+                label.style.background = '#e0f2fe';
+                label.style.borderColor = '#0ea5e9';
+                label.style.cursor = 'default';
+            }
+        });
+
+        // If all workshops already selected, also lock ws0
+        const ws0El = document.getElementById('ws0');
+        if (ws0El) {
+            ws0El.disabled = true;
+            const ws0label = ws0El.nextElementSibling;
+            if (ws0label) ws0label.style.cursor = 'default';
+        }
+
+        // Insert info banner above first section title
+        const firstSection = document.querySelector('#page2 .section-title');
+        if (firstSection) {
+            const banner = document.createElement('div');
+            banner.style.cssText = 'background:#f0fdf4;border:1px solid #16a34a;border-radius:8px;padding:1rem 1.5rem;margin-bottom:1.5rem;font-size:0.93rem;line-height:1.6;';
+            banner.innerHTML = '<strong style="color:#15803d;">✎ Edit Mode</strong> — Personal details are locked. Check the workshops you want to add below. Payment is required only for the newly selected workshops (Rs 2,000 each).';
+            firstSection.parentNode.insertBefore(banner, firstSection);
+        }
+
+        // Update submit button label
+        const submitBtn = document.querySelector('#registrationForm button[type="submit"]');
+        if (submitBtn) submitBtn.textContent = 'UPDATE REGISTRATION';
+
+        // Store edit state
+        window._editMode = true;
+        window._editDelegateId = delegateId;
+        window._existingWorkshops = existingWorkshops;
+        window._existingTxnCount = data.txndetails ? Object.keys(data.txndetails).length : 0;
+
+        updateTotal();
+    }
+
+    // Submit handler for edit mode
+    async function handleSubmitEdit(event) {
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Updating...';
+
+        try {
+            const delegateId = window._editDelegateId;
+            const existingWorkshops = window._existingWorkshops || [];
+
+            // Collect all currently checked workshops (excluding ws0)
+            const allSelected = Array.from(
+                document.querySelectorAll("input[name='workshop']:checked")
+            ).map(cb => cb.value).filter(v => v !== 'ws0');
+
+            // Newly added workshops = selected but not already in existing list
+            const newlyAdded = allSelected.filter(ws => !existingWorkshops.includes(ws));
+
+            if (newlyAdded.length === 0) {
+                alert('No new workshops selected. Please select at least one workshop to add.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'UPDATE REGISTRATION';
+                return;
+            }
+
+            // Upload new payment screenshot (required for new workshops)
+            const paymentFile = document.getElementById('paymentss').files[0];
+            if (!paymentFile) {
+                alert('Please attach the payment screenshot for the newly added workshops.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'UPDATE REGISTRATION';
+                return;
+            }
+            if (paymentFile.size > 5 * 1024 * 1024) {
+                alert('Payment screenshot exceeds 5 MB. Please use a smaller file.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'UPDATE REGISTRATION';
+                return;
+            }
+            const paymentForm = new FormData();
+            paymentForm.append('file', paymentFile);
+            paymentForm.append('delegateId', delegateId);
+            const paymentRes = await fetch('/nercon/api/registration/upload/payment', { method: 'POST', body: paymentForm });
+            const paymentJson = await paymentRes.json();
+            if (!paymentJson.success) throw new Error('Payment screenshot upload failed: ' + paymentJson.message);
+
+            // Determine txn key (txn2, txn3, …)
+            const txnKey = 'txn' + (( window._existingTxnCount || 0) + 1);
+
+            const updatePayload = {
+                workshops:    allSelected,
+                txnKey:       txnKey,
+                txnid:        document.getElementById('txnid').value,
+                txndate:      document.getElementById('txndate').value,
+                paymentimg:   paymentJson.url,
+                totalAmount:  document.getElementById('totalAmount').textContent
+            };
+
+            const updateRes = await fetch(
+                '/nercon/api/registration/' + encodeURIComponent(delegateId) + '/workshops',
+                { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updatePayload) }
+            );
+            const updateJson = await updateRes.json();
+            if (!updateJson.success) throw new Error(updateJson.message || 'Update failed');
+
+            // Show success
+            document.getElementById('page2').classList.remove('active');
+            const success = document.getElementById('successMessage');
+            success.style.display = 'block';
+            success.querySelector('h2').textContent = '✓ Registration Updated!';
+            success.querySelector('p').textContent = 'Your workshop selection has been updated for NERCON 2026.';
+            document.getElementById('delegateId').textContent = delegateId;
+            success.scrollIntoView({ behavior: 'smooth' });
+
+        } catch (error) {
+            console.error('Update error:', error);
+            alert('Error updating registration: ' + error.message + '\nPlease try again.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'UPDATE REGISTRATION';
+        }
+    }
+
+    // On page load: check for edit mode URL params
+    document.addEventListener('DOMContentLoaded', function () {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('mode') === 'edit' && params.get('delegateId')) {
+            initEditMode(params.get('delegateId'));
+        }
+    });
 
     // Initialize
     updateTotal();

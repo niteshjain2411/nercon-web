@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NERCON 2026 | Culture &amp; Cuisine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0ea5e9;
+            --accent: #059669;
+            --light-bg: #f0f9ff;
+            --surface: #ffffff;
+            --dark-text: #1f2937;
+            --muted-text: #4b5563;
+            --border-color: #e5e7eb;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-text);
+            background:
+                radial-gradient(circle at top left, rgba(14, 165, 233, 0.12), transparent 28%),
+                radial-gradient(circle at bottom right, rgba(30, 58, 138, 0.10), transparent 32%),
+                linear-gradient(180deg, #f6fbff 0%, #ffffff 22%, #f8fbff 100%);
+        }
+        header { background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; }
+        .logo-text { font-weight: 700; font-size: 1.8rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .logo-area { display: flex; align-items: center; gap: 0.75rem; }
+        .header-logo { width: 48px; height: 48px; object-fit: contain; border-radius: 50%; }
+        nav ul { list-style: none; display: flex; gap: 2.5rem; }
+        nav ul li a { text-decoration: none; color: var(--dark-text); font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease; position: relative; }
+        nav ul li a:after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--secondary); transition: width 0.3s ease; }
+        nav ul li a:hover:after { width: 100%; }
+
+        /* Page Banner */
+        .page-banner {
+            position: relative;
+            overflow: hidden;
+            background-color: #dbeef8;
+            background-image:
+                linear-gradient(135deg, rgba(8, 24, 58, 0.74), rgba(14, 165, 233, 0.46)),
+                url('./GYPSICON%202026_files/Assam%20tourism.avif');
+            background-position: center center, center center;
+            background-repeat: no-repeat, no-repeat;
+            background-size: auto, contain;
+            color: white;
+            padding: 4.5rem 2rem 4rem;
+            text-align: center;
+        }
+        .page-banner:before {
+            content: '';
+            position: absolute;
+            inset: auto auto -80px -60px;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            filter: blur(2px);
+        }
+        .page-banner:after {
+            content: '';
+            position: absolute;
+            top: -70px;
+            right: -30px;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.05);
+        }
+        .page-banner h1 {
+            position: relative;
+            font-size: 2.9rem;
+            font-weight: 700;
+            font-family: 'Cinzel', 'Georgia', serif;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.04em;
+        }
+        .page-banner p {
+            position: relative;
+            font-size: 1.05rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Gallery Container */
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem 4.5rem;
+        }
+        .gallery-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+        }
+        .gallery-intro h2 {
+            font-size: 1.75rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+        .gallery-intro p {
+            color: var(--muted-text);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+        .gallery-note {
+            margin-top: 0.9rem;
+            font-size: 0.95rem;
+            color: #0f4c81;
+            font-weight: 600;
+        }
+
+        /* Image Grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .image-card {
+            position: relative;
+            border-radius: 20px;
+            min-height: 360px;
+            perspective: 1200px;
+            transition: transform 0.35s ease;
+        }
+        .image-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 360px;
+            border-radius: 20px;
+            transform-style: preserve-3d;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.10);
+        }
+        .image-card.is-flipped .image-card-inner {
+            transform: rotateY(180deg);
+        }
+        .image-card:hover {
+            transform: translateY(-6px);
+        }
+        .image-card.is-flipped .image-card-inner {
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.16);
+        }
+        .image-face {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            backface-visibility: hidden;
+            background: var(--surface);
+            border: 1px solid rgba(229, 231, 235, 0.85);
+            display: flex;
+            flex-direction: column;
+        }
+        .image-front img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .image-card:hover .image-front img {
+            transform: scale(1.05);
+        }
+        .image-front .image-wrapper {
+            overflow: hidden;
+        }
+        .image-front .caption {
+            padding: 1.1rem 1.3rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--primary);
+            background: linear-gradient(180deg, rgba(248,251,255,0.98), rgba(240,249,255,0.95));
+            border-top: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+        .image-front .caption::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary), var(--primary));
+        }
+        .flip-hint {
+            display: block;
+            margin-top: 0.45rem;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--muted-text);
+        }
+        .image-back {
+            transform: rotateY(180deg);
+            justify-content: center;
+            padding: 1.6rem;
+            background:
+                linear-gradient(180deg, rgba(248, 251, 255, 0.98), rgba(230, 244, 255, 0.96));
+        }
+        .image-back h3 {
+            font-size: 1.1rem;
+            line-height: 1.4;
+            color: var(--primary);
+            margin-bottom: 0.9rem;
+            text-align: center;
+        }
+        .image-back p {
+            font-size: 0.94rem;
+            line-height: 1.75;
+            color: #334155;
+            text-align: left;
+        }
+        .flip-card-button {
+            appearance: none;
+            border: none;
+            background: transparent;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            text-align: inherit;
+            font: inherit;
+            color: inherit;
+        }
+        .flip-card-button:focus-visible {
+            outline: 3px solid rgba(14, 165, 233, 0.55);
+            outline-offset: 4px;
+            border-radius: 24px;
+        }
+
+        /* Footer */
+        footer { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; text-align: center; padding: 2rem; margin-top: 0; }
+
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 1rem; }
+            nav ul { flex-direction: column; gap: 1rem; text-align: center; }
+            .page-banner { padding: 3.5rem 1rem 3rem; }
+            .page-banner h1 { font-size: 2rem; }
+            .gallery-container { padding: 1.5rem 1rem; }
+            .image-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<section class="page-banner">
+    <h1>Culture &amp; Cuisine</h1>
+    <p>NERCON 2026 — Explore the beauty, heritage, and flavours of Northeast India</p>
+</section>
+
+<div class="gallery-container">
+    <div class="gallery-intro">
+        <h2>Discover Northeast India</h2>
+        <p>From the misty tea gardens of Assam to the ancient Ahom monuments, the Northeast is a treasure trove of culture, wildlife, and culinary delights. Explore what awaits you during NERCON 2026.</p>
+        <div class="gallery-note">Click or tap any card to flip it and read more.</div>
+    </div>
+
+    <div class="image-grid">
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Brahmaputra River Ropeway card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/Brahmaputra%20River%20Ropeway.jpeg" alt="Brahmaputra River Ropeway">
+                        </div>
+                        <div class="caption">Brahmaputra River Ropeway<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Brahmaputra River Ropeway</h3>
+                        <p>The Brahmaputra River Ropeway in Guwahati is one of India’s longest river ropeways, offering stunning aerial views of the mighty Brahmaputra. It connects Guwahati city with North Guwahati, making travel both convenient and scenic. The ride is especially popular for its breathtaking sunset vistas over the river.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Assamese Cuisine card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/Assamese%20Cuisine.jpeg" alt="Assamese Cuisine">
+                        </div>
+                        <div class="caption">Assamese Cuisine<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Assamese Cuisine</h3>
+                        <p>Assamese cuisine is known for its simple yet flavorful dishes that highlight fresh, local ingredients and minimal spices. It often features rice, fish, and unique preparations like khar and tenga, offering a balance of earthy and tangy tastes. The food reflects the region’s rich culture and deep connection with nature.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Kaziranga National park card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/Kaziranga%20National%20park.jpeg" alt="Kaziranga National park">
+                        </div>
+                        <div class="caption">Kaziranga National park<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Kaziranga National park</h3>
+                        <p>Kaziranga National Park in Assam is a UNESCO World Heritage Site, famous for its population of the one-horned rhino. The park features vast grasslands, wetlands, and diverse wildlife including elephants, tigers, and numerous bird species. It is a major attraction for nature lovers and wildlife enthusiasts.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Charaideo Maidam card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/Charaideo%20Maidam.jpeg" alt="Charaideo Maidam">
+                        </div>
+                        <div class="caption">Charaideo Maidam<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Charaideo Maidam</h3>
+                        <p>Charaideo Maidam, located in Assam, is an ancient burial site of the Ahom dynasty, often referred to as the “Pyramids of Assam.” These maidams are royal tombs that reflect the rich history, architecture, and cultural traditions of the Ahom kings. The site stands as an important symbol of Assam’s heritage and ancestral legacy.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Muga silk card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/Muga%20silk.jpeg" alt="Muga silk">
+                        </div>
+                        <div class="caption">Muga silk<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Muga silk</h3>
+                        <p>Muga silk is a unique and luxurious silk produced exclusively in Assam, known for its natural golden sheen and durability. It is traditionally worn during special occasions and holds great cultural significance in Assamese heritage. The fabric becomes more lustrous with age, making it highly valued worldwide.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Pobitora wildlife sanctuary card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/Pobitora%20wildlife%20sanctuary.jpeg" alt="Pobitora wildlife sanctuary">
+                        </div>
+                        <div class="caption">Pobitora wildlife sanctuary<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Pobitora wildlife sanctuary</h3>
+                        <p>Pobitora Wildlife Sanctuary in Assam is renowned for having one of the highest densities of one-horned rhinoceros in the world. Spread across lush grasslands and wetlands, it also supports a variety of birds and other wildlife. Its proximity to Guwahati makes it a popular destination for quick wildlife getaways.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Rang Ghar card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/Rang%20Ghar.jpeg" alt="Rang Ghar">
+                        </div>
+                        <div class="caption">Rang Ghar<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Rang Ghar</h3>
+                        <p>Rang Ghar, located in Sivasagar, Assam, is one of Asia’s oldest two-storied amphitheaters, built by the Ahom kings. It was used as a royal pavilion to watch traditional games, sports, and cultural events - particularly during the Rongali Bihu festival in the Ahom capital of Rangpur. The structure reflects the architectural brilliance and rich heritage of the Ahom era.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Umananda card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/umananda.jpeg" alt="umananda">
+                        </div>
+                        <div class="caption">Umananda<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>umananda</h3>
+                        <p>Umananda Temple, located on Peacock Island in the Brahmaputra River, is one of the smallest inhabited river islands in the world. Dedicated to Lord Shiva, it is a significant pilgrimage site known for its peaceful surroundings and scenic beauty. The temple offers a serene escape with stunning river views and spiritual ambiance.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Assamese jalpan card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/Assamese%20jalpan.jpeg" alt="Assamese jalpan">
+                        </div>
+                        <div class="caption">Assamese jalpan<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Assamese jalpan</h3>
+                        <p>Assamese Jalpan is a traditional breakfast or snack that includes a variety of light and wholesome items like flattened rice (chira), puffed rice (muri), curd, jaggery, and seasonal fruits. It is known for its simplicity, nutrition, and refreshing taste. Jalpan reflects the everyday food culture and warm hospitality of Assam.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Kamakhya Temple card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/Kamakhya%20Temple.jpeg" alt="Kamakhya Temple">
+                        </div>
+                        <div class="caption">Kamakhya Temple<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Kamakhya Temple</h3>
+                        <p>Kamakhya Temple, situated on Nilachal Hill in Guwahati, is one of the most important Shakti Peethas in India, dedicated to Goddess Kamakhya. It is renowned for its unique rituals and the annual Ambubachi Mela, which attracts thousands of devotees. The temple holds deep spiritual significance and is a symbol of faith and devotion in Assam.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Umiam lake, Meghalaya card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/Umiam%20lake,%20Meghalaya.jpeg" alt="Umiam lake, Meghalaya">
+                        </div>
+                        <div class="caption">Umiam lake, Meghalaya<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Umiam lake, Meghalaya</h3>
+                        <p>Umiam Lake, located near Shillong in Meghalaya, is a beautiful man-made reservoir surrounded by lush green hills. It is a popular spot for boating, water sports, and picnics, offering breathtaking scenic views. The lake is often called the “Barapani” and is a serene getaway for nature lovers.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip The Brahmaputra River card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/The%20Brahmaputra%20River.jpeg" alt="The Brahmaputra River">
+                        </div>
+                        <div class="caption">The Brahmaputra River<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>The Brahmaputra River</h3>
+                        <p>The Brahmaputra River (Luit in Assamese) is one of the largest and most powerful rivers in Asia, flowing through Tibet, India, and Bangladesh. In Assam, it shapes the region’s landscape, culture, and livelihood, supporting agriculture and biodiversity. Known for its vast width and majestic flow, it is often called the lifeline of Assam.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Tea gardens of assam in Sibsagar, Jorhat and Tinsukia card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./GYPSICON%202026_files/Tourism/Tea%20gardens%20of%20assam%20in%20Sibsagar,%20Jorhat%20and%20Tinsukia.jpeg" alt="Tea gardens of assam in Sibsagar, Jorhat and Tinsukia">
+                        </div>
+                        <div class="caption">Tea gardens of assam in Sibsagar, Jorhat and Tinsukia<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Tea gardens of assam in Sibsagar, Jorhat and Tinsukia</h3>
+                        <p>The tea gardens of Assam in Sibsagar, Jorhat, and Tinsukia are known for producing some of the finest and most aromatic teas in the world. These lush green plantations stretch across rolling landscapes, offering scenic beauty and a glimpse into traditional tea cultivation. They play a vital role in Assam’s economy and cultural identity.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="./template-loader.js"></script>
+<script>
+    document.querySelectorAll('.image-card').forEach(card => {
+        const button = card.querySelector('.flip-card-button');
+        if (!button) {
+            return;
+        }
+
+        button.addEventListener('click', () => {
+            card.classList.toggle('is-flipped');
+        });
+
+        button.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                card.classList.toggle('is-flipped');
+            }
+        });
+    });
+</script>
+</body>
+</html>

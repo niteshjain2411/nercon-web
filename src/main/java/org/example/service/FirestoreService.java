@@ -92,6 +92,38 @@ public class FirestoreService {
     }
 
     /**
+     * Update workshops and append a new transaction for an existing registration.
+     * Personal details and regstatus are NOT touched.
+     */
+    public void updateWorkshops(String delegateId, List<String> workshops,
+                                String txnKey, String txnid, String txndate,
+                                String paymentimgUrl, String totalAmount)
+            throws ExecutionException, InterruptedException {
+        DocumentReference docRef = firestore.collection(COLLECTION_NAME).document(delegateId);
+
+        boolean attendsWorkshop = workshops != null && !workshops.isEmpty()
+                && !(workshops.size() == 1 && "ws0".equals(workshops.get(0)));
+
+        Map<String, Object> updates = new LinkedHashMap<>();
+        updates.put("workshops", workshops != null ? workshops : List.of());
+        updates.put("isattendworkshop", attendsWorkshop);
+        if (totalAmount != null && !totalAmount.isBlank()) {
+            updates.put("totalAmount", totalAmount);
+        }
+        if (txnid != null && !txnid.isBlank()) {
+            Map<String, String> txn = new LinkedHashMap<>();
+            txn.put("txnid", txnid);
+            txn.put("txndate", txndate != null ? txndate : "");
+            updates.put("txndetails." + txnKey, txn);
+        }
+        if (paymentimgUrl != null && !paymentimgUrl.isBlank()) {
+            updates.put("paymentimg", paymentimgUrl);
+        }
+
+        docRef.update(updates).get();
+    }
+
+    /**
      * Fetch a single registration document by delegateId.
      * Returns null if the document does not exist.
      */
