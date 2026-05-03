@@ -44,6 +44,92 @@
         .coming-soon-box h3 { font-size: 1.8rem; color: var(--primary); margin-bottom: 1rem; }
         .coming-soon-box p { font-size: 1.1rem; color: #6b7280; max-width: 550px; margin: 0 auto 1rem; line-height: 1.8; }
         .coming-soon-box .highlight { color: var(--secondary); font-weight: 600; }
+        /* Committee grid styles */
+        .committee-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            justify-content: center;
+        }
+        .residents-grid {
+            justify-content: flex-start;
+        }
+        .committee-card {
+            background: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.1rem 1.5rem;
+            text-align: center;
+            min-width: 200px;
+            flex: 1 1 200px;
+            max-width: 280px;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .committee-card:hover {
+            box-shadow: 0 4px 16px rgba(14,165,233,0.15);
+            transform: translateY(-3px);
+        }
+        .patron-card {
+            background: linear-gradient(135deg, #eef2ff, #e0f2fe);
+            border-color: #c7d2fe;
+        }
+        .highlight-card {
+            background: linear-gradient(135deg, #f0fdf4, #d1fae5);
+            border-color: #6ee7b7;
+        }
+        .resident-card {
+            flex: 1 1 160px;
+            max-width: 220px;
+            padding: 0.75rem 1rem;
+            background: #f9fafb;
+        }
+        .committee-photo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: top center;
+            margin: 0 auto 0.75rem;
+            display: block;
+            border: 3px solid var(--secondary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+        .resident-card .committee-photo {
+            width: 70px;
+            height: 70px;
+            border-width: 2px;
+        }
+        .committee-name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+        .committee-role {
+            font-size: 0.85rem;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        .content-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem 4rem;
+        }
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
         @media (max-width: 768px) {
             .page-banner h1 { font-size: 1.8rem; }
             .content-wrapper { padding: 1.5rem 1rem; }
@@ -59,19 +145,165 @@
 </section>
 
 <div class="content-wrapper">
-    <div class="content-card">
-        <div class="content-header">
-            <h2>Meet the Organizing Committee</h2>
-        </div>
+
+    <!-- Patrons -->
+    <div class="content-card" style="margin-bottom:2rem;">
+        <div class="content-header"><h2>Patrons</h2></div>
         <div class="content-body">
-            <div class="coming-soon-box">
-                <div class="icon">👥</div>
-                <h3>Coming Soon...</h3>
-                <p>The dedicated <span class="highlight">organizing committee</span> behind NERCON 2026 is working tirelessly to deliver an exceptional conference experience at AIIMS Guwahati.</p>
-                <p>Committee member profiles, roles, and contact details will be published here soon. Stay tuned for updates!</p>
+            <div class="committee-grid">
+                <div class="committee-card patron-card">
+                    <img src="./Nercon%202026_files/Samples/Prof.%20Bhupendra%20Kumar%20Singh%20Sanjay.png" alt="Prof. Bhupendra Kumar Singh Sanjay" class="committee-photo">
+                    <div class="committee-name">Prof. Bhupendra Kumar Singh Sanjay</div>
+                    <div class="committee-role">President</div>
+                </div>
+                <div class="committee-card patron-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Ashok%20Puranik.png" alt="Dr. Ashok Puranik" class="committee-photo">
+                    <div class="committee-name">Dr. Ashok Puranik</div>
+                    <div class="committee-role">Executive Director</div>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Co-Patrons -->
+    <div class="content-card" style="margin-bottom:2rem;">
+        <div class="content-header"><h2>Co-Patrons</h2></div>
+        <div class="content-body">
+            <div class="committee-grid">
+                <div class="committee-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Naveen%20P.png" alt="Dr. Naveen P" class="committee-photo">
+                    <div class="committee-name">Dr. Naveen P</div>
+                    <div class="committee-role">Dean Examination</div>
+                </div>
+                <div class="committee-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Bhupen%20Barman.png" alt="Dr. Bhupen Barman" class="committee-photo">
+                    <div class="committee-name">Dr. Bhupen Barman</div>
+                    <div class="committee-role">Dean Research</div>
+                </div>
+                <div class="committee-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Muralidhar%20Reddy%20Sangam.png" alt="Dr. Muralidhar Reddy Sangam" class="committee-photo">
+                    <div class="committee-name">Dr. Muralidhar Reddy Sangam</div>
+                    <div class="committee-role">Dean Academics</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Organising Committee -->
+    <div class="content-card" style="margin-bottom:2rem;">
+        <div class="content-header"><h2>Organising Committee</h2></div>
+        <div class="content-body">
+            <div class="committee-grid">
+                <div class="committee-card highlight-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20S.P.%20Sinhasan.jpg" alt="Dr. S.P. Sinhasan" class="committee-photo">
+                    <div class="committee-name">Dr. S.P. Sinhasan</div>
+                    <div class="committee-role">Organising President</div>
+                </div>
+                <div class="committee-card highlight-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Aseema%20Das.jpg" alt="Dr. Aseema Das" class="committee-photo">
+                    <div class="committee-name">Dr. Aseema Das</div>
+                    <div class="committee-role">Organising Chairperson</div>
+                </div>
+                <div class="committee-card highlight-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Pakesh%20Baishya.jpg" alt="Dr. Pakesh Baishya" class="committee-photo">
+                    <div class="committee-name">Dr. Pakesh Baishya</div>
+                    <div class="committee-role">Organising Secretary</div>
+                </div>
+                <div class="committee-card highlight-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Prasad%20Sudhir%20Dange.jpg" alt="Dr. Prasad Sudhir Dange" class="committee-photo">
+                    <div class="committee-name">Dr. Prasad Sudhir Dange</div>
+                    <div class="committee-role">Treasurer</div>
+                </div>
+                <div class="committee-card highlight-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Roopam%20Deka.jpg" alt="Dr. Roopam Deka" class="committee-photo">
+                    <div class="committee-name">Dr. Roopam Deka</div>
+                    <div class="committee-role">Scientific Committee</div>
+                </div>
+                <div class="committee-card highlight-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Bifica%20Sofia%20Lyngdoh.jpg" alt="Dr. Bifica Sofia Lyngdoh" class="committee-photo">
+                    <div class="committee-name">Dr. Bifica Sofia Lyngdoh</div>
+                    <div class="committee-role">Souvenir Committee</div>
+                </div>            
+            </div>
+        </div>
+    </div>
+
+    <!-- NERCON Office Bearers -->
+    <div class="content-card" style="margin-bottom:2rem;">
+        <div class="content-header"><h2>NERCON Office Bearers</h2></div>
+        <div class="content-body">
+            <div class="committee-grid">
+                <div class="committee-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Ronica%20Baruah.png" alt="Dr. Ronica Baruah" class="committee-photo">
+                    <div class="committee-name">Dr. Ronica Baruah</div>
+                    <div class="committee-role">President</div>
+                </div>
+                <div class="committee-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Yookarin%20Khonglah.png" alt="Dr. Yookarin Khonglah" class="committee-photo">
+                    <div class="committee-name">Dr. Yookarin Khonglah</div>
+                    <div class="committee-role">Vice President</div>
+                </div>
+                <div class="committee-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Riju%20Rani%20Deka.png" alt="Dr. Riju Rani Deka" class="committee-photo">
+                    <div class="committee-name">Dr. Riju Rani Deka</div>
+                    <div class="committee-role">General Secretary</div>
+                </div>
+                <div class="committee-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Bedanta%20Bhuyan.png" alt="Dr. Bedanta Bhuyan" class="committee-photo">
+                    <div class="committee-name">Dr. Bedanta Bhuyan</div>
+                    <div class="committee-role">Joint Secretary</div>
+                </div>
+                <div class="committee-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Bipin%20Th.png" alt="Dr. Bipin Th" class="committee-photo">
+                    <div class="committee-name">Dr. Bipin Th</div>
+                    <div class="committee-role">Joint Secretary</div>
+                </div>
+                <div class="committee-card">
+                    <img src="./Nercon%202026_files/Samples/Dr.%20Naushad%20Shah.png" alt="Dr. Naushad Shah" class="committee-photo">
+                    <div class="committee-name">Dr. Naushad Shah</div>
+                    <div class="committee-role">Treasurer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Senior Residents -->
+    <div class="content-card" style="margin-bottom:2rem;">
+        <div class="content-header"><h2>Senior Residents</h2></div>
+        <div class="content-body">
+            <div class="committee-grid residents-grid">
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Nuneno%20Nakhro.jpg" alt="Dr. Nuneno Nakhro" class="committee-photo"><div class="committee-name">Dr. Nuneno Nakhro</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Aditi%20Bhattacharya.jpg" alt="Dr. Aditi Bhattacharya" class="committee-photo"><div class="committee-name">Dr. Aditi Bhattacharya</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Thangjam%20Ruchika.jpg" alt="Dr. Thangjam Ruchika" class="committee-photo"><div class="committee-name">Dr. Thangjam Ruchika</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20U.S.%20Ananthnarayan.jpg" alt="Dr. U.S. Ananthnarayan" class="committee-photo"><div class="committee-name">Dr. U.S. Ananthnarayan</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Amrapali%20Sammader.jpg" alt="Dr. Amrapali Sammader" class="committee-photo"><div class="committee-name">Dr. Amrapali Sammader</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20George%20A.jpg" alt="Dr. George A" class="committee-photo"><div class="committee-name">Dr. George A</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Upasana%20Sandilya.jpg" alt="Dr. Upasana Sandilya" class="committee-photo"><div class="committee-name">Dr. Upasana Sandilya</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Kirtijit%20Chakma.jpg" alt="Dr. Kirtijit Chakma" class="committee-photo"><div class="committee-name">Dr. Kirtijit Chakma</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Narmy%20Thangjam.jpg" alt="Dr. Narmy Thangjam" class="committee-photo"><div class="committee-name">Dr. Narmy Thangjam</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20K.S.Rishikesh.jpg" alt="Dr. K.S. Rishikesh" class="committee-photo"><div class="committee-name">Dr. K.S. Rishikesh</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Junior Residents -->
+    <div class="content-card" style="margin-bottom:2rem;">
+        <div class="content-header"><h2>Junior Residents</h2></div>
+        <div class="content-body">
+            <div class="committee-grid residents-grid">
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Srushti%20Praharshitha.jpg" alt="Dr. Srushti Praharshitha" class="committee-photo"><div class="committee-name">Dr. Srushti Praharshitha</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Kangan%20Sharma.jpg" alt="Dr. Kangan Sharma" class="committee-photo"><div class="committee-name">Dr. Kangan Sharma</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Afnas%20Niyaz.jpg" alt="Dr. Afnas Niyaz" class="committee-photo"><div class="committee-name">Dr. Afnas Niyaz</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Madiha%20Yahya.jpg" alt="Dr. Madiha Yahya" class="committee-photo"><div class="committee-name">Dr. Madiha Yahya</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Benjina%20Ahmed.jpg" alt="Dr. Benjina Ahmed" class="committee-photo"><div class="committee-name">Dr. Benjina Ahmed</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Pradip%20Chandra%20Das.jpg" alt="Dr. Pradip Chandra Das" class="committee-photo"><div class="committee-name">Dr. Pradip Chandra Das</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Shuvankar%20Srutikar.jpg" alt="Dr. Shuvankar Srutikar" class="committee-photo"><div class="committee-name">Dr. Shuvankar Srutikar</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Saurabh%20Chandrakar.jpg" alt="Dr. Saurabh Chandrakar" class="committee-photo"><div class="committee-name">Dr. Saurabh Chandrakar</div></div>
+                <div class="committee-card resident-card"><img src="./Nercon%202026_files/Samples/Dr.%20Naveen%20Nehra.jpg" alt="Dr. Naveen Nehra" class="committee-photo"><div class="committee-name">Dr. Naveen Nehra</div></div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div id="footer-placeholder"></div>

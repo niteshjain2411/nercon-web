@@ -151,8 +151,8 @@
             filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
         }
         .hero .subtitle {
-            font-size: 1.8rem;
-            margin: 0.5rem 0;
+            font-size: 1.2rem;
+            margin: 0.3rem 0;
             font-family: 'Cinzel', 'Georgia', serif;
                 color: #f5d060;
                 background: none;
@@ -207,6 +207,55 @@
             0%, 100% { box-shadow: 0 0 20px rgba(212,160,23,0.6), 0 6px 20px rgba(0,0,0,0.3); }
             50%      { box-shadow: 0 0 35px rgba(245,208,96,0.9), 0 8px 30px rgba(0,0,0,0.4); }
         }
+        /* Countdown boxes */
+        .cd-box {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 10px;
+            padding: 0.65rem 1.1rem;
+            min-width: 72px;
+            text-align: center;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        .cd-box span {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #f5d060;
+            line-height: 1.1;
+            font-family: 'Cinzel', 'Georgia', serif;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+        .cd-box small {
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #bae6fd;
+            font-weight: 600;
+        }
+        /* Brochure button */
+        .brochure-btn {
+            display: inline-block;
+            padding: 0.65rem 2rem;
+            background: rgba(255,255,255,0.12);
+            border: 2px solid rgba(255,255,255,0.5);
+            color: #e0f2fe;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            transition: all 0.3s ease;
+        }
+        .brochure-btn:hover {
+            background: rgba(255,255,255,0.25);
+            border-color: #f5d060;
+            color: #f5d060;
+            transform: translateY(-2px);
+        }
         .cta-button:hover {
             background-position: right center;
             transform: translateY(-4px) scale(1.05);
@@ -253,6 +302,7 @@
             margin-bottom: 1.5rem;
             font-size: 1rem;
             line-height: 1.8;
+            text-align: center;
         }
         .theme-box {
             background: linear-gradient(135deg, var(--accent) 0%, #10b981 100%);
@@ -392,55 +442,94 @@
     <div class="hero-content">       
         <h1>NERCON 2026</h1>
         <p class="subtitle">35th Annual Conference of the North Eastern Regional Chapter</p>
-        <p class="subtitle">Indian Association of Pathologists and Diagnostician</p>
+        <p class="subtitle">Indian Association of Pathologists and Microbiologists</p>
+        <p style="font-size:1.15rem;margin:0.6rem 0 0.2rem;color:#e0f2fe;font-style:italic;font-weight:500;text-shadow:0 1px 4px rgba(0,0,0,0.4);">&ldquo;Cells, Tissues, Insights.&rdquo;</p>
+        <p style="font-size:1rem;margin:0 0 0.5rem;color:#bae6fd;font-weight:400;letter-spacing:0.02em;text-shadow:0 1px 4px rgba(0,0,0,0.35);">Advancing Diagnostics. Connecting Experts. Inspiring Innovation.</p>
         <div class="dates">
-            <strong>November 12-14, 2026</strong><br>
-            All India Institute of Medical Sciences (AIIMS) Guwahati, Assam, India
+            <strong>November 12&ndash;14, 2026</strong>
         </div>
+        <p style="font-size:0.95rem;margin:0.4rem 0 1.2rem;color:#bae6fd;font-weight:400;">Organized by<br>
+        <strong style="color:#e0f2fe;font-size:1.1rem;">Department of Pathology and Lab Medicine</strong><br>
+        <span style="font-size:1.05rem;">All India Institute of Medical Sciences (AIIMS) Guwahati, Assam, India</span></p>
         <a href="./registration.html" class="cta-button">Register Now</a>
+
+        <!-- Countdown Timer -->
+        <div id="countdown" style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:2rem;">
+            <div class="cd-box">
+                <span id="cd-days">--</span>
+                <small>Days</small>
+            </div>
+            <div class="cd-box">
+                <span id="cd-hours">--</span>
+                <small>Hours</small>
+            </div>
+            <div class="cd-box">
+                <span id="cd-mins">--</span>
+                <small>Minutes</small>
+            </div>
+            <div class="cd-box">
+                <span id="cd-secs">--</span>
+                <small>Seconds</small>
+            </div>
+        </div>
+        <!-- Download Brochure -->
+        <div style="margin-top:1.5rem;">
+            <a href="./Nercon 2026_files/brochure.pdf" download class="brochure-btn">
+                &#8681; Download Brochure
+            </a>
+        </div>
     </div>
 </section>
 <div class="container">
     <section class="section" id="about" style="padding-top: 6rem;">
         <h2 class="section-title">About the Conference</h2>
-        <div class="about-content">
-            <div class="about-text">
-                <p>The Department of Pathology and Laboratory Medicine at AIIMS Guwahati cordially invites delegates, practitioners, and specialists to the 35th Annual Conference of NERCON 2026. This premier event brings together pathologists, diagnostician, and healthcare professionals from across the Northeast region.</p>
-                <p>Guwahati, situated on the banks of the majestic Brahmaputra River, offers the perfect backdrop for this prestigious conference. The city is known for its natural beauty, welcoming hospitality, and growing medical infrastructure.</p>
-                <p>NERCON 2026 is designed to enhance your knowledge and keep you updated with the latest advances in pathology and diagnostics. The conference will feature keynote lectures from renowned experts, interactive workshops, panel discussions, and cutting-edge research presentations.</p>
+        <div class="about-text">
+            <p>The Department of Pathology and Lab Medicine at AIIMS Guwahati cordially invites postgraduate students, delegates, clinicians, and medical researchers to the 35th Annual Conference of the North Eastern Regional Chapter, Indian Association of Pathologists and Microbiologists.</p>
+            <p>This premier event brings together pathologists, diagnosticians, and healthcare professionals from across the Northeast region of India and across the globe.</p>
+            <p>Guwahati, situated on the banks of the majestic Brahmaputra River, offers the perfect backdrop for this prestigious conference. The city is known for its natural beauty, welcoming hospitality, and growing medical infrastructure.</p>
+            <p>NERCON 2026 is designed to enhance your knowledge and keep you updated with the latest advances in pathology and laboratory medicine. The conference will feature keynote lectures from renowned experts, interactive workshops, panel discussions, career guidance sessions and cutting-edge research presentations.</p>
+        </div>
+    </section>
+
+    <!-- International Speakers Section -->
+    <section class="section" id="international-speakers">
+        <h2 class="section-title">International Speakers</h2>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:2.5rem; margin-top:1rem;">
+            <div style="display:flex; flex-direction:column; align-items:center; width:160px; text-align:center;">
+                <img src="./Nercon 2026_files/internationalSpeakers/dr_Michael_Veith.png" alt="Dr. Michael Veith" style="width:140px; height:140px; object-fit:cover; border-radius:50%; box-shadow:0 4px 16px rgba(0,0,0,0.15); border:3px solid var(--secondary);">
+                <p style="margin:0.75rem 0 0.1rem; font-weight:700; color:var(--primary); font-size:0.95rem;">Dr. Michael Veith</p>
+                <p style="margin:0; font-size:0.85rem; color:#6b7280;">Germany</p>
             </div>
-            <div>
-                <div>
-                    <img src="./nercon_2026.gif" alt="NERCON 2026" style="max-width: 280px; width: 100%; margin: 0 auto 0.75rem; display: block; mix-blend-mode: multiply;">
-                    
-                </div>
-                <div class="highlight-grid">
-                    <div class="highlight-item">
-                        <h4>✓ Expert Speakers</h4>
-                        <p>National & International leaders in pathology</p>
-                    </div>
-                    <div class="highlight-item">
-                        <h4>✓ Workshops</h4>
-                        <p>Hands-on learning sessions</p>
-                    </div>
-                    <div class="highlight-item">
-                        <h4>✓ Digital Pathology</h4>
-                        <p>AI & emerging technologies</p>
-                    </div>
-                    <div class="highlight-item">
-                        <h4>✓ Networking</h4>
-                        <p>Connect with peers & colleagues</p>
-                    </div>
-                </div>
+            <div style="display:flex; flex-direction:column; align-items:center; width:160px; text-align:center;">
+                <img src="./Nercon 2026_files/internationalSpeakers/dr_Pankhi_Dutta.png" alt="Dr. Pankhi Dutta" style="width:140px; height:140px; object-fit:cover; border-radius:50%; box-shadow:0 4px 16px rgba(0,0,0,0.15); border:3px solid var(--secondary);">
+                <p style="margin:0.75rem 0 0.1rem; font-weight:700; color:var(--primary); font-size:0.95rem;">Dr. Pankhi Dutta</p>
+                <p style="margin:0; font-size:0.85rem; color:#6b7280;">Dubai</p>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; width:160px; text-align:center;">
+                <img src="./Nercon 2026_files/internationalSpeakers/dr_Abbas_Agaimy.png" alt="Dr. Abbas Agaimy" style="width:140px; height:140px; object-fit:cover; border-radius:50%; box-shadow:0 4px 16px rgba(0,0,0,0.15); border:3px solid var(--secondary);">
+                <p style="margin:0.75rem 0 0.1rem; font-weight:700; color:var(--primary); font-size:0.95rem;">Dr. Abbas Agaimy</p>
+                <p style="margin:0; font-size:0.85rem; color:#6b7280;">Germany</p>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; width:160px; text-align:center;">
+                <img src="./Nercon 2026_files/internationalSpeakers/dr_Sunil_Jaiman.png" alt="Dr. Sunil Jaiman" style="width:140px; height:140px; object-fit:cover; border-radius:50%; box-shadow:0 4px 16px rgba(0,0,0,0.15); border:3px solid var(--secondary);">
+                <p style="margin:0.75rem 0 0.1rem; font-weight:700; color:var(--primary); font-size:0.95rem;">Dr. Sunil Jaiman</p>
+                <p style="margin:0; font-size:0.85rem; color:#6b7280;">Detroit, USA</p>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; width:160px; text-align:center;">
+                <img src="./Nercon 2026_files/internationalSpeakers/dr_Rifat_Mannan.png" alt="Dr. Rifat Mannan" style="width:140px; height:140px; object-fit:cover; border-radius:50%; box-shadow:0 4px 16px rgba(0,0,0,0.15); border:3px solid var(--secondary);">
+                <p style="margin:0.75rem 0 0.1rem; font-weight:700; color:var(--primary); font-size:0.95rem;">Dr. Rifat Mannan</p>
+                <p style="margin:0; font-size:0.85rem; color:#6b7280;">California, USA</p>
             </div>
         </div>
     </section>
+
     <section class="section" id="key-info">
         <h2 class="section-title">Key Information</h2>
-        <div class="key-info">
+        <!-- Row 1: Event details -->
+        <div class="key-info" style="margin-bottom:1.5rem;">
             <div class="info-card">
                 <h3>📅 Event Dates</h3>
-                <p>November 12-14, 2026</p>
+                <p>November 12–14, 2026</p>
             </div>
             <div class="info-card">
                 <h3>📍 Venue</h3>
@@ -455,7 +544,32 @@
                 <p>Accredited Program</p>
             </div>
         </div>
+        <!-- Row 2: Important deadlines -->
+        <div class="key-info">
+            <div class="info-card" style="border-top-color:#f59e0b;">
+                <h3 style="color:#b45309;">📝 Abstract Submission</h3>
+                <p style="font-weight:600; color:#374151;">Deadline</p>
+                <p>30th August, 2026</p>
+            </div>
+            <div class="info-card" style="border-top-color:#10b981;">
+                <h3 style="color:#047857;">🐣 Early Bird Registration</h3>
+                <p style="font-weight:600; color:#374151;">Deadline</p>
+                <p>15th June, 2026</p>
+            </div>
+            <div class="info-card" style="border-top-color:#0ea5e9;">
+                <h3 style="color:#0369a1;">📋 Regular Registration</h3>
+                <p style="font-weight:600; color:#374151;">Deadline</p>
+                <p>30th October, 2026</p>
+            </div>
+            <div class="info-card" style="border-top-color:#8b5cf6;">
+                <h3 style="color:#6d28d9;">⚡ Spot Registration</h3>
+                <p style="font-weight:600; color:#374151;">Window</p>
+                <p>1st Nov – 10th Nov, 2026</p>
+            </div>
+        </div>
     </section>
+
+    
     <section class="section" id="program">
         <h2 class="section-title">Conference Highlights</h2>
         <div class="program-grid">
@@ -464,8 +578,7 @@
                     <h3>Keynote Sessions</h3>
                 </div>
                 <div class="program-card-body">
-                    <p><strong>Eminent speakers</strong> presenting latest research and clinical updates in pathology and diagnostics.</p>
-                    <p>Topics include digital pathology, precision medicine, and diagnostic innovations.</p>
+                    <p><strong>Eminent speakers</strong> presenting latest research and clinical updates in pathology and modern medicine.</p>
                 </div>
             </div>
             <div class="program-card">
@@ -473,8 +586,7 @@
                     <h3>Interactive Workshops</h3>
                 </div>
                 <div class="program-card-body">
-                    <p><strong>Hands-on sessions</strong> covering GI Pathology, Neuropathology, and specialized diagnostic techniques.</p>
-                    <p>Maximum 2 workshops per delegate with flexible scheduling.</p>
+                    <p><strong>Hands-on sessions</strong> covering various specialties of diagnostic pathology and specialized diagnostic techniques.</p>
                 </div>
             </div>
             <div class="program-card">
@@ -482,8 +594,7 @@
                     <h3>Research Presentations</h3>
                 </div>
                 <div class="program-card-body">
-                    <p><strong>Original research</strong> and case presentations by pathologists and diagnostician.</p>
-                    <p>Opportunity to showcase your work to the medical community.</p>
+                    <p><strong>Original research</strong> and case presentations to showcase your work to the medical community.</p>
                 </div>
             </div>
             <div class="program-card">
@@ -491,8 +602,7 @@
                     <h3>Panel Discussions</h3>
                 </div>
                 <div class="program-card-body">
-                    <p><strong>Expert panels</strong> discussing emerging challenges and opportunities in the field.</p>
-                    <p>Interactive Q&A sessions with leading professionals.</p>
+                    <p><strong>Expert panels</strong> discussion on the emerging fields like digital pathology and career guidance for budding pathologists.</p>
                 </div>
             </div>
             <div class="program-card">
@@ -500,8 +610,7 @@
                     <h3>Networking Events</h3>
                 </div>
                 <div class="program-card-body">
-                    <p><strong>Social gatherings</strong> to connect with colleagues and peers.</p>
-                    <p>Welcoming banquet and cultural evening highlighting local traditions.</p>
+                    <p><strong>Social gatherings</strong> to connect with the mentors, colleagues, and peers. Welcoming banquet and cultural evening highlighting local traditions.</p>
                 </div>
             </div>
             <div class="program-card">
@@ -509,14 +618,57 @@
                     <h3>Explore Guwahati</h3>
                 </div>
                 <div class="program-card-body">
-                    <p><strong>Post-conference tours</strong> to iconic landmarks and cultural sites.</p>
-                    <p>Experience Assam's heritage, including the famous Kamakhya Temple.</p>
+                    <p><strong>Tours to iconic landmarks</strong> and cultural sites, including the renowned Kamakhya Temple, offering a glimpse into Assam’s rich heritage.</p>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Sponsors Section -->
+    <section class="section" id="sponsors">
+        <h2 class="section-title">Our Sponsors</h2>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:2rem; margin-top:1rem;">
+            <div style="text-align:center;">
+                <img src="./Nercon 2026_files/Sponsors/comingsoon.png" alt="Sponsor" style="width:180px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+            </div>
+            <div style="text-align:center;">
+                <img src="./Nercon 2026_files/Sponsors/comingsoon.png" alt="Sponsor" style="width:180px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+            </div>
+            <div style="text-align:center;">
+                <img src="./Nercon 2026_files/Sponsors/comingsoon.png" alt="Sponsor" style="width:180px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+            </div>
+        </div>
+    </section>
+    
 </div>
 <div id="footer-placeholder"></div>
 <script src="./template-loader.js"></script>
+<script>
+    (function () {
+        const target = new Date('2026-11-12T00:00:00');
+        const days  = document.getElementById('cd-days');
+        const hours = document.getElementById('cd-hours');
+        const mins  = document.getElementById('cd-mins');
+        const secs  = document.getElementById('cd-secs');
+
+        function pad(n) { return String(n).padStart(2, '0'); }
+
+        function tick() {
+            const now  = new Date();
+            const diff = target - now;
+            if (diff <= 0) {
+                days.textContent = hours.textContent = mins.textContent = secs.textContent = '00';
+                return;
+            }
+            days.textContent  = pad(Math.floor(diff / 86400000));
+            hours.textContent = pad(Math.floor((diff % 86400000) / 3600000));
+            mins.textContent  = pad(Math.floor((diff % 3600000)  / 60000));
+            secs.textContent  = pad(Math.floor((diff % 60000)    / 1000));
+        }
+
+        tick();
+        setInterval(tick, 1000);
+    })();
+</script>
 </body>
 </html>
