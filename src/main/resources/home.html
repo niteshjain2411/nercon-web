@@ -267,6 +267,18 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
+            position: relative;
+        }
+        .container::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
         }
         .section {
             padding: 4rem 0;
@@ -639,7 +651,7 @@
             </div>
         </div>
     </section>
-    
+
 </div>
 <div id="footer-placeholder"></div>
 <script src="./template-loader.js"></script>

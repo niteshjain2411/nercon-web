@@ -34,7 +34,18 @@
         .page-banner { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 3rem 2rem; text-align: center; }
         .page-banner h1 { font-size: 2.5rem; font-weight: 700; font-family: 'Cinzel', 'Georgia', serif; margin-bottom: 0.5rem; }
         .page-banner p { font-size: 1.1rem; opacity: 0.9; }
-        .content-wrapper { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+        .content-wrapper { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 4rem; position: relative; }
+        .content-wrapper::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
+        }
         .content-card { background: white; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--border-color); overflow: hidden; }
         .content-header { background: var(--light-bg); padding: 1.5rem 2rem; border-bottom: 2px solid var(--secondary); }
         .content-header h2 { font-size: 1.5rem; color: var(--primary); font-weight: 700; }
@@ -48,6 +59,22 @@
         .contact-note p { font-size: 0.95rem; color: var(--dark-text); margin: 0; }
         .contact-note a { color: var(--secondary); text-decoration: none; font-weight: 600; }
         .contact-note a:hover { text-decoration: underline; }
+        .secretariat-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .secretariat-table tr { border-bottom: 1px solid var(--border-color); }
+        .secretariat-table tr:last-child { border-bottom: none; }
+        .secretariat-table td { padding: 0.85rem 1rem; font-size: 0.97rem; vertical-align: top; line-height: 1.6; }
+        .secretariat-table td:first-child { color: #6b7280; font-weight: 600; white-space: nowrap; width: 180px; }
+        .secretariat-table td:last-child { color: var(--dark-text); }
+        .secretariat-table a { color: var(--secondary); text-decoration: none; font-weight: 500; }
+        .secretariat-table a:hover { text-decoration: underline; }
+        footer {
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        footer a { color: white; }
         @media (max-width: 768px) {
             .page-banner h1 { font-size: 1.8rem; }
             .content-wrapper { padding: 1.5rem 1rem; }
@@ -65,18 +92,35 @@
 <div class="content-wrapper">
     <div class="content-card">
         <div class="content-header">
-            <h2>Get in Touch</h2>
+            <h2>Organising Secretariat</h2>
         </div>
         <div class="content-body">
-            <div class="coming-soon-box">
-                <div class="icon">📬</div>
-                <h3>Coming Soon...</h3>
-                <p>A detailed contact page with <span class="highlight">inquiry forms, office addresses, and key contact persons</span> is being prepared for NERCON 2026.</p>
-                <p>In the meantime, feel free to reach us directly via email for any queries.</p>
-                <div class="contact-note">
-                    <p>Email us at <a href="mailto:nercon2026@gmail.com">nercon2026@gmail.com</a></p>
-                </div>
-            </div>
+            <table class="secretariat-table">
+                <tr>
+                    <td>Conference</td>
+                    <td>NERCON 2026 — 35th Annual Conference, IAPM NE Chapter</td>
+                </tr>
+                <tr>
+                    <td>Organiser</td>
+                    <td>Department of Pathology &amp; Lab Medicine, AIIMS Guwahati</td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td>Silbharal, Changsari, Kamrup, Assam &mdash; 781101</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><a href="mailto:nercon2026@gmail.com">nercon2026@gmail.com</a></td>
+                </tr>
+                <tr>
+                    <td>Abstract Queries</td>
+                    <td><a href="mailto:abstractnercon2026@gmail.com">abstractnercon2026@gmail.com</a></td>
+                </tr>
+                <tr>
+                    <td>Paper Award</td>
+                    <td><a href="mailto:papernercon2026@gmail.com">papernercon2026@gmail.com</a></td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

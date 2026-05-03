@@ -71,6 +71,18 @@
             grid-template-columns: 1.05fr 0.95fr;
             gap: 2rem;
             align-items: start;
+            position: relative;
+        }
+        .help-container::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
         }
         .help-card {
             background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(248,251,255,0.94));

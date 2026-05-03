@@ -44,7 +44,7 @@
             background-color: #dbeef8;
             background-image:
                 linear-gradient(135deg, rgba(8, 24, 58, 0.74), rgba(14, 165, 233, 0.46)),
-                url('./Nercon%202026_files/Assam%20tourism.avif');
+                url('./Nercon%202026_files/Tourism/guwahati_assam.png');
             background-position: center center, center center;
             background-repeat: no-repeat, no-repeat;
             background-size: auto, contain;
@@ -94,6 +94,19 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 3rem 2rem 4.5rem;
+            position: relative;
+        }
+        .gallery-container::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
         }
         .gallery-intro {
             text-align: center;
@@ -256,18 +269,34 @@
 <div id="header-placeholder"></div>
 
 <section class="page-banner">
-    <h1>Culture &amp; Cuisine</h1>
-    <p>NERCON 2026 — Explore the beauty, heritage, and flavours of Northeast India</p>
+    <h1>Explore Guwahati</h1>
+    <p>The Gateway to Northeast India</p>
 </section>
 
 <div class="gallery-container">
     <div class="gallery-intro">
-        <h2>Discover Northeast India</h2>
-        <p>From the misty tea gardens of Assam to the ancient Ahom monuments, the Northeast is a treasure trove of culture, wildlife, and culinary delights. Explore what awaits you during NERCON 2026.</p>
+        <h2>Discover Guwahati</h2>
+        <p>A city of scenic beauty, rich culture, spiritual heritage and warm hospitality. Explore what awaits you during NERCON 2026.</p>
         <div class="gallery-note">Click or tap any card to flip it and read more.</div>
     </div>
 
     <div class="image-grid">
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip The Brahmaputra River card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./Nercon%202026_files/Tourism/The%20Brahmaputra%20River.jpeg" alt="The Brahmaputra River">
+                        </div>
+                        <div class="caption">The Brahmaputra River<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>The Brahmaputra River</h3>
+                        <p>The Brahmaputra River (Luit in Assamese) is one of the largest and most powerful rivers in Asia, flowing through Tibet, India, and Bangladesh. In Assam, it shapes the region’s landscape, culture, and livelihood, supporting agriculture and biodiversity. Known for its vast width and majestic flow, it is often called the lifeline of Assam.</p>
+                    </div>
+                </div>
+            </button>
+        </div>
         <div class="image-card">
             <button type="button" class="flip-card-button" aria-label="Flip Brahmaputra River Ropeway card">
                 <div class="image-card-inner">
@@ -285,102 +314,6 @@
             </button>
         </div>
         <div class="image-card">
-            <button type="button" class="flip-card-button" aria-label="Flip Assamese Cuisine card">
-                <div class="image-card-inner">
-                    <div class="image-face image-front">
-                        <div class="image-wrapper">
-                            <img src="./Nercon%202026_files/Tourism/Assamese%20Cuisine.jpeg" alt="Assamese Cuisine">
-                        </div>
-                        <div class="caption">Assamese Cuisine<span class="flip-hint">Click to flip</span></div>
-                    </div>
-                    <div class="image-face image-back">
-                        <h3>Assamese Cuisine</h3>
-                        <p>Assamese cuisine is known for its simple yet flavorful dishes that highlight fresh, local ingredients and minimal spices. It often features rice, fish, and unique preparations like khar and tenga, offering a balance of earthy and tangy tastes. The food reflects the region’s rich culture and deep connection with nature.</p>
-                    </div>
-                </div>
-            </button>
-        </div>
-        <div class="image-card">
-            <button type="button" class="flip-card-button" aria-label="Flip Kaziranga National park card">
-                <div class="image-card-inner">
-                    <div class="image-face image-front">
-                        <div class="image-wrapper">
-                            <img src="./Nercon%202026_files/Tourism/Kaziranga%20National%20park.jpeg" alt="Kaziranga National park">
-                        </div>
-                        <div class="caption">Kaziranga National park<span class="flip-hint">Click to flip</span></div>
-                    </div>
-                    <div class="image-face image-back">
-                        <h3>Kaziranga National park</h3>
-                        <p>Kaziranga National Park in Assam is a UNESCO World Heritage Site, famous for its population of the one-horned rhino. The park features vast grasslands, wetlands, and diverse wildlife including elephants, tigers, and numerous bird species. It is a major attraction for nature lovers and wildlife enthusiasts.</p>
-                    </div>
-                </div>
-            </button>
-        </div>
-        <div class="image-card">
-            <button type="button" class="flip-card-button" aria-label="Flip Charaideo Maidam card">
-                <div class="image-card-inner">
-                    <div class="image-face image-front">
-                        <div class="image-wrapper">
-                            <img src="./Nercon%202026_files/Tourism/Charaideo%20Maidam.jpeg" alt="Charaideo Maidam">
-                        </div>
-                        <div class="caption">Charaideo Maidam<span class="flip-hint">Click to flip</span></div>
-                    </div>
-                    <div class="image-face image-back">
-                        <h3>Charaideo Maidam</h3>
-                        <p>Charaideo Maidam, located in Assam, is an ancient burial site of the Ahom dynasty, often referred to as the “Pyramids of Assam.” These maidams are royal tombs that reflect the rich history, architecture, and cultural traditions of the Ahom kings. The site stands as an important symbol of Assam’s heritage and ancestral legacy.</p>
-                    </div>
-                </div>
-            </button>
-        </div>
-        <div class="image-card">
-            <button type="button" class="flip-card-button" aria-label="Flip Muga silk card">
-                <div class="image-card-inner">
-                    <div class="image-face image-front">
-                        <div class="image-wrapper">
-                            <img src="./Nercon%202026_files/Tourism/Muga%20silk.jpeg" alt="Muga silk">
-                        </div>
-                        <div class="caption">Muga silk<span class="flip-hint">Click to flip</span></div>
-                    </div>
-                    <div class="image-face image-back">
-                        <h3>Muga silk</h3>
-                        <p>Muga silk is a unique and luxurious silk produced exclusively in Assam, known for its natural golden sheen and durability. It is traditionally worn during special occasions and holds great cultural significance in Assamese heritage. The fabric becomes more lustrous with age, making it highly valued worldwide.</p>
-                    </div>
-                </div>
-            </button>
-        </div>
-        <div class="image-card">
-            <button type="button" class="flip-card-button" aria-label="Flip Pobitora wildlife sanctuary card">
-                <div class="image-card-inner">
-                    <div class="image-face image-front">
-                        <div class="image-wrapper">
-                            <img src="./Nercon%202026_files/Tourism/Pobitora%20wildlife%20sanctuary.jpeg" alt="Pobitora wildlife sanctuary">
-                        </div>
-                        <div class="caption">Pobitora wildlife sanctuary<span class="flip-hint">Click to flip</span></div>
-                    </div>
-                    <div class="image-face image-back">
-                        <h3>Pobitora wildlife sanctuary</h3>
-                        <p>Pobitora Wildlife Sanctuary in Assam is renowned for having one of the highest densities of one-horned rhinoceros in the world. Spread across lush grasslands and wetlands, it also supports a variety of birds and other wildlife. Its proximity to Guwahati makes it a popular destination for quick wildlife getaways.</p>
-                    </div>
-                </div>
-            </button>
-        </div>
-        <div class="image-card">
-            <button type="button" class="flip-card-button" aria-label="Flip Rang Ghar card">
-                <div class="image-card-inner">
-                    <div class="image-face image-front">
-                        <div class="image-wrapper">
-                            <img src="./Nercon%202026_files/Tourism/Rang%20Ghar.jpeg" alt="Rang Ghar">
-                        </div>
-                        <div class="caption">Rang Ghar<span class="flip-hint">Click to flip</span></div>
-                    </div>
-                    <div class="image-face image-back">
-                        <h3>Rang Ghar</h3>
-                        <p>Rang Ghar, located in Sivasagar, Assam, is one of Asia’s oldest two-storied amphitheaters, built by the Ahom kings. It was used as a royal pavilion to watch traditional games, sports, and cultural events - particularly during the Rongali Bihu festival in the Ahom capital of Rangpur. The structure reflects the architectural brilliance and rich heritage of the Ahom era.</p>
-                    </div>
-                </div>
-            </button>
-        </div>
-        <div class="image-card">
             <button type="button" class="flip-card-button" aria-label="Flip Umananda card">
                 <div class="image-card-inner">
                     <div class="image-face image-front">
@@ -390,24 +323,8 @@
                         <div class="caption">Umananda<span class="flip-hint">Click to flip</span></div>
                     </div>
                     <div class="image-face image-back">
-                        <h3>umananda</h3>
+                        <h3>Umananda</h3>
                         <p>Umananda Temple, located on Peacock Island in the Brahmaputra River, is one of the smallest inhabited river islands in the world. Dedicated to Lord Shiva, it is a significant pilgrimage site known for its peaceful surroundings and scenic beauty. The temple offers a serene escape with stunning river views and spiritual ambiance.</p>
-                    </div>
-                </div>
-            </button>
-        </div>
-        <div class="image-card">
-            <button type="button" class="flip-card-button" aria-label="Flip Assamese jalpan card">
-                <div class="image-card-inner">
-                    <div class="image-face image-front">
-                        <div class="image-wrapper">
-                            <img src="./Nercon%202026_files/Tourism/Assamese%20jalpan.jpeg" alt="Assamese jalpan">
-                        </div>
-                        <div class="caption">Assamese jalpan<span class="flip-hint">Click to flip</span></div>
-                    </div>
-                    <div class="image-face image-back">
-                        <h3>Assamese jalpan</h3>
-                        <p>Assamese Jalpan is a traditional breakfast or snack that includes a variety of light and wholesome items like flattened rice (chira), puffed rice (muri), curd, jaggery, and seasonal fruits. It is known for its simplicity, nutrition, and refreshing taste. Jalpan reflects the everyday food culture and warm hospitality of Assam.</p>
                     </div>
                 </div>
             </button>
@@ -429,53 +346,101 @@
             </button>
         </div>
         <div class="image-card">
-            <button type="button" class="flip-card-button" aria-label="Flip Umiam lake, Meghalaya card">
+            <button type="button" class="flip-card-button" aria-label="Flip Pobitora wildlife sanctuary card">
                 <div class="image-card-inner">
                     <div class="image-face image-front">
                         <div class="image-wrapper">
-                            <img src="./Nercon%202026_files/Tourism/Umiam%20lake,%20Meghalaya.jpeg" alt="Umiam lake, Meghalaya">
+                            <img src="./Nercon%202026_files/Tourism/Pobitora%20wildlife%20sanctuary.jpeg" alt="Pobitora wildlife sanctuary">
                         </div>
-                        <div class="caption">Umiam lake, Meghalaya<span class="flip-hint">Click to flip</span></div>
+                        <div class="caption">Pobitora wildlife sanctuary<span class="flip-hint">Click to flip</span></div>
                     </div>
                     <div class="image-face image-back">
-                        <h3>Umiam lake, Meghalaya</h3>
-                        <p>Umiam Lake, located near Shillong in Meghalaya, is a beautiful man-made reservoir surrounded by lush green hills. It is a popular spot for boating, water sports, and picnics, offering breathtaking scenic views. The lake is often called the “Barapani” and is a serene getaway for nature lovers.</p>
+                        <h3>Pobitora wildlife sanctuary</h3>
+                        <p>Pobitora Wildlife Sanctuary in Assam is renowned for having one of the highest densities of one-horned rhinoceros in the world. Spread across lush grasslands and wetlands, it also supports a variety of birds and other wildlife. Its proximity to Guwahati makes it a popular destination for quick wildlife getaways.</p>
                     </div>
                 </div>
             </button>
         </div>
         <div class="image-card">
-            <button type="button" class="flip-card-button" aria-label="Flip The Brahmaputra River card">
+            <button type="button" class="flip-card-button" aria-label="Flip Kaziranga National park card">
                 <div class="image-card-inner">
                     <div class="image-face image-front">
                         <div class="image-wrapper">
-                            <img src="./Nercon%202026_files/Tourism/The%20Brahmaputra%20River.jpeg" alt="The Brahmaputra River">
+                            <img src="./Nercon%202026_files/Tourism/Kaziranga%20National%20park.jpeg" alt="Kaziranga National park">
                         </div>
-                        <div class="caption">The Brahmaputra River<span class="flip-hint">Click to flip</span></div>
+                        <div class="caption">Kaziranga National park<span class="flip-hint">Click to flip</span></div>
                     </div>
                     <div class="image-face image-back">
-                        <h3>The Brahmaputra River</h3>
-                        <p>The Brahmaputra River (Luit in Assamese) is one of the largest and most powerful rivers in Asia, flowing through Tibet, India, and Bangladesh. In Assam, it shapes the region’s landscape, culture, and livelihood, supporting agriculture and biodiversity. Known for its vast width and majestic flow, it is often called the lifeline of Assam.</p>
+                        <h3>Kaziranga National park</h3>
+                        <p>Kaziranga National Park in Assam is a UNESCO World Heritage Site, famous for its population of the one-horned rhino. The park features vast grasslands, wetlands, and diverse wildlife including elephants, tigers, and numerous bird species. It is a major attraction for nature lovers and wildlife enthusiasts.</p>
                     </div>
                 </div>
             </button>
         </div>
         <div class="image-card">
-            <button type="button" class="flip-card-button" aria-label="Flip Tea gardens of assam in Sibsagar, Jorhat and Tinsukia card">
+            <button type="button" class="flip-card-button" aria-label="Flip Assamese Cuisine card">
                 <div class="image-card-inner">
                     <div class="image-face image-front">
                         <div class="image-wrapper">
-                            <img src="./Nercon%202026_files/Tourism/Tea%20gardens%20of%20assam%20in%20Sibsagar,%20Jorhat%20and%20Tinsukia.jpeg" alt="Tea gardens of assam in Sibsagar, Jorhat and Tinsukia">
+                            <img src="./Nercon%202026_files/Tourism/Assamese%20Cuisine.jpeg" alt="Assamese Cuisine">
                         </div>
-                        <div class="caption">Tea gardens of assam in Sibsagar, Jorhat and Tinsukia<span class="flip-hint">Click to flip</span></div>
+                        <div class="caption">Assamese Cuisine<span class="flip-hint">Click to flip</span></div>
                     </div>
                     <div class="image-face image-back">
-                        <h3>Tea gardens of assam in Sibsagar, Jorhat and Tinsukia</h3>
-                        <p>The tea gardens of Assam in Sibsagar, Jorhat, and Tinsukia are known for producing some of the finest and most aromatic teas in the world. These lush green plantations stretch across rolling landscapes, offering scenic beauty and a glimpse into traditional tea cultivation. They play a vital role in Assam’s economy and cultural identity.</p>
+                        <h3>Assamese Cuisine</h3>
+                        <p>Assamese cuisine is known for its simple yet flavorful dishes that highlight fresh, local ingredients and minimal spices. It often features rice, fish, and unique preparations like khar and tenga, offering a balance of earthy and tangy tastes. The food reflects the region’s rich culture and deep connection with nature.</p>
+                    </div>
+                </div>
+            </button>
+        </div>        
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Assamese Handicrafts card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./Nercon%202026_files/Tourism/Assam%20Handicrafts.jpeg" alt="Assamese Handicrafts">
+                        </div>
+                        <div class="caption">Assamese handicrafts<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Assamese handicrafts</h3>
+                        <p>Assamese handicrafts are a vibrant expression of the region’s culture, crafted skillfully using bamboo, cane, wood, and textiles. Items like Japi, Cane and Bamboo crafts, Assamese jewellery, Mukhas (masks) and traditional handloom products showcase intricate designs and craftsmanship. These handicrafts reflect the creativity and heritage passed down through generations in Assam.</p>
                     </div>
                 </div>
             </button>
         </div>
+        <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Assam handloom card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./Nercon%202026_files/Tourism/Assam%20Handloom.jpeg" alt="Assam handloom">
+                        </div>
+                        <div class="caption">Assam handloom<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Assam handloom</h3>
+                        <p>Assam handloom is renowned for its exquisite weaving traditions, producing beautiful fabrics like Muga silk, Pat silk, Gamosa and Bodo aronai. Skilled artisans create intricate designs on traditional looms, reflecting the rich cultural heritage of the region. These handwoven textiles are highly valued for their elegance, durability, and craftsmanship.</p>
+                    </div>
+                </div>
+            </button>
+        </div>     
+        <!-- <div class="image-card">
+            <button type="button" class="flip-card-button" aria-label="Flip Assamese jalpan card">
+                <div class="image-card-inner">
+                    <div class="image-face image-front">
+                        <div class="image-wrapper">
+                            <img src="./Nercon%202026_files/Tourism/Assamese%20jalpan.jpeg" alt="Assamese jalpan">
+                        </div>
+                        <div class="caption">Assamese jalpan<span class="flip-hint">Click to flip</span></div>
+                    </div>
+                    <div class="image-face image-back">
+                        <h3>Assamese jalpan</h3>
+                        <p>Assamese Jalpan is a traditional breakfast or snack that includes a variety of light and wholesome items like flattened rice (chira), puffed rice (muri), curd, jaggery, and seasonal fruits. It is known for its simplicity, nutrition, and refreshing taste. Jalpan reflects the everyday food culture and warm hospitality of Assam.</p>
+                    </div>
+                </div>
+            </button>
+        </div> -->
     </div>
 </div>
 

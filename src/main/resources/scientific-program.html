@@ -38,6 +38,18 @@
 
         .content-wrapper {
             max-width: 900px; margin: 0 auto; padding: 3rem 2rem 4rem;
+            position: relative;
+        }
+        .content-wrapper::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
         }
         .content-card { background: white; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--border-color); overflow: hidden; }
         .content-header { background: var(--light-bg); padding: 1.5rem 2rem; border-bottom: 2px solid var(--secondary); }

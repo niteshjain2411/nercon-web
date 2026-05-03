@@ -39,6 +39,18 @@
         .sub-container {
             max-width: 1200px; margin: 0 auto; padding: 2.5rem 2rem 4rem;
             display: grid; grid-template-columns: 280px 1fr; gap: 2.5rem; align-items: start;
+            position: relative;
+        }
+        .sub-container::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
         }
         .sidebar { position: sticky; top: 90px; }
         .sidebar-title { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; padding: 1.2rem 1.5rem; border-radius: 10px 10px 0 0; font-family: 'Cinzel', 'Georgia', serif; font-size: 1.15rem; font-weight: 700; text-align: center; }

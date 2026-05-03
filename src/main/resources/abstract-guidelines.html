@@ -95,6 +95,18 @@
             grid-template-columns: 280px 1fr;
             gap: 2.5rem;
             align-items: start;
+            position: relative;
+        }
+        .sub-container::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
         }
 
         /* Left Sidebar */
