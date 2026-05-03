@@ -2,7 +2,6 @@ package org.example.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 public class RegistrationData implements Serializable {
     private String fullname;
@@ -14,17 +13,21 @@ public class RegistrationData implements Serializable {
     private String state;
     private String designation;
     private String medcouncil;
-    private String regstatus;
     private String medcouncilregnum;
     private boolean isattendworkshop;
     private List<String> workshops;
     private long accompanycount;
-    private Map<String, Transaction> txndetails;
-    private String totalAmount;
+    private List<String> txndetails;
     private String delegateId;
-    private String paymentimg;
     private String pgbonafideimg;
     private String synopsis;
+
+    // Legacy fallback fields – present in Firestore docs saved before the nerconTrx split
+    private String txnid;
+    private String txndate;
+    private String totalAmount;
+    private String regstatus;
+    private String paymentimg;
 
     // Constructors
     public RegistrationData() {
@@ -32,10 +35,10 @@ public class RegistrationData implements Serializable {
 
     public RegistrationData(String fullname, String email, String phone, String gender,
                             String institute, String city, String state, String designation,
-                            String medcouncil, String regstatus, String medcouncilregnum,
+                            String medcouncil, String medcouncilregnum,
                             boolean isattendworkshop, List<String> workshops, long accompanycount,
-                            Map<String, Transaction> txndetails, String totalAmount,
-                            String delegateId, String paymentimg, String pgbonafideimg) {
+                            List<String> txndetails,
+                            String delegateId, String pgbonafideimg) {
         this.fullname = fullname;
         this.email = email;
         this.phone = phone;
@@ -45,15 +48,12 @@ public class RegistrationData implements Serializable {
         this.state = state;
         this.designation = designation;
         this.medcouncil = medcouncil;
-        this.regstatus = regstatus;
         this.medcouncilregnum = medcouncilregnum;
         this.isattendworkshop = isattendworkshop;
         this.workshops = workshops;
         this.accompanycount = accompanycount;
         this.txndetails = txndetails;
-        this.totalAmount = totalAmount;
         this.delegateId = delegateId;
-        this.paymentimg = paymentimg;
         this.pgbonafideimg = pgbonafideimg;
     }
 
@@ -85,9 +85,6 @@ public class RegistrationData implements Serializable {
     public String getMedcouncil() { return medcouncil; }
     public void setMedcouncil(String medcouncil) { this.medcouncil = medcouncil; }
 
-    public String getRegstatus() { return regstatus; }
-    public void setRegstatus(String regstatus) { this.regstatus = regstatus; }
-
     public String getMedcouncilregnum() { return medcouncilregnum; }
     public void setMedcouncilregnum(String medcouncilregnum) { this.medcouncilregnum = medcouncilregnum; }
 
@@ -100,22 +97,31 @@ public class RegistrationData implements Serializable {
     public long getAccompanycount() { return accompanycount; }
     public void setAccompanycount(long accompanycount) { this.accompanycount = accompanycount; }
 
-    public Map<String, Transaction> getTxndetails() { return txndetails; }
-    public void setTxndetails(Map<String, Transaction> txndetails) { this.txndetails = txndetails; }
-
-    public String getTotalAmount() { return totalAmount; }
-    public void setTotalAmount(String totalAmount) { this.totalAmount = totalAmount; }
+    public List<String> getTxndetails() { return txndetails; }
+    public void setTxndetails(List<String> txndetails) { this.txndetails = txndetails; }
 
     public String getDelegateId() { return delegateId; }
     public void setDelegateId(String delegateId) { this.delegateId = delegateId; }
-
-    public String getPaymentimg() { return paymentimg; }
-    public void setPaymentimg(String paymentimg) { this.paymentimg = paymentimg; }
 
     public String getPgbonafideimg() { return pgbonafideimg; }
     public void setPgbonafideimg(String pgbonafideimg) { this.pgbonafideimg = pgbonafideimg; }
 
     public String getSynopsis() { return synopsis; }
     public void setSynopsis(String synopsis) { this.synopsis = synopsis; }
+
+    public String getTxnid() { return txnid; }
+    public void setTxnid(String txnid) { this.txnid = txnid; }
+
+    public String getTxndate() { return txndate; }
+    public void setTxndate(String txndate) { this.txndate = txndate; }
+
+    public String getTotalAmount() { return totalAmount; }
+    public void setTotalAmount(String totalAmount) { this.totalAmount = totalAmount; }
+
+    public String getRegstatus() { return regstatus; }
+    public void setRegstatus(String regstatus) { this.regstatus = regstatus; }
+
+    public String getPaymentimg() { return paymentimg; }
+    public void setPaymentimg(String paymentimg) { this.paymentimg = paymentimg; }
 }
 

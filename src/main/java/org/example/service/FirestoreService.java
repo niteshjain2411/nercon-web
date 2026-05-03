@@ -8,6 +8,7 @@ import com.google.cloud.storage.Bucket;
 import com.google.firebase.cloud.StorageClient;
 import org.example.model.RegistrationData;
 import org.example.model.Transaction;
+import org.example.model.Workshop;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,8 +43,6 @@ public class FirestoreService {
                     && !(workshops.size() == 1 && "ws0".equals(workshops.get(0)));
             registration.setAttendworkshop(attendsWorkshop);
 
-            // Default null image fields to empty string
-            if (registration.getPaymentimg() == null) registration.setPaymentimg("");
             if (registration.getPgbonafideimg() == null) registration.setPgbonafideimg("");
 
             DocumentReference docRef = firestore
@@ -82,18 +81,35 @@ public class FirestoreService {
     }
 
     /**
-     * Update the regstatus field for a registration document.
+     * Update the regstatus for all transactions associated with a delegate.
+     * Falls back to updating the legacy regstatus field on the registration document
+     * for old-format records that pre-date the nerconTrx split.
      */
     public void updateRegistrationStatus(String delegateId, String status)
             throws ExecutionException, InterruptedException {
-        DocumentReference docRef = firestore.collection(COLLECTION_NAME).document(delegateId);
-        ApiFuture<WriteResult> future = docRef.update("regstatus", status);
-        future.get();
+        RegistrationData reg = getRegistrationById(delegateId);
+        if (reg == null) return;
+
+        boolean updatedAny = false;
+        if (reg.getTxndetails() != null && !reg.getTxndetails().isEmpty()) {
+            for (String txnId : reg.getTxndetails()) {
+                if (txnId != null && !txnId.isBlank()) {
+                    firestore.collection("nerconTrx").document(txnId)
+                            .update("regstatus", status).get();
+                    updatedAny = true;
+                }
+            }
+        }
+        if (!updatedAny) {
+            // Legacy fallback: update regstatus directly on the registration document
+            firestore.collection(COLLECTION_NAME).document(delegateId)
+                    .update("regstatus", status).get();
+        }
     }
 
     /**
-     * Update workshops and append a new transaction for an existing registration.
-     * Personal details and regstatus are NOT touched.
+     * Update workshops and append a new transaction ID for an existing registration.
+     * Personal details are NOT touched.
      */
     public void updateWorkshops(String delegateId, List<String> workshops,
                                 String txnKey, String txnid, String txndate,
@@ -107,20 +123,77 @@ public class FirestoreService {
         Map<String, Object> updates = new LinkedHashMap<>();
         updates.put("workshops", workshops != null ? workshops : List.of());
         updates.put("isattendworkshop", attendsWorkshop);
-        if (totalAmount != null && !totalAmount.isBlank()) {
-            updates.put("totalAmount", totalAmount);
-        }
         if (txnid != null && !txnid.isBlank()) {
-            Map<String, String> txn = new LinkedHashMap<>();
-            txn.put("txnid", txnid);
-            txn.put("txndate", txndate != null ? txndate : "");
-            updates.put("txndetails." + txnKey, txn);
-        }
-        if (paymentimgUrl != null && !paymentimgUrl.isBlank()) {
-            updates.put("paymentimg", paymentimgUrl);
+            // Append new txnid to the txndetails list atomically
+            updates.put("txndetails", FieldValue.arrayUnion(txnid));
+            // Save the transaction record to nerconTrx
+            saveTransaction(new Transaction(txnid, txndate != null ? txndate : "",
+                    paymentimgUrl != null ? paymentimgUrl : "",
+                    totalAmount != null ? totalAmount : "", "pending"));
         }
 
         docRef.update(updates).get();
+    }
+
+    /**
+     * Save a Transaction record to the nerconTrx collection.
+     */
+    public void saveTransaction(Transaction txn) throws ExecutionException, InterruptedException {
+        if (txn == null || txn.getTxnid() == null || txn.getTxnid().isBlank()) return;
+        Map<String, Object> txnMap = new LinkedHashMap<>();
+        txnMap.put("txnid", txn.getTxnid());
+        txnMap.put("txndate", txn.getTxndate() != null ? txn.getTxndate() : "");
+        txnMap.put("paymentimg", txn.getPaymentimg() != null ? txn.getPaymentimg() : "");
+        txnMap.put("totalAmount", txn.getTotalAmount() != null ? txn.getTotalAmount() : "");
+        txnMap.put("regstatus", txn.getRegstatus() != null ? txn.getRegstatus() : "pending");
+        firestore.collection("nerconTrx").document(txn.getTxnid()).set(txnMap).get();
+    }
+
+    /**
+     * Fetch all transactions from nerconTrx.
+     */
+    public List<Transaction> getAllTransactions() {
+        List<Transaction> list = new ArrayList<>();
+        try {
+            for (QueryDocumentSnapshot doc : firestore.collection("nerconTrx").get().get().getDocuments()) {
+                Map<String, Object> d = doc.getData();
+                Transaction txn = new Transaction(
+                        doc.getId(),
+                        getString(d, "txndate"),
+                        getString(d, "paymentimg"),
+                        getString(d, "totalAmount"),
+                        getString(d, "regstatus"));
+                list.add(txn);
+            }
+        } catch (Exception e) {
+            System.err.println("Firestore fetch transactions error: " + e.getMessage());
+        }
+        return list;
+    }
+
+    /**
+     * Fetch all workshops from nerconWS.
+     */
+    public List<Workshop> getAllWorkshops() {
+        List<Workshop> list = new ArrayList<>();
+        try {
+            for (QueryDocumentSnapshot doc : firestore.collection("nerconWS").get().get().getDocuments()) {
+                Map<String, Object> d = doc.getData();
+                Workshop ws = new Workshop();
+                ws.setId(doc.getId());
+                ws.setContent(getString(d, "content"));
+                ws.setDurationType(getString(d, "durationType"));
+                ws.setResourcePerson(getString(d, "resourcePerson"));
+                Object maxS = d.get("maxSlots");
+                ws.setMaxSlots(maxS instanceof Number ? ((Number) maxS).longValue() : 0L);
+                Object bookS = d.get("bookedSlots");
+                ws.setBookedSlots(bookS instanceof Number ? ((Number) bookS).longValue() : 0L);
+                list.add(ws);
+            }
+        } catch (Exception e) {
+            System.err.println("Firestore fetch workshops error: " + e.getMessage());
+        }
+        return list;
     }
 
     /**
@@ -173,31 +246,14 @@ public class FirestoreService {
         data.put("state", reg.getState());
         data.put("designation", reg.getDesignation());
         data.put("medcouncil", reg.getMedcouncil());
-        data.put("regstatus", reg.getRegstatus());
         data.put("medcouncilregnum", reg.getMedcouncilregnum());
         data.put("isattendworkshop", reg.isAttendworkshop());
         data.put("workshops", reg.getWorkshops() != null ? reg.getWorkshops() : List.of());
         data.put("accompanycount", reg.getAccompanycount());
-        data.put("totalAmount", reg.getTotalAmount());
         data.put("delegateId", reg.getDelegateId());
-        data.put("paymentimg", reg.getPaymentimg());
-        data.put("pgbonafideimg", reg.getPgbonafideimg());
+        data.put("pgbonafideimg", reg.getPgbonafideimg() != null ? reg.getPgbonafideimg() : "");
         data.put("synopsis", reg.getSynopsis() != null ? reg.getSynopsis() : "");
-
-        // Serialize txndetails as a nested map: { "key": { txnid, txndate } }
-        if (reg.getTxndetails() != null) {
-            Map<String, Object> txnMap = new LinkedHashMap<>();
-            reg.getTxndetails().forEach((key, txn) -> {
-                Map<String, String> entry = new LinkedHashMap<>();
-                entry.put("txnid", txn.getTxnid());
-                entry.put("txndate", txn.getTxndate());
-                txnMap.put(key, entry);
-            });
-            data.put("txndetails", txnMap);
-        } else {
-            data.put("txndetails", Map.of());
-        }
-
+        data.put("txndetails", reg.getTxndetails() != null ? reg.getTxndetails() : List.of());
         return data;
     }
 
@@ -214,32 +270,56 @@ public class FirestoreService {
         reg.setState(getString(data, "state"));
         reg.setDesignation(getString(data, "designation"));
         reg.setMedcouncil(getString(data, "medcouncil"));
-        reg.setRegstatus(getString(data, "regstatus"));
         reg.setMedcouncilregnum(getString(data, "medcouncilregnum"));
         reg.setAttendworkshop(Boolean.TRUE.equals(data.get("isattendworkshop")));
-        reg.setWorkshops((List<String>) data.getOrDefault("workshops", List.of()));
+
+        // workshops: stored as list of strings (IDs)
+        Object wsRaw = data.get("workshops");
+        if (wsRaw instanceof List<?> wsList) {
+            List<String> workshops = new ArrayList<>();
+            for (Object item : wsList) {
+                if (item != null) workshops.add(item.toString());
+            }
+            reg.setWorkshops(workshops);
+        } else {
+            reg.setWorkshops(new ArrayList<>());
+        }
+
         Object accompany = data.get("accompanycount");
         reg.setAccompanycount(accompany instanceof Number ? ((Number) accompany).longValue() : 0L);
-        reg.setTotalAmount(getString(data, "totalAmount"));
-        reg.setPaymentimg(getString(data, "paymentimg"));
         reg.setPgbonafideimg(getString(data, "pgbonafideimg"));
         reg.setSynopsis(getString(data, "synopsis"));
 
-        // Deserialize txndetails
+        // txndetails: list of strings, or legacy map format
         Object txnRaw = data.get("txndetails");
-        if (txnRaw instanceof Map<?, ?> txnRawMap) {
-            Map<String, Transaction> txndetails = new LinkedHashMap<>();
-            txnRawMap.forEach((k, v) -> {
-                if (v instanceof Map<?, ?> entryMap) {
-                    Transaction txn = new Transaction(
-                            getString((Map<String, Object>) entryMap, "txnid"),
-                            getString((Map<String, Object>) entryMap, "txndate")
-                    );
-                    txndetails.put(String.valueOf(k), txn);
+        if (txnRaw instanceof List<?> txnList) {
+            List<String> ids = new ArrayList<>();
+            for (Object item : txnList) {
+                if (item != null) ids.add(item.toString());
+            }
+            reg.setTxndetails(ids);
+        } else if (txnRaw instanceof Map<?, ?> legacyMap) {
+            // Legacy: stored as { "txn1": { txnid: "...", txndate: "..." } }
+            List<String> ids = new ArrayList<>();
+            legacyMap.forEach((k, v) -> {
+                if (v instanceof Map<?, ?> entry) {
+                    Object txnid = entry.get("txnid");
+                    if (txnid != null) ids.add(txnid.toString());
+                } else if (v != null) {
+                    ids.add(v.toString());
                 }
             });
-            reg.setTxndetails(txndetails);
+            reg.setTxndetails(ids);
+        } else {
+            reg.setTxndetails(new ArrayList<>());
         }
+
+        // Legacy fallback: transaction fields stored directly on old registration documents
+        reg.setTxnid(getString(data, "txnid"));
+        reg.setTxndate(getString(data, "txndate"));
+        reg.setTotalAmount(getString(data, "totalAmount"));
+        reg.setRegstatus(getString(data, "regstatus"));
+        reg.setPaymentimg(getString(data, "paymentimg"));
 
         return reg;
     }

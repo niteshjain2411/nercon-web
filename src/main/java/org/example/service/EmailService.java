@@ -49,8 +49,8 @@ public class EmailService {
                 && !(workshops.size() == 1 && "ws0".equalsIgnoreCase(workshops.get(0)));
         StringBuilder workshopsHtml = new StringBuilder();
         if (hasWorkshops) {
-            for (String w : workshops) {
-                workshopsHtml.append("        <li style=\"margin-bottom:0.3rem;\">").append(escHtml(w)).append("</li>\n");
+            for (String wsId : workshops) {
+                workshopsHtml.append("        <li style=\"margin-bottom:0.3rem;\">").append(escHtml(wsId)).append("</li>\n");
             }
         }
 

@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.model.RegistrationData;
+import org.example.model.Transaction;
 import org.example.service.EmailService;
 import org.example.service.FirestoreService;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,28 +37,47 @@ public class RegistrationController {
     /**
      * Save registration data to Firestore.
      * POST /api/registration/save
+     * Accepts a flexible JSON body that may include txnid, txndate, paymentimg, totalAmount
+     * alongside the registration fields.
      */
     @PostMapping("/save")
-    public ResponseEntity<?> saveRegistration(@RequestBody RegistrationData registration) {
+    public ResponseEntity<?> saveRegistration(@RequestBody Map<String, Object> body) {
         try {
-            if (registration.getFullname() == null || registration.getFullname().isEmpty()) {
+            String fullname = (String) body.get("fullname");
+            if (fullname == null || fullname.isEmpty()) {
                 return ResponseEntity.badRequest().body(createErrorResponse("Full name is required"));
             }
-            if (registration.getEmail() == null || registration.getEmail().isEmpty()) {
+            String email = (String) body.get("email");
+            if (email == null || email.isEmpty()) {
                 return ResponseEntity.badRequest().body(createErrorResponse("Email is required"));
             }
-            if (registration.getDesignation() == null || registration.getDesignation().isEmpty()) {
+            String designation = (String) body.get("designation");
+            if (designation == null || designation.isEmpty()) {
                 return ResponseEntity.badRequest().body(createErrorResponse("Designation is required"));
             }
 
-            // Auto-generate delegateId if not supplied by the client
+            RegistrationData registration = buildRegistrationFromMap(body);
+
+            // Auto-generate delegateId if not supplied
             if (registration.getDelegateId() == null || registration.getDelegateId().isBlank()) {
                 long totalPeople = 1 + registration.getAccompanycount();
                 registration.setDelegateId("NERCON-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase() + "-Rg-" + totalPeople);
             }
 
-            // Mark registration as successful before persisting
-            registration.setRegstatus("success");
+            // Extract transaction info from payload and save to nerconTrx
+            String txnid = extractTxnId(body);
+            if (txnid != null && !txnid.isBlank()) {
+                registration.setTxndetails(List.of(txnid));
+                String txndate    = (String) body.getOrDefault("txndate", "");
+                String paymentimg = (String) body.getOrDefault("paymentimg", "");
+                String totalAmount = (String) body.getOrDefault("totalAmount", "");
+                try {
+                    firestoreService.saveTransaction(
+                            new Transaction(txnid, txndate, paymentimg, totalAmount, "pending"));
+                } catch (Exception e) {
+                    System.err.println("Warning: failed to save transaction: " + e.getMessage());
+                }
+            }
 
             boolean saved = firestoreService.saveRegistration(registration);
 
@@ -294,11 +315,10 @@ public class RegistrationController {
             int rowNum = 1;
             for (RegistrationData r : rows) {
                 Row row = sheet.createRow(rowNum++);
-                String txnId = "", txnDate = "";
+                // txndetails is now a list of txn IDs
+                String txnId = "";
                 if (r.getTxndetails() != null && !r.getTxndetails().isEmpty()) {
-                    var first = r.getTxndetails().values().iterator().next();
-                    txnId = first.getTxnid() != null ? first.getTxnid() : "";
-                    txnDate = first.getTxndate() != null ? first.getTxndate() : "";
+                    txnId = r.getTxndetails().get(0);
                 }
                 String[] vals = {
                     r.getDelegateId(), r.getFullname(), r.getEmail(), r.getPhone(), r.getGender(),
@@ -306,8 +326,8 @@ public class RegistrationController {
                     r.getMedcouncil(), r.getMedcouncilregnum(),
                     r.isAttendworkshop() ? "Yes" : "No",
                     r.getWorkshops() != null ? String.join(", ", r.getWorkshops()) : "",
-                    String.valueOf(r.getAccompanycount()), r.getTotalAmount(),
-                    r.getRegstatus(), txnId, txnDate,
+                    String.valueOf(r.getAccompanycount()), "", "",
+                    txnId, "",
                     r.getSynopsis() != null ? r.getSynopsis() : ""
                 };
                 for (int i = 0; i < vals.length; i++) {
@@ -324,6 +344,82 @@ public class RegistrationController {
     // -------------------------------------------------------------------
     // Private helpers
     // -------------------------------------------------------------------
+
+    @SuppressWarnings("unchecked")
+    private RegistrationData buildRegistrationFromMap(Map<String, Object> body) {
+        RegistrationData r = new RegistrationData();
+        r.setFullname((String) body.get("fullname"));
+        r.setEmail((String) body.get("email"));
+        r.setPhone((String) body.get("phone"));
+        r.setGender((String) body.get("gender"));
+        r.setInstitute((String) body.get("institute"));
+        r.setCity((String) body.get("city"));
+        r.setState((String) body.get("state"));
+        r.setDesignation((String) body.get("designation"));
+        r.setMedcouncil((String) body.get("medcouncil"));
+        r.setMedcouncilregnum((String) body.get("medcouncilregnum"));
+        r.setPgbonafideimg((String) body.getOrDefault("pgbonafideimg", ""));
+        r.setSynopsis((String) body.getOrDefault("synopsis", ""));
+        r.setDelegateId((String) body.get("delegateId"));
+
+        Object accompany = body.get("accompanycount");
+        if (accompany instanceof Number n) {
+            r.setAccompanycount(n.longValue());
+        } else if (accompany instanceof String s) {
+            try { r.setAccompanycount(Long.parseLong(s)); } catch (NumberFormatException ignored) {}
+        }
+
+        // workshops: list of string IDs
+        Object wsRaw = body.get("workshops");
+        if (wsRaw instanceof List<?> wsList) {
+            List<String> ids = new ArrayList<>();
+            for (Object item : wsList) {
+                if (item instanceof String s) ids.add(s);
+            }
+            r.setWorkshops(ids);
+        }
+
+        // txndetails: list of strings or legacy map — extract IDs
+        Object txnRaw = body.get("txndetails");
+        if (txnRaw instanceof List<?> txnList) {
+            List<String> ids = new ArrayList<>();
+            for (Object item : txnList) { if (item != null) ids.add(item.toString()); }
+            r.setTxndetails(ids);
+        } else if (txnRaw instanceof Map<?, ?> txnMap) {
+            List<String> ids = new ArrayList<>();
+            txnMap.forEach((k, v) -> {
+                if (v instanceof Map<?, ?> entry) {
+                    Object txnid = entry.get("txnid");
+                    if (txnid != null) ids.add(txnid.toString());
+                } else if (v != null) {
+                    ids.add(v.toString());
+                }
+            });
+            r.setTxndetails(ids);
+        }
+
+        return r;
+    }
+
+    private String extractTxnId(Map<String, Object> body) {
+        // Check top-level txnid field first
+        Object top = body.get("txnid");
+        if (top instanceof String s && !s.isBlank()) return s;
+        // Fall back to first entry in txndetails
+        Object txnRaw = body.get("txndetails");
+        if (txnRaw instanceof Map<?, ?> txnMap) {
+            for (Object v : txnMap.values()) {
+                if (v instanceof Map<?, ?> entry) {
+                    Object txnid = entry.get("txnid");
+                    if (txnid instanceof String s && !s.isBlank()) return s;
+                }
+            }
+        } else if (txnRaw instanceof List<?> txnList && !txnList.isEmpty()) {
+            Object first = txnList.get(0);
+            if (first instanceof String s && !s.isBlank()) return s;
+        }
+        return null;
+    }
 
     private ResponseEntity<?> handleImageUpload(MultipartFile file, String delegateId, String imageType) {
         try {

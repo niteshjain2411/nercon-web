@@ -545,59 +545,23 @@
                 </div>
 
                 <!-- Workshop Selection -->
-                <div class="section-title">2. Workshop Selection (Max 2)</div>
+                <div class="section-title">2. Workshop Selection (12th November 2026)</div>
                 <div class="form-group">
-                    <label>Select up to 2 non-overlapping workshops:</label>
+                    <label>Select up to 2 non-overlapping halfday workshops or only 1 fullday workshop:</label>
                     <div style="margin-bottom: 1.5rem;">
                         <div class="no-workshop-option">
-                            <input type="checkbox" id="ws0" name="workshop" value="ws0" data-fee="0">
+                            <input type="checkbox" id="ws0" name="workshop" value="ws0">
                             <label for="ws0" style="display: inline; margin-left: 0.5rem; font-weight: normal;">I DO NOT WISH TO ATTEND ANY WORKSHOP</label>
                         </div>
                     </div>
 
-                    <!-- Workshop Timeline -->
-                    <div class="workshop-timeline">
-                        <div class="timeline-container">
-                            <div class="workshop-slot" data-time="09:00" data-fee="2000">
-                                <input type="checkbox" id="ws1" name="workshop" value="ws1" data-fee="2000">
-                                <label for="ws1" class="time-slot-label">
-                                    <div class="time-display">09:00 AM</div>
-                                    <div class="workshop-name">GI Pathology</div>
-                                </label>
-                            </div>
-                            <div class="workshop-slot" data-time="10:30" data-fee="2000">
-                                <input type="checkbox" id="ws2" name="workshop" value="ws2" data-fee="2000">
-                                <label for="ws2" class="time-slot-label">
-                                    <div class="time-display">10:30 AM</div>
-                                    <div class="workshop-name">Neuropathology</div>
-                                </label>
-                            </div>
-                            <div class="workshop-slot" data-time="01:30" data-fee="2000">
-                                <input type="checkbox" id="ws3" name="workshop" value="ws3" data-fee="2000">
-                                <label for="ws3" class="time-slot-label">
-                                    <div class="time-display">01:30 PM</div>
-                                    <div class="workshop-name">Digital Pathology & AI</div>
-                                </label>
-                            </div>
-                            <div class="workshop-slot" data-time="03:00" data-fee="2000">
-                                <input type="checkbox" id="ws4" name="workshop" value="ws4" data-fee="2000">
-                                <label for="ws4" class="time-slot-label">
-                                    <div class="time-display">03:00 PM</div>
-                                    <div class="workshop-name">Cytopathology</div>
-                                </label>
-                            </div>
-                            <div class="workshop-slot" data-time="04:00" data-fee="2000">
-                                <input type="checkbox" id="ws5" name="workshop" value="ws5" data-fee="2000">
-                                <label for="ws5" class="time-slot-label">
-                                    <div class="time-display">04:00 PM</div>
-                                    <div class="workshop-name">Hematopathology</div>
-                                </label>
-                            </div>
-                        </div>
+                    <!-- Dynamic Workshop Container -->
+                    <div id="workshop-container">
+                        <div style="color:#6b7280;font-style:italic;padding:1rem 0;">Loading workshops…</div>
                     </div>
 
                     <div style="background: #f3f4f6; padding: 1rem; border-radius: 6px; margin-top: 1rem; font-size: 0.9rem; color: var(--dark-text);">
-                        <strong>Note:</strong> Each workshop slot is 2.5 hours. Maximum 2 non-overlapping workshops can be selected. Each workshop costs Rs 2,000.
+                        <strong>Note:</strong> Full day workshops occupy the entire day — only 1 can be selected. For half-day workshops, you may select 1 morning and 1 afternoon workshop. Each workshop costs Rs 2,000.
                     </div>
                 </div>
 
@@ -616,6 +580,10 @@
                 <!-- Fee Summary -->
                 <div class="summary-box">
                     <h3>Total Payable Amount</h3>
+                    <p id="workshopDiscountLine" style="display:none;font-size:0.85rem;opacity:0.9;margin:0 0 0.4rem;">
+                        Workshop Fee: Rs <span id="workshopFeeBeforeDiscount"></span>
+                        &minus; <span style="background:rgba(255,255,255,0.25);padding:0.1rem 0.4rem;border-radius:4px;">&#8377;1,000 combo discount</span>
+                    </p>
                     <p class="summary-amount">Rs <span id="totalAmount">0</span></p>
                 </div>
 
@@ -666,12 +634,154 @@
 <div id="footer-placeholder"></div>
 <script src="./template-loader.js"></script>
 <script>
-    const workshopCheckboxes = document.querySelectorAll("input[name='workshop']");
     const totalAmountSpan = document.getElementById("totalAmount");
     const form = document.getElementById("registrationForm");
     const successMessage = document.getElementById("successMessage");
 
-    // Page Navigation Functions
+    const FULL_DAY    = 'FULL DAY WORKSHOPS (9 AM \u2013 4 PM)';
+    const HALF_MORN   = 'HALF DAY WORKSHOP- MORNING (9 AM \u2013 12 NOON)';
+    const HALF_AFT    = 'HALF DAY WORKSHOP- AFTERNOON (1 PM \u2013 4 PM)';
+    const DURATION_ORDER = [FULL_DAY, HALF_MORN, HALF_AFT];
+    let workshopData = {};  // docId -> Workshop
+
+    // -----------------------------------------------------------------------
+    // Workshop loading
+    // -----------------------------------------------------------------------
+    async function loadWorkshops() {
+        const container = document.getElementById('workshop-container');
+        try {
+            const res  = await fetch('/nercon/api/workshop/all');
+            const json = await res.json();
+            const workshops = json.data || [];
+            workshopData = {};
+            workshops.forEach(w => { workshopData[w.id] = w; });
+
+            const groups = {};
+            DURATION_ORDER.forEach(dt => groups[dt] = []);
+            workshops.forEach(w => {
+                if (groups[w.durationType] !== undefined) groups[w.durationType].push(w);
+            });
+
+            let wsCodeCounter = 1;
+            let html = '';
+            DURATION_ORDER.forEach(dt => {
+                const list = groups[dt];
+                if (!list.length) return;
+                html += `
+                <div class="ws-section" data-dt="${dt}" style="margin-bottom:1.5rem;">
+                    <div style="font-weight:700;color:var(--primary);font-size:0.93rem;margin:1.2rem 0 0.6rem;
+                                padding:0.5rem 0.75rem;background:#e0f2fe;border-radius:6px;
+                                border-left:4px solid var(--secondary);">${dt}</div>
+                    <div style="overflow-x:auto;">
+                    <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+                        <thead>
+                            <tr style="background:var(--primary);color:white;">
+                                <th style="padding:0.6rem 0.75rem;text-align:center;white-space:nowrap;">Select</th>
+                                <th style="padding:0.6rem 0.75rem;text-align:center;white-space:nowrap;">Workshop Code</th>
+                                <th style="padding:0.6rem 0.75rem;text-align:left;">Content</th>
+                                <th style="padding:0.6rem 0.75rem;text-align:left;">Resource Person(s)</th>
+                                <th style="padding:0.6rem 0.75rem;text-align:center;white-space:nowrap;">Available Slots</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                list.forEach((w, idx) => {
+                    const slotsLeft = Math.max(0, (w.maxSlots || 0) - (w.bookedSlots || 0));
+                    const isFull = slotsLeft <= 0;
+                    const code = 'W-' + String(wsCodeCounter++).padStart(2, '0');
+                    const rowBg = idx % 2 === 0 ? '#ffffff' : '#f8fafc';
+                    html += `
+                            <tr style="background:${rowBg};${isFull ? 'opacity:0.55;' : ''}border-bottom:1px solid #e5e7eb;">
+                                <td style="padding:0.7rem 0.75rem;text-align:center;">
+                                    <input type="checkbox" id="ws_${w.id}" name="workshop"
+                                           value="${w.id}" data-fee="2000" data-dt="${dt}"
+                                           ${isFull ? 'disabled' : ''}
+                                           style="width:18px;height:18px;cursor:${isFull ? 'not-allowed' : 'pointer'};accent-color:var(--secondary);">
+                                </td>
+                                <td style="padding:0.7rem 0.75rem;text-align:center;font-weight:700;color:var(--primary);white-space:nowrap;">${code}</td>
+                                <td style="padding:0.7rem 0.75rem;">${w.content || '—'}</td>
+                                <td style="padding:0.7rem 0.75rem;color:#374151;">${w.resourcePerson || '—'}</td>
+                                <td style="padding:0.7rem 0.75rem;text-align:center;">
+                                    ${isFull
+                                        ? '<span style="color:var(--danger);font-weight:700;">FULL</span>'
+                                        : `<span style="color:var(--accent);font-weight:600;">${slotsLeft}</span>`}
+                                </td>
+                            </tr>`;
+                });
+                html += `
+                        </tbody>
+                    </table>
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html || '<div style="color:#6b7280;font-style:italic;">No workshops available at this time.</div>';
+            attachWorkshopListeners();
+
+            // If edit mode is already active, re-run pre-check after workshops render
+            if (window._editMode && window._existingWorkshops) {
+                preCheckWorkshops(window._existingWorkshops);
+            }
+        } catch (e) {
+            container.innerHTML = '<div style="color:var(--danger);">Failed to load workshops. Please refresh the page.</div>';
+        }
+    }
+
+    function attachWorkshopListeners() {
+        document.querySelectorAll("input[name='workshop']").forEach(cb => {
+            cb.addEventListener('change', function () {
+                handleWorkshopChange(this);
+                updateTotal();
+            });
+        });
+    }
+
+    function handleWorkshopChange(changed) {
+        const ws0 = document.getElementById('ws0');
+
+        if (changed.id === 'ws0') {
+            if (changed.checked) {
+                document.querySelectorAll("input[name='workshop']").forEach(cb => {
+                    if (cb !== changed) cb.checked = false;
+                });
+            }
+            return;
+        }
+
+        // Uncheck "no workshop" option
+        if (ws0) ws0.checked = false;
+
+        const dt = changed.dataset.dt;
+        if (!changed.checked) return;
+
+        if (dt === FULL_DAY) {
+            // Full day selected: uncheck all other workshops
+            document.querySelectorAll("input[name='workshop']:checked").forEach(cb => {
+                if (cb !== changed && cb.id !== 'ws0') cb.checked = false;
+            });
+        } else {
+            // Half day selected: uncheck any full-day
+            document.querySelectorAll(`input[name='workshop'][data-dt="${FULL_DAY}"]:checked`).forEach(cb => {
+                cb.checked = false;
+            });
+
+            const halfChecked = Array.from(
+                document.querySelectorAll("input[name='workshop']:checked")
+            ).filter(cb => cb.id !== 'ws0' && cb.dataset.dt !== FULL_DAY);
+
+            if (halfChecked.length > 2) {
+                changed.checked = false;
+                alert('You can select at most 2 non-overlapping half-day workshops (1 morning + 1 afternoon).');
+                return;
+            }
+            // Only one workshop per half-day slot (morning OR afternoon)
+            const sameSlot = halfChecked.filter(cb => cb.dataset.dt === dt);
+            if (sameSlot.length > 1) {
+                changed.checked = false;
+                alert('Only one workshop per time slot (' + dt + ') can be selected.');
+            }
+        }
+    }
+
     function proceedToRegistration() {
         document.getElementById("page1").classList.remove("active");
         document.getElementById("page2").classList.add("active");
@@ -684,29 +794,48 @@
         window.scrollTo(0, 0);
     }
 
-    // Workshop validation
-    workshopCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener("change", function() {
-            const checked = document.querySelectorAll("input[name='workshop']:checked").length;
-            if (checked > 2) {
-                this.checked = false;
-                alert("Maximum 2 workshops allowed");
-            }
-            updateTotal();
-        });
-    });
-
     // Calculate total fee
     function updateTotal() {
-        // In edit mode: base conference fee is already paid; only count NEW (non-disabled) workshops
         let total = window._editMode ? 0 : 6000;
-        workshopCheckboxes.forEach(checkbox => {
-            if (checkbox.checked && !checkbox.disabled) {
-                total += parseInt(checkbox.getAttribute("data-fee")) || 0;
-            }
+
+        // Collect selected workshops (excluding the "no workshop" option)
+        const selectedWorkshopCbs = Array.from(
+            document.querySelectorAll("input[name='workshop']:checked")
+        ).filter(cb => cb.id !== 'ws0' && !cb.disabled);
+
+        let workshopFee = 0;
+        selectedWorkshopCbs.forEach(cb => {
+            workshopFee += parseInt(cb.getAttribute('data-fee')) || 0;
         });
+
+        // Half-day combo discount: ₹500/workshop (₹1,000 total) only during initial
+        // registration when exactly 1 morning + 1 afternoon half-day workshop are selected.
+        let discount = 0;
         if (!window._editMode) {
-            const accompanyCnt = parseInt(document.getElementById("accompany").value) || 0;
+            const halfDayCbs = selectedWorkshopCbs.filter(
+                cb => cb.dataset.dt && cb.dataset.dt !== FULL_DAY
+            );
+            const hasMorning   = halfDayCbs.some(cb => cb.dataset.dt === HALF_MORN);
+            const hasAfternoon = halfDayCbs.some(cb => cb.dataset.dt === HALF_AFT);
+            if (halfDayCbs.length === 2 && hasMorning && hasAfternoon) {
+                discount = 1000;
+            }
+        }
+
+        // Show/hide discount line in summary box
+        const discountLine = document.getElementById('workshopDiscountLine');
+        if (discount > 0 && discountLine) {
+            document.getElementById('workshopFeeBeforeDiscount').textContent =
+                workshopFee.toLocaleString();
+            discountLine.style.display = 'block';
+        } else if (discountLine) {
+            discountLine.style.display = 'none';
+        }
+
+        total += workshopFee - discount;
+
+        if (!window._editMode) {
+            const accompanyCnt = parseInt(document.getElementById('accompany').value) || 0;
             total += accompanyCnt * 1500;
         }
         totalAmountSpan.textContent = total.toLocaleString();
@@ -798,12 +927,8 @@
                 designation:     document.getElementById("designation").value,
                 workshops:       selectedWorkshops,
                 accompanycount:  accompanyCount,
-                txndetails: {
-                    txn1: {
-                        txnid:   document.getElementById("txnid").value,
-                        txndate: document.getElementById("txndate").value
-                    }
-                },
+                txnid:           document.getElementById("txnid").value,
+                txndate:         document.getElementById("txndate").value,
                 synopsis:       document.getElementById("synopsis").value.trim(),
                 totalAmount:    document.getElementById("totalAmount").textContent,
                 delegateId:     delegateId,
@@ -920,21 +1045,13 @@
         }
 
         // Pre-check existing workshops and lock them (cannot be removed)
-        const existingWorkshops = (data.workshops || []).filter(w => w !== 'ws0');
-        existingWorkshops.forEach(wsId => {
-            const wsEl = document.getElementById(wsId);
-            if (!wsEl) return;
-            wsEl.checked = true;
-            wsEl.disabled = true;
-            const label = wsEl.nextElementSibling;
-            if (label) {
-                label.style.background = '#e0f2fe';
-                label.style.borderColor = '#0ea5e9';
-                label.style.cursor = 'default';
-            }
-        });
+        const existingWorkshops = Array.isArray(data.workshops)
+            ? data.workshops.map(w => typeof w === 'string' ? w : (w.id || '')).filter(Boolean)
+            : [];
+        window._existingWorkshops = existingWorkshops;
+        preCheckWorkshops(existingWorkshops);
 
-        // If all workshops already selected, also lock ws0
+        // If ws0 was set, lock it
         const ws0El = document.getElementById('ws0');
         if (ws0El) {
             ws0El.disabled = true;
@@ -959,7 +1076,7 @@
         window._editMode = true;
         window._editDelegateId = delegateId;
         window._existingWorkshops = existingWorkshops;
-        window._existingTxnCount = data.txndetails ? Object.keys(data.txndetails).length : 0;
+        window._existingTxnCount = (data.txndetails || []).length;
 
         updateTotal();
     }
@@ -1010,12 +1127,8 @@
             const paymentJson = await paymentRes.json();
             if (!paymentJson.success) throw new Error('Payment screenshot upload failed: ' + paymentJson.message);
 
-            // Determine txn key (txn2, txn3, …)
-            const txnKey = 'txn' + (( window._existingTxnCount || 0) + 1);
-
             const updatePayload = {
                 workshops:    allSelected,
-                txnKey:       txnKey,
                 txnid:        document.getElementById('txnid').value,
                 txndate:      document.getElementById('txndate').value,
                 paymentimg:   paymentJson.url,
@@ -1048,11 +1161,27 @@
 
     // On page load: check for edit mode URL params
     document.addEventListener('DOMContentLoaded', function () {
+        loadWorkshops();
         const params = new URLSearchParams(window.location.search);
         if (params.get('mode') === 'edit' && params.get('delegateId')) {
             initEditMode(params.get('delegateId'));
         }
     });
+
+    function preCheckWorkshops(existingWorkshops) {
+        existingWorkshops.forEach(wsId => {
+            const wsEl = document.getElementById('ws_' + wsId);
+            if (!wsEl) return;
+            wsEl.checked = true;
+            wsEl.disabled = true;
+            const label = wsEl.nextElementSibling;
+            if (label) {
+                label.style.background = '#e0f2fe';
+                label.style.borderColor = '#0ea5e9';
+                label.style.cursor = 'default';
+            }
+        });
+    }
 
     // Initialize
     updateTotal();
