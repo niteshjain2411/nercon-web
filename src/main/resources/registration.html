@@ -1,7 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/nercon/Nercon%20Logo.jpeg" type="image/jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NERCON 2026 | Online Registration</title>
     <style>
@@ -654,7 +655,7 @@
                     </div>
 
                     <div style="background: #f3f4f6; padding: 1rem; border-radius: 6px; margin-top: 1rem; font-size: 0.9rem; color: var(--dark-text);">
-                        <strong>Note:</strong> Full day workshops occupy the entire day — only 1 can be selected. For half-day workshops, you may select 1 morning and 1 afternoon workshop. Each workshop costs Rs 2,000.
+                        <strong>Note:</strong> Full day workshops occupy the entire day — only 1 can be selected. For half-day workshops, you may select 1 morning and 1 afternoon workshop.
                     </div>
                 </div>
 
@@ -792,6 +793,11 @@
         const container = document.getElementById('workshop-container');
         try {
             const res  = await fetch('/nercon/api/workshop/all');
+            if (!res.ok) {
+                let errDetail = '';
+                try { const t = await res.text(); errDetail = t.substring(0, 200); } catch (_) {}
+                throw new Error('HTTP ' + res.status + ': ' + errDetail);
+            }
             const json = await res.json();
             const workshops = json.data || [];
             workshopData = {};
@@ -863,6 +869,7 @@
                 preCheckWorkshops(window._existingWorkshops);
             }
         } catch (e) {
+            console.error('Workshop load error:', e);
             container.innerHTML = '<div style="color:var(--danger);">Failed to load workshops. Please refresh the page.</div>';
         }
     }
@@ -1097,7 +1104,7 @@
                 accompanycount:  accompanyCount,
                 txnid:           document.getElementById("txnid").value,
                 txndate:         document.getElementById("txndate").value,
-                synopsis:       document.getElementById("synopsis").value.trim(),
+                synopsis:       (document.getElementById("synopsis") || {value: ""}).value.trim(),
                 totalAmount:    document.getElementById("totalAmount").textContent,
                 delegateId:     delegateId,
                 paymentimg:     paymentimgUrl,

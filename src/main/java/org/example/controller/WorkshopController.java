@@ -38,6 +38,7 @@ public class WorkshopController {
             Map<String, Object> error = new HashMap<>();
             error.put("success", false);
             error.put("message", "Error fetching workshops: " + e.getMessage());
+            System.err.println("WorkshopController error: " + e.getClass().getName() + ": " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }

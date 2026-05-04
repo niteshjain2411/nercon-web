@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Service
 public class FirestoreService {
@@ -177,7 +179,8 @@ public class FirestoreService {
     public List<Workshop> getAllWorkshops() {
         List<Workshop> list = new ArrayList<>();
         try {
-            for (QueryDocumentSnapshot doc : firestore.collection("nerconWS").get().get().getDocuments()) {
+            QuerySnapshot snapshot = firestore.collection("nerconWS").get().get(15, TimeUnit.SECONDS);
+            for (QueryDocumentSnapshot doc : snapshot.getDocuments()) {
                 Map<String, Object> d = doc.getData();
                 Workshop ws = new Workshop();
                 ws.setId(doc.getId());
@@ -190,8 +193,10 @@ public class FirestoreService {
                 ws.setBookedSlots(bookS instanceof Number ? ((Number) bookS).longValue() : 0L);
                 list.add(ws);
             }
+        } catch (TimeoutException e) {
+            System.err.println("Firestore fetch workshops timed out: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("Firestore fetch workshops error: " + e.getMessage());
+            System.err.println("Firestore fetch workshops error: " + e.getClass().getName() + ": " + e.getMessage());
         }
         return list;
     }
@@ -286,7 +291,13 @@ public class FirestoreService {
         }
 
         Object accompany = data.get("accompanycount");
-        reg.setAccompanycount(accompany instanceof Number ? ((Number) accompany).longValue() : 0L);
+        if (accompany instanceof Number) {
+            reg.setAccompanycount(((Number) accompany).longValue());
+        } else if (accompany instanceof String s) {
+            try { reg.setAccompanycount(Long.parseLong(s.trim())); } catch (NumberFormatException ignored) { reg.setAccompanycount(0L); }
+        } else {
+            reg.setAccompanycount(0L);
+        }
         reg.setPgbonafideimg(getString(data, "pgbonafideimg"));
         reg.setSynopsis(getString(data, "synopsis"));
 

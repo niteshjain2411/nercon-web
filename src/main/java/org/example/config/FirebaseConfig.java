@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,9 +28,21 @@ public class FirebaseConfig {
         if (!FirebaseApp.getApps().isEmpty()) {
             return FirebaseApp.getInstance();
         }
-        InputStream serviceAccount = new FileInputStream(credentialsPath);
+
+        GoogleCredentials credentials;
+        File credFile = new File(credentialsPath);
+        if (credFile.exists()) {
+            // Use explicit service account file (local dev)
+            try (InputStream serviceAccount = new FileInputStream(credFile)) {
+                credentials = GoogleCredentials.fromStream(serviceAccount);
+            }
+        } else {
+            // Fall back to Application Default Credentials (GCP Cloud Run / GCE / etc.)
+            credentials = GoogleCredentials.getApplicationDefault();
+        }
+
         FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .setCredentials(credentials)
                 .setStorageBucket(storageBucket)
                 .build();
         return FirebaseApp.initializeApp(options);
