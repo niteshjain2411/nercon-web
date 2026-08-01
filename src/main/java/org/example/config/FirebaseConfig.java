@@ -47,6 +47,7 @@ public class FirebaseConfig {
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
                 .setProjectId(projectId)
+
                 .setStorageBucket(storageBucket)
                 .build();
         return FirebaseApp.initializeApp(options);

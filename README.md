@@ -223,3 +223,52 @@ This project is proprietary and developed for NERCON 2026 conference.
 
 **Last Updated**: April 5, 2026
 **Maintainer**: NERCON Development Team
+
+## Deploy to Firebase Hosting
+
+This repository contains a static front-end (HTML, CSS, JS) under `src/main/resources` that can be served directly by Firebase Hosting. The Java Spring Boot backend is separate and should be deployed to a server (Heroku, Google Cloud Run, an IaaS VM, or similar) if you need server-side endpoints.
+
+What this adds:
+- `firebase.json` — hosting configuration (serves files from `firebase_public`)
+- `scripts/prepare_firebase.sh` — copies the `src/main/resources` static files into `firebase_public`
+- `package.json` — npm convenience scripts to prepare and deploy
+
+Quick steps to deploy from macOS (zsh):
+
+1. Install Firebase CLI if you don't have it (recommended via npm):
+
+```bash
+# install once
+npm install -g firebase-tools
+```
+
+2. Login to Firebase and select your project:
+
+```bash
+firebase login
+firebase use --add
+```
+
+3. Prepare the public folder and verify files:
+
+```bash
+npm run prepare-firebase
+ls -la firebase_public | head -n 40
+```
+
+4. Deploy to Firebase Hosting:
+
+```bash
+npm run deploy-firebase
+```
+
+Notes and alternatives:
+- If you prefer not to install the Firebase CLI globally, the `deploy-firebase` script uses `npx firebase-tools` so it will run without a global install.
+- The Spring Boot backend (APIs) is not deployed to Firebase Hosting. For a complete production setup consider:
+	- Deploy backend to Google Cloud Run and set the frontend to call the Cloud Run URL
+	- Use a reverse proxy or configure CORS in the backend to allow requests from your Firebase Hosting domain
+
+Security:
+- Do NOT commit service account JSON files to git. If you need CI/CD deployment, use GitHub Actions or GitLab CI with the service account stored as a secret and injected at deploy time.
+
+If you want, I can: initialize a Firebase project config (`firebase init hosting`) interactively (requires your input), or create a sample GitHub Actions workflow to deploy automatically on push to `main`.

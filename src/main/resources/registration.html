@@ -589,6 +589,7 @@
                                 <th style="padding: 0.65rem 0.9rem; text-align: left; border: 1px solid #c7d2fe;">Categories</th>
                                 <th style="padding: 0.65rem 0.9rem; text-align: center; border: 1px solid #c7d2fe;">Early Bird Registration<br><small>(by 15th June 2026)</small></th>
                                 <th style="padding: 0.65rem 0.9rem; text-align: center; border: 1px solid #c7d2fe;">Regular Registration<br><small>(by 31st October 2026)</small></th>
+
                                 <th style="padding: 0.65rem 0.9rem; text-align: center; border: 1px solid #c7d2fe;">Spot Registration<br><small>(After 31st October 2026)</small></th>
                             </tr>
                         </thead>
@@ -642,7 +643,10 @@
                     </li>
                     <li style="margin-bottom: 0.75rem; color: var(--dark-text); font-size: 0.95rem;"><strong>Concessional Registration (Half-Day Workshops):</strong>
                         <ul style="margin-left: 1.5rem; margin-top: 0.25rem;">
-                            <li>Delegates opting for two non-overlapping half-day workshops simultaneously at the time of registration shall be eligible for a concession of <strong>&#8377;1,000</strong>.</li>                            
+                            <li>Delegates opting for two non-overlapping half-day workshops simultaneously at the time of initial registration shall be eligible for a concession of <strong>&#8377;1,000</strong>.</li>
+                            <li>This concession is applicable only at the time of <strong>combined registration</strong> for both workshops.</li>
+                            <li>The concession shall <strong>not</strong> be applicable if a delegate registers for one half-day workshop initially and subsequently opts for another.</li>
+
                         </ul>
                     </li>
                 </ul>
@@ -655,6 +659,12 @@
                     <li style="margin-bottom: 0.75rem; color: var(--dark-text); font-size: 0.95rem;">For any queries or technical assistance regarding the registration process, delegates may contact: <strong>nercon2026@gmail.com</strong></li>
                 </ul>
 
+                <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Cancellation Policy</h3>
+                <ol style="margin-left: 1.5rem; line-height: 2;">
+                    <li style="margin-bottom: 0.75rem; color: var(--dark-text); font-size: 0.95rem;">Cancellation requests, duly mailed to <strong>nercon2026@gmail.com</strong>, will be accepted till <strong>30th September 2026</strong>. After this date, no request for cancellation will be accepted.</li>
+                    <li style="margin-bottom: 0.75rem; color: var(--dark-text); font-size: 0.95rem;">Eligible cancellation requests will be eligible for <strong>50% refund</strong> of the amount paid.</li>
+                    <li style="margin-bottom: 0.75rem; color: var(--dark-text); font-size: 0.95rem;">Refund will be processed <strong>two weeks after the conference</strong>.</li>
+                </ol>
 
             </div>
             <div class="button-group" style="margin-top: 2rem;">
@@ -726,6 +736,7 @@
                     <div class="form-group">
                         <label for="category">Registration Category <span class="required">*</span></label>
                         <select id="category" name="category" onchange="updateTotal(); toggleHodRequired()" required>
+
                             <option value="">Select Category</option>
                             <option value="pg">PG Student</option>
                             <option value="delegate">Delegate</option>
@@ -928,6 +939,8 @@
                 if (groups[w.durationType] !== undefined) groups[w.durationType].push(w);
             });
 
+            let wsCodeCounter = 1;
+
             let html = '';
             DURATION_ORDER.forEach(dt => {
                 const list = groups[dt];
@@ -952,7 +965,8 @@
                 list.forEach((w, idx) => {
                     const slotsLeft = Math.max(0, (w.maxSlots || 0) - (w.bookedSlots || 0));
                     const isFull = slotsLeft <= 0;
-                    const code = w.id || '—';
+                    const code = w.id || ('W-' + String(wsCodeCounter++).padStart(2, '0'));
+
                     const rowBg = idx % 2 === 0 ? '#ffffff' : '#f8fafc';
                     html += `
                             <tr style="background:${rowBg};${isFull ? 'opacity:0.55;' : ''}border-bottom:1px solid #e5e7eb;">
@@ -1163,6 +1177,7 @@
         }
     }
 
+
     function proceedToRegistration() {
         document.getElementById("page1").classList.remove("active");
         document.getElementById("page2").classList.add("active");
@@ -1181,6 +1196,7 @@
         today.setHours(0, 0, 0, 0);
         const earlyBirdCutoff = new Date('2026-06-15');
         const regularCutoff   = new Date('2026-10-31');
+
         if (today <= earlyBirdCutoff) return 'early';
         if (today <= regularCutoff)   return 'regular';
         return 'spot';

@@ -92,7 +92,23 @@
             max-width: 900px;
             margin: 0 auto;
             padding: 3rem 2rem 4.5rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2.5rem;
+            align-items: start;
             position: relative;
+        }
+        .sub-container::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
+
         }
         .sub-container::before {
             content: '';
@@ -513,10 +529,12 @@
         <div class="content-card">
             
             <div class="content-body">
+                <p><strong>Abstracts must be original, related to Pathology / Diagnostics and should not have been published elsewhere.</strong></p>
 
                 <!-- Categories -->
                 <h3 class="section-title">Categories of Submission</h3>
                 <p class="section-desc">Abstracts are accepted under the following categories:</p>
+
                 <ul>
                     <li>Oral Paper Presentation</li>
                     <li>Poster Presentation</li>

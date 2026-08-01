@@ -107,17 +107,6 @@ public class FirestoreService {
         }
     }
 
-    /**
-     * Increment bookedSlots by 1 for each workshop the delegate selected.
-     * ws0 ("no workshop" sentinel) is skipped.
-     */
-    public void incrementWorkshopBookedSlots(List<String> workshopIds)
-            throws ExecutionException, InterruptedException {
-        if (workshopIds == null || workshopIds.isEmpty()) return;
-        for (String wsId : workshopIds) {
-            if (wsId == null || wsId.isBlank() || "ws0".equals(wsId)) continue;
-            firestore.collection("nerconWS").document(wsId)
-                    .update("bookedSlots", FieldValue.increment(1)).get();
         }
     }
 
@@ -272,6 +261,7 @@ public class FirestoreService {
         data.put("synopsis", reg.getSynopsis() != null ? reg.getSynopsis() : "");
         data.put("registrationCategory", reg.getRegistrationCategory() != null ? reg.getRegistrationCategory() : "");
         data.put("creationTS", reg.getCreationTS() != null ? reg.getCreationTS() : "");
+
         data.put("txndetails", reg.getTxndetails() != null ? reg.getTxndetails() : List.of());
         return data;
     }
