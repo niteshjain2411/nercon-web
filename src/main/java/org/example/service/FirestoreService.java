@@ -24,6 +24,13 @@ public class FirestoreService {
 
     private static final String COLLECTION_NAME = "Nercon26";
 
+    /**
+     * Registration field holding the workshop IDs whose bookedSlots have already
+     * been incremented for this delegate. Deliberately not part of RegistrationData:
+     * it is bookkeeping owned by the approval path, not registration data.
+     */
+    private static final String COUNTED_WORKSHOPS_FIELD = "countedWorkshops";
+
     private final Firestore firestore;
 
     @Value("${firebase.storage.bucket}")
@@ -51,7 +58,10 @@ public class FirestoreService {
                     .collection(COLLECTION_NAME)
                     .document(registration.getDelegateId());
 
-            ApiFuture<WriteResult> future = docRef.set(toFirestoreMap(registration));
+            // Merge rather than replace: toFirestoreMap covers every registration field,
+            // so this writes the same values, but it preserves approval bookkeeping such
+            // as countedWorkshops that a re-save would otherwise wipe.
+            ApiFuture<WriteResult> future = docRef.set(toFirestoreMap(registration), SetOptions.merge());
             future.get();
             return true;
         } catch (InterruptedException e) {
@@ -108,17 +118,68 @@ public class FirestoreService {
     }
 
     /**
-     * Increment bookedSlots by 1 for each workshop the delegate selected.
-     * ws0 ("no workshop" sentinel) is skipped.
+     * Increment bookedSlots by 1 for each workshop the delegate selected that has
+     * not already been counted for this delegate.
+     *
+     * Every workshop counted is recorded in the registration's countedWorkshops
+     * field, so approving the same registration twice — or re-approving it after
+     * the delegate adds a workshop — never counts a workshop a second time. The
+     * whole operation runs in one transaction, so concurrent approvals of the same
+     * delegate cannot both count the same workshop.
+     *
+     * ws0 (the "no workshop" sentinel) is skipped, as is any workshop with no
+     * nerconWS document, so a stale ID cannot fail an approval that has already
+     * written the status and sent the email.
+     *
+     * @return the workshop IDs actually incremented by this call
      */
-    public void incrementWorkshopBookedSlots(List<String> workshopIds)
+    public List<String> incrementWorkshopBookedSlots(String delegateId, List<String> workshopIds)
             throws ExecutionException, InterruptedException {
-        if (workshopIds == null || workshopIds.isEmpty()) return;
-        for (String wsId : workshopIds) {
-            if (wsId == null || wsId.isBlank() || "ws0".equals(wsId)) continue;
-            firestore.collection("nerconWS").document(wsId)
-                    .update("bookedSlots", FieldValue.increment(1)).get();
+        if (delegateId == null || delegateId.isBlank() || workshopIds == null || workshopIds.isEmpty()) {
+            return List.of();
         }
+        DocumentReference regRef = firestore.collection(COLLECTION_NAME).document(delegateId);
+
+        return firestore.runTransaction(txn -> {
+            DocumentSnapshot regSnap = txn.get(regRef).get();
+            if (!regSnap.exists()) return List.<String>of();
+
+            Set<String> alreadyCounted = new HashSet<>();
+            Object counted = regSnap.get(COUNTED_WORKSHOPS_FIELD);
+            if (counted instanceof List<?> countedList) {
+                for (Object id : countedList) {
+                    if (id != null) alreadyCounted.add(id.toString());
+                }
+            }
+
+            // Candidates: skip ws0, duplicates within the request, and anything already counted
+            List<String> candidates = new ArrayList<>();
+            Set<String> seen = new HashSet<>();
+            for (String wsId : workshopIds) {
+                if (wsId == null || wsId.isBlank() || "ws0".equals(wsId)) continue;
+                if (alreadyCounted.contains(wsId) || !seen.add(wsId)) continue;
+                candidates.add(wsId);
+            }
+            if (candidates.isEmpty()) return List.<String>of();
+
+            // A Firestore transaction requires every read before any write
+            List<String> toIncrement = new ArrayList<>();
+            for (String wsId : candidates) {
+                if (txn.get(firestore.collection("nerconWS").document(wsId)).get().exists()) {
+                    toIncrement.add(wsId);
+                } else {
+                    System.err.println("Skipping unknown workshop '" + wsId + "' for " + delegateId);
+                }
+            }
+            if (toIncrement.isEmpty()) return List.<String>of();
+
+            for (String wsId : toIncrement) {
+                txn.update(firestore.collection("nerconWS").document(wsId),
+                        "bookedSlots", FieldValue.increment(1));
+            }
+            txn.update(regRef, COUNTED_WORKSHOPS_FIELD, FieldValue.arrayUnion(toIncrement.toArray()));
+            return toIncrement;
+        }).get();
     }
 
     /**

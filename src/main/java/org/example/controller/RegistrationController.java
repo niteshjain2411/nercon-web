@@ -240,6 +240,7 @@ public class RegistrationController {
 
             // When approved: fetch registration, dispatch async email, increment workshop slots
             boolean emailQueued = false;
+            List<String> countedWorkshops = List.of();
             if ("approved".equals(status)) {
                 RegistrationData registration = firestoreService.getRegistrationById(delegateId);
                 if (registration != null) {
@@ -247,7 +248,9 @@ public class RegistrationController {
                         emailService.sendApprovalEmail(registration); // runs async — exceptions logged in EmailService
                         emailQueued = true;
                     }
-                    firestoreService.incrementWorkshopBookedSlots(registration.getWorkshops());
+                    // Idempotent: only workshops not already counted for this delegate
+                    countedWorkshops = firestoreService
+                            .incrementWorkshopBookedSlots(delegateId, registration.getWorkshops());
                 }
             }
 
@@ -256,6 +259,7 @@ public class RegistrationController {
             res.put("delegateId", delegateId);
             res.put("status", status);
             res.put("emailQueued", emailQueued);
+            res.put("workshopSlotsCounted", countedWorkshops);
             return ResponseEntity.ok(res);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
