@@ -1,0 +1,9 @@
+{
+  "name": "nercon-web-firebase",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prepare-firebase": "bash scripts/prepare_firebase.sh",
+    "deploy-firebase": "npx firebase-tools deploy --only hosting"
+  }
+}

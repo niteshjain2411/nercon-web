@@ -1,0 +1,152 @@
+var wWidth = 0;
+
+$(function(e){
+	var $this = $(this),
+		wWidth = $(window).outerWidth();
+	
+	$( document) .ready( function( e ){
+		var loadCmnApp = (function(e){
+			"user strict";
+			
+			function cmnFunc(){
+				// event
+                speakerPop();
+				subTab();
+				channelTab();
+				mapRes();
+                
+
+				if(wWidth < 1024){
+					
+				}else{
+					
+				}
+			}
+			
+			function cmnResize(){
+				// resize event
+				wWidth = $(window).outerWidth();
+				
+				if(wWidth < 1024){
+					
+				}else{
+					
+				}
+			}
+			
+			function cmnScroll(){
+				// scroll event
+			}
+			
+			return{
+				cmnInit: function(e){
+					cmnFunc();
+				},
+				cmnResize: function(e){
+					$(window).resize(function(e){
+						wWidth = $(window).outerWidth();
+						//wWidth = windowWidth();
+						
+						cmnResize();
+					});
+				},
+				
+				cmnScroll: function(e){
+					$(window).scroll(function(e){
+						cmnScroll();
+					});
+				}
+			}
+		})();
+		
+		/* ====================
+			* run
+		===================== */
+		 // init
+		loadCmnApp.cmnInit();
+		// resize
+		loadCmnApp.cmnResize();
+		// scroll
+		loadCmnApp.cmnScroll();
+
+        $( this ).on( "click", '#btn_subscript_add', function( e ) {
+            e.preventDefault();
+            return $.post( "/include/ajax/subscript_add.php", {"email": $( '#subscript_email' ).val()}, function( res ) {
+                try { eval( res['eval'] ); } catch ( e ) { console.log( e ); alert( "Error.["+( res['msg'] )+"]" ) }
+            }, "JSON" );
+        } );
+	} );
+});
+
+function windowWidth() {
+    if($(document).innerHeight() > $(window).innerHeight()) {
+        return $(window).innerWidth() - 17;
+    } else {
+        return $(window).innerWidth();
+    }
+}
+
+function subTab(){
+	//$('.sub-tabcon').hide().first().show();
+	$('.sub-tab-menu > li').on('click',function(e){
+		var cnt = $(this).index();
+		$(this).addClass('on')
+		$('.sub-tab-menu > li').not(this).removeClass('on');
+		$('.sub-tabcon').hide().eq(cnt).stop().fadeIn(300);
+	});
+}
+
+
+
+/*탭메뉴 수정*/
+$(function(){
+  $('.abst-tabcontent > div').hide();
+  $('.tabnav a').click(function () {
+    $('.abst-tabcontent > div').hide().filter(this.hash).fadeIn();
+    $('.tabnav a').removeClass('active');
+    $(this).addClass('active');
+    return false;
+  }).filter(':eq(0)').click();
+
+
+});
+
+function speakerPop(){
+
+    // 트리거 클릭
+    $('.btn-popup').on('click', function(e){
+      e.preventDefault();
+      var target = $(this).attr('href');
+      // dim + 해당 레이어 띄우기
+      $('.dim-layer2').fadeIn();
+      $(target).fadeIn();
+    });
+
+    // 닫기 버튼 또는 dimBg 클릭
+    $(document).on('click', '.btn-layerClose, .dimBg', function(e){
+      e.preventDefault();
+      $('.dim-layer2, .pop-layer').fadeOut();
+    });
+
+}
+
+
+function channelTab(){
+	for(i = 0; i < 10; i ++){
+		$('.channel-tabcon'+i+'').hide().first().show();
+		$('.channel-tab-menu'+i+' > li').on('click',function(e){	
+			var cnt = $(this).index(),
+				classname = $(this).parent().attr('class'),
+				this_cnt = classname.substring(33,34);
+				//console.log(this_cnt);
+
+			$('.channel-tabcon'+this_cnt).hide().eq(cnt).stop().fadeIn();
+			$(this).addClass('on');
+			$('.channel-tab-menu'+this_cnt+' > li').not(this).removeClass('on');
+		});
+	}
+}
+
+function mapRes(){
+	$('img[usemap]').rwdImageMaps();
+}

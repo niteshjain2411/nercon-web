@@ -1,0 +1,697 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/nercon/Nercon%20Logo.jpeg" type="image/jpeg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NERCON 2026 | Medical Conference - AIIMS Guwahati</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0ea5e9;
+            --accent: #059669;
+            --light-bg: #f0f9ff;
+            --dark-text: #1f2937;
+            --border-color: #e5e7eb;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-text);
+            background: #ffffff;
+        }
+        /* Header & Navigation */
+        header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .header-logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+        /* Hero Section */
+        .hero {
+            background:
+                linear-gradient(135deg, rgba(8, 24, 58, 0.78) 0%, rgba(13, 39, 92, 0.58) 45%, rgba(9, 26, 63, 0.82) 100%),
+                url('./AIIMS-Guwahati.jpg') center center / cover no-repeat;
+            color: white;
+            padding: 2.5rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 35%, rgba(0,0,0,0.18) 100%);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            transform: translateY(-1rem);
+        }
+        .hero-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .hero-logos img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: white;
+            padding: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .hero h1 {
+            font-size: 4.4rem;
+            margin-top: -1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            line-height: 1.2;
+            font-family: 'Cinzel', 'Georgia', serif;
+            background: linear-gradient(180deg,
+                #fff5c0 0%,
+                #f5d060 20%,
+                #d4a017 50%,
+                #b8860b 75%,
+                #8b6400 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.06em;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+        }
+        .hero .subtitle {
+            font-size: 1.2rem;
+            margin: 0.3rem 0;
+            font-family: 'Cinzel', 'Georgia', serif;
+                color: #f5d060;
+                background: none;
+                -webkit-text-fill-color: #f5d060;
+                -webkit-background-clip: border-box;
+                background-clip: border-box;
+                text-shadow: 0 2px 6px rgba(0,0,0,0.35);
+            opacity: 0.95;
+        }
+        .hero .dates {
+            font-size: 1.9rem;
+            margin-top: 1.5rem;
+            font-weight: 600;
+        }
+        .cta-button {
+            display: inline-block;
+            margin-top: 0.8rem;
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, #f5d060 0%, #d4a017 50%, #f5d060 100%);
+            background-size: 200% auto;
+            color: #1a1a00;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 20px rgba(212,160,23,0.6), 0 6px 20px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.4);
+            animation: pulse-glow 2s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -75%;
+            width: 50%;
+            height: 200%;
+            background: rgba(255,255,255,0.25);
+            transform: skewX(-20deg);
+            animation: shine 3s ease-in-out infinite;
+        }
+        @keyframes shine {
+            0%   { left: -75%; }
+            50%  { left: 125%; }
+            100% { left: 125%; }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(212,160,23,0.6), 0 6px 20px rgba(0,0,0,0.3); }
+            50%      { box-shadow: 0 0 35px rgba(245,208,96,0.9), 0 8px 30px rgba(0,0,0,0.4); }
+        }
+        /* Countdown boxes */
+        .cd-box {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 10px;
+            padding: 0.65rem 1.1rem;
+            min-width: 72px;
+            text-align: center;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        .cd-box span {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #f5d060;
+            line-height: 1.1;
+            font-family: 'Cinzel', 'Georgia', serif;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+        .cd-box small {
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #bae6fd;
+            font-weight: 600;
+        }
+        /* Brochure button */
+        .brochure-btn {
+            display: inline-block;
+            padding: 0.65rem 2rem;
+            background: rgba(255,255,255,0.12);
+            border: 2px solid rgba(255,255,255,0.5);
+            color: #e0f2fe;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            transition: all 0.3s ease;
+        }
+        .brochure-btn:hover {
+            background: rgba(255,255,255,0.25);
+            border-color: #f5d060;
+            color: #f5d060;
+            transform: translateY(-2px);
+        }
+        .cta-button:hover {
+            background-position: right center;
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 0 45px rgba(245,208,96,1), 0 12px 35px rgba(0,0,0,0.4);
+            color: #0a0a00;
+        }
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+        }
+        .container::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .section {
+            padding: 4rem 0;
+        }
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        .about-text p {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.8;
+            text-align: center;
+        }
+        .theme-box {
+            background: linear-gradient(135deg, var(--accent) 0%, #10b981 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .highlight-item {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+        .highlight-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(14,165,233,0.1);
+        }
+        .highlight-item h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        /* Key Info Section */
+        .key-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        .info-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            text-align: center;
+            border-top: 4px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+        .info-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            transform: translateY(-5px);
+        }
+        .info-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+        .info-card p {
+            color: #6b7280;
+            margin: 0;
+        }
+        /* Program Section */
+        .program-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .program-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .program-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            border-color: var(--secondary);
+        }
+        .program-card-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+        }
+        .program-card-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+        .program-card-body {
+            padding: 1.5rem;
+        }
+        .program-card-body p {
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .hero-logos img {
+                width: 70px;
+                height: 70px;
+            }
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            .highlight-grid {
+                grid-template-columns: 1fr;
+            }
+            .section {
+                padding: 2rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+<section class="hero">
+    <div class="hero-content">       
+        <h1>NERCON 2026</h1>
+        <p class="subtitle">35th Annual Conference of the North Eastern Regional Chapter</p>
+        <p class="subtitle">Indian Association of Pathologists and Microbiologists</p>
+        <p style="font-size:1.15rem;margin:0.6rem 0 0.2rem;color:#e0f2fe;font-style:italic;font-weight:500;text-shadow:0 1px 4px rgba(0,0,0,0.4);">&ldquo;Cells, Tissues, Insights.&rdquo;</p>
+        <p style="font-size:1rem;margin:0 0 0.5rem;color:#bae6fd;font-weight:400;letter-spacing:0.02em;text-shadow:0 1px 4px rgba(0,0,0,0.35);">Advancing Diagnostics. Connecting Experts. Inspiring Innovation.</p>
+        <div class="dates">
+            <strong>November 12&ndash;14, 2026</strong>
+        </div>
+        <p style="font-size:0.95rem;margin:0.4rem 0 1.2rem;color:#bae6fd;font-weight:400;">Organized by<br>
+        <strong style="color:#e0f2fe;font-size:1.1rem;">Department of Pathology and Lab Medicine</strong><br>
+        <span style="font-size:1.05rem;">All India Institute of Medical Sciences (AIIMS) Guwahati, Assam, India</span></p>
+        <a href="./registration.html" class="cta-button">Register Now</a>
+
+        <!-- Countdown Timer -->
+        <div id="countdown" style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:2rem;">
+            <div class="cd-box">
+                <span id="cd-days">--</span>
+                <small>Days</small>
+            </div>
+            <div class="cd-box">
+                <span id="cd-hours">--</span>
+                <small>Hours</small>
+            </div>
+            <div class="cd-box">
+                <span id="cd-mins">--</span>
+                <small>Minutes</small>
+            </div>
+            <div class="cd-box">
+                <span id="cd-secs">--</span>
+                <small>Seconds</small>
+            </div>
+        </div>
+        <!-- Download Brochure -->
+        <div style="margin-top:1.5rem;">
+            <a href="./Nercon 2026_files/Nercon2026_Brochure.pdf" download class="brochure-btn">
+                &#8681; Download Brochure
+            </a>
+        </div>
+    </div>
+</section>
+<div class="container">
+    <section class="section" id="about" style="padding-top: 6rem;">
+        <h2 class="section-title">About the Conference</h2>
+        <div class="about-text">
+            <p>The Department of Pathology and Lab Medicine at AIIMS Guwahati cordially invites postgraduate students, delegates, clinicians, and medical researchers to the 35th Annual Conference of the North Eastern Regional Chapter, Indian Association of Pathologists and Microbiologists.</p>
+            <p>This premier event brings together pathologists, diagnosticians, and healthcare professionals from across the Northeast region of India and across the globe.</p>
+            <p>Guwahati, situated on the banks of the majestic Brahmaputra River, offers the perfect backdrop for this prestigious conference. The city is known for its natural beauty, welcoming hospitality, and growing medical infrastructure.</p>
+            <p>NERCON 2026 is designed to enhance your knowledge and keep you updated with the latest advances in pathology and laboratory medicine. The conference will feature keynote lectures from renowned experts, interactive workshops, panel discussions, career guidance sessions and cutting-edge research presentations.</p>
+        </div>
+    </section>
+
+    <!-- International Speakers Section -->
+    <section class="section" id="international-speakers">
+        <h2 class="section-title">International Speakers</h2>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:2.5rem; margin-top:1rem;">
+            <div style="display:flex; flex-direction:column; align-items:center; width:160px; text-align:center;">
+                <img src="./Nercon 2026_files/internationalSpeakers/dr_Abbas_Agaimy.png" alt="Dr. Abbas Agaimy" style="width:140px; height:140px; object-fit:cover; border-radius:50%; box-shadow:0 4px 16px rgba(0,0,0,0.15); border:3px solid var(--secondary);">
+                <p style="margin:0.75rem 0 0.1rem; font-weight:700; color:var(--primary); font-size:0.95rem;">Dr. Abbas Agaimy</p>
+                <p style="margin:0; font-size:0.85rem; color:#6b7280;">Germany</p>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; width:160px; text-align:center;">
+                <img src="./Nercon 2026_files/internationalSpeakers/dr_Michael_Vieth.png" alt="Dr. Michael Vieth" style="width:140px; height:140px; object-fit:cover; border-radius:50%; box-shadow:0 4px 16px rgba(0,0,0,0.15); border:3px solid var(--secondary);">
+                <p style="margin:0.75rem 0 0.1rem; font-weight:700; color:var(--primary); font-size:0.95rem;">Dr. Michael Vieth</p>
+                <p style="margin:0; font-size:0.85rem; color:#6b7280;">Germany</p>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; width:160px; text-align:center;">
+                <img src="./Nercon 2026_files/internationalSpeakers/dr_Pankhi_Dutta.png" alt="Dr. Pankhi Dutta" style="width:140px; height:140px; object-fit:cover; border-radius:50%; box-shadow:0 4px 16px rgba(0,0,0,0.15); border:3px solid var(--secondary);">
+                <p style="margin:0.75rem 0 0.1rem; font-weight:700; color:var(--primary); font-size:0.95rem;">Dr. Pankhi Dutta</p>
+                <p style="margin:0; font-size:0.85rem; color:#6b7280;">Dubai</p>
+            </div>            
+            <div style="display:flex; flex-direction:column; align-items:center; width:160px; text-align:center;">
+                <img src="./Nercon 2026_files/internationalSpeakers/dr_Sunil_Jaiman.png" alt="Dr. Sunil Jaiman" style="width:140px; height:140px; object-fit:cover; border-radius:50%; box-shadow:0 4px 16px rgba(0,0,0,0.15); border:3px solid var(--secondary);">
+                <p style="margin:0.75rem 0 0.1rem; font-weight:700; color:var(--primary); font-size:0.95rem;">Dr. Sunil Jaiman</p>
+                <p style="margin:0; font-size:0.85rem; color:#6b7280;">Detroit, USA</p>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; width:160px; text-align:center;">
+                <img src="./Nercon 2026_files/internationalSpeakers/dr_Rifat_Mannan.png" alt="Dr. Rifat Mannan" style="width:140px; height:140px; object-fit:cover; border-radius:50%; box-shadow:0 4px 16px rgba(0,0,0,0.15); border:3px solid var(--secondary);">
+                <p style="margin:0.75rem 0 0.1rem; font-weight:700; color:var(--primary); font-size:0.95rem;">Dr. Rifat Mannan</p>
+                <p style="margin:0; font-size:0.85rem; color:#6b7280;">California, USA</p>
+            </div>
+        </div>
+    </section>
+        <!-- After International Speakers section, before Key Info section -->
+    <section class="section" id="conference-video">
+        <h2 class="section-title">Conference Highlights</h2>
+        <div style="display:flex; justify-content:center;">
+            <blockquote class="twitter-tweet" data-media-max-width="560">
+                <a href="https://x.com/i/status/2055190210653364425"></a>
+            </blockquote>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+    </section>
+
+    <section class="section" id="key-info">
+        <h2 class="section-title">Key Information</h2>
+        <!-- Row 1: Event details -->
+        <div class="key-info" style="margin-bottom:1.5rem;">
+            <div class="info-card">
+                <h3>📅 Event Dates</h3>
+                <p>November 12–14, 2026</p>
+            </div>
+            <div class="info-card">
+                <h3>📍 Venue</h3>
+                <p>AIIMS Guwahati, India</p>
+            </div>
+            <div class="info-card">
+                <h3>👥 Expected Attendees</h3>
+                <p>500+ Delegates</p>
+            </div>
+            <div class="info-card">
+                <h3>🎓 CME Credits</h3>
+                <p>Accredited Program</p>
+            </div>
+        </div>
+        <!-- Row 2: Important deadlines -->
+        <div class="key-info">
+            <div class="info-card" style="border-top-color:#f59e0b;">
+                <h3 style="color:#b45309;">📝 Abstract Submission</h3>
+                <p style="font-weight:600; color:#374151;">Deadline</p>
+                <p>30th August, 2026</p>
+            </div>
+            <div class="info-card" style="border-top-color:#10b981;">
+                <h3 style="color:#047857;">🐣 Early Bird Registration</h3>
+                <p style="font-weight:600; color:#374151;">Deadline</p>
+                <p>15th June, 2026</p>
+            </div>
+            <div class="info-card" style="border-top-color:#0ea5e9;">
+                <h3 style="color:#0369a1;">📋 Regular Registration</h3>
+                <p style="font-weight:600; color:#374151;">Deadline</p>
+                <p>31st October, 2026</p>
+            </div>
+            <div class="info-card" style="border-top-color:#8b5cf6;">
+                <h3 style="color:#6d28d9;">⚡ Spot Registration</h3>
+                <p style="font-weight:600; color:#374151;">Window</p>
+                <p>1st Nov – 10th Nov, 2026</p>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="section" id="program">
+        <h2 class="section-title">Conference Highlights</h2>
+        <div class="program-grid">
+            <div class="program-card">
+                <div class="program-card-header">
+                    <h3>Keynote Sessions</h3>
+                </div>
+                <div class="program-card-body">
+                    <p><strong>Eminent speakers</strong> presenting latest research and clinical updates in pathology and modern medicine.</p>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-card-header">
+                    <h3>Interactive Workshops</h3>
+                </div>
+                <div class="program-card-body">
+                    <p><strong>Hands-on sessions</strong> covering various specialties of diagnostic pathology and specialized diagnostic techniques.</p>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-card-header">
+                    <h3>Research Presentations</h3>
+                </div>
+                <div class="program-card-body">
+                    <p><strong>Original research</strong> and case presentations to showcase your work to the medical community.</p>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-card-header">
+                    <h3>Panel Discussions</h3>
+                </div>
+                <div class="program-card-body">
+                    <p><strong>Expert panels</strong> discussion on the emerging fields like digital pathology and career guidance for budding pathologists.</p>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-card-header">
+                    <h3>Networking Events</h3>
+                </div>
+                <div class="program-card-body">
+                    <p><strong>Social gatherings</strong> to connect with the mentors, colleagues, and peers. Welcoming banquet and cultural evening highlighting local traditions.</p>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-card-header">
+                    <h3>Explore Guwahati</h3>
+                </div>
+                <div class="program-card-body">
+                    <p><strong>Tours to iconic landmarks</strong> and cultural sites, including the renowned Kamakhya Temple, offering a glimpse into Assam’s rich heritage.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sponsors Section -->
+    <section class="section" id="sponsors">
+        <h2 class="section-title">Our Sponsors</h2>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:2rem; margin-top:1rem;">
+            <div style="text-align:center;">
+                <img src="./Nercon 2026_files/Sponsors/comingsoon.png" alt="Sponsor" style="width:180px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+            </div>
+            <div style="text-align:center;">
+                <img src="./Nercon 2026_files/Sponsors/comingsoon.png" alt="Sponsor" style="width:180px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+            </div>
+            <div style="text-align:center;">
+                <img src="./Nercon 2026_files/Sponsors/comingsoon.png" alt="Sponsor" style="width:180px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+            </div>
+        </div>
+    </section>
+
+</div>
+<div id="footer-placeholder"></div>
+<script src="./template-loader.js"></script>
+<script>
+    (function () {
+        const target = new Date('2026-11-12T00:00:00');
+        const days  = document.getElementById('cd-days');
+        const hours = document.getElementById('cd-hours');
+        const mins  = document.getElementById('cd-mins');
+        const secs  = document.getElementById('cd-secs');
+
+        function pad(n) { return String(n).padStart(2, '0'); }
+
+        function tick() {
+            const now  = new Date();
+            const diff = target - now;
+            if (diff <= 0) {
+                days.textContent = hours.textContent = mins.textContent = secs.textContent = '00';
+                return;
+            }
+            days.textContent  = pad(Math.floor(diff / 86400000));
+            hours.textContent = pad(Math.floor((diff % 86400000) / 3600000));
+            mins.textContent  = pad(Math.floor((diff % 3600000)  / 60000));
+            secs.textContent  = pad(Math.floor((diff % 60000)    / 1000));
+        }
+
+        tick();
+        setInterval(tick, 1000);
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/nercon/Nercon%20Logo.jpeg" type="image/jpeg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NERCON 2026 | Paper Publication Award</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0ea5e9;
+            --accent: #059669;
+            --light-bg: #f0f9ff;
+            --surface: #ffffff;
+            --surface-tint: #f8fbff;
+            --dark-text: #1f2937;
+            --muted-text: #4b5563;
+            --border-color: #e5e7eb;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-text);
+            background:
+                radial-gradient(circle at top left, rgba(14, 165, 233, 0.12), transparent 28%),
+                radial-gradient(circle at bottom right, rgba(30, 58, 138, 0.10), transparent 32%),
+                linear-gradient(180deg, #f6fbff 0%, #ffffff 22%, #f8fbff 100%);
+        }
+        header { background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; }
+        .logo-text { font-weight: 700; font-size: 1.8rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .logo-area { display: flex; align-items: center; gap: 0.75rem; }
+        .header-logo { width: 48px; height: 48px; object-fit: contain; border-radius: 50%; }
+        nav ul { list-style: none; display: flex; gap: 2.5rem; }
+        nav ul li a { text-decoration: none; color: var(--dark-text); font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease; position: relative; }
+        nav ul li a:after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--secondary); transition: width 0.3s ease; }
+        nav ul li a:hover:after { width: 100%; }
+
+        /* Page Banner */
+        .page-banner {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(135deg, rgba(30, 58, 138, 0.96), rgba(14, 165, 233, 0.88)),
+                linear-gradient(90deg, #12356f, #0a7eb0);
+            color: white;
+            padding: 4.5rem 2rem 4rem;
+            text-align: center;
+        }
+        .page-banner:before {
+            content: '';
+            position: absolute;
+            inset: auto auto -80px -60px;
+            width: 260px; height: 260px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            filter: blur(2px);
+        }
+        .page-banner:after {
+            content: '';
+            position: absolute;
+            top: -70px; right: -30px;
+            width: 240px; height: 240px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.05);
+        }
+        .page-banner h1 {
+            position: relative;
+            font-size: 2.9rem; font-weight: 700;
+            font-family: 'Cinzel', 'Georgia', serif;
+            margin-bottom: 0.6rem; letter-spacing: 0.04em;
+        }
+        .page-banner p {
+            position: relative;
+            font-size: 1.05rem; opacity: 0.95;
+            max-width: 700px; margin: 0 auto;
+        }
+
+        /* Content layout */
+        .sub-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem 4.5rem;
+            position: relative;
+        }
+        .sub-container::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .content-card {
+            position: relative;
+            background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(248,251,255,0.94));
+            border-radius: 24px;
+            box-shadow: 0 24px 56px rgba(15, 23, 42, 0.10);
+            border: 1px solid rgba(229, 231, 235, 0.85);
+            overflow: hidden;
+        }
+        .content-card:before {
+            content: '';
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary), var(--primary));
+        }
+        .content-body { padding: 2rem 2.2rem 2.3rem; }
+
+        /* Section headings */
+        .section-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 2rem 0 0.75rem;
+            padding-bottom: 0.35rem;
+            border-bottom: 2px solid rgba(14, 165, 233, 0.25);
+        }
+        .section-title:first-child { margin-top: 0; }
+
+        /* Intro paragraph */
+        .intro-text {
+            font-size: 0.97rem;
+            color: #374151;
+            line-height: 1.8;
+            margin-bottom: 1.6rem;
+            padding: 1rem 1.2rem;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(14, 165, 233, 0.08));
+            border-left: 4px solid var(--secondary);
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* Criteria / protocol numbered box */
+        .criteria-box {
+            border: 1px solid #b0b0b0;
+            margin: 0.6rem 0 1.6rem;
+            overflow: hidden;
+        }
+        .criteria-box-header {
+            background: #fff;
+            border-bottom: 1px solid #b0b0b0;
+            padding: 0.6rem 1rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #1a1a1a;
+            letter-spacing: 0.02em;
+        }
+        .criteria-box-body {
+            padding: 0.7rem 1rem 0.8rem 0.5rem;
+        }
+        .criteria-box-body ol {
+            margin: 0;
+            padding-left: 1.8rem;
+            list-style: decimal;
+            display: block;
+        }
+        .criteria-box-body ol li {
+            margin-bottom: 0.45rem;
+            font-size: 0.92rem;
+            color: #1a1a1a;
+            line-height: 1.65;
+            display: list-item;
+        }
+        .criteria-box-body ol li:last-child { margin-bottom: 0; }
+
+        /* Submission protocol box (same border style, email highlighted) */
+        .protocol-email {
+            display: inline-block;
+            margin: 0.3rem 0 0.1rem 0;
+            font-weight: 700;
+            color: #1a56db;
+        }
+        .protocol-code {
+            display: inline-block;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 0.1rem 0.5rem;
+            font-family: monospace;
+            font-size: 0.88rem;
+            color: #1e3a8a;
+            margin-top: 0.2rem;
+        }
+
+        /* Author details bullet box */
+        .author-box {
+            border: 1px solid #b0b0b0;
+            margin: 0.6rem 0 1.6rem;
+            overflow: hidden;
+        }
+        .author-box-header {
+            background: #fff;
+            border-bottom: 1px solid #b0b0b0;
+            padding: 0.6rem 1rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #1a1a1a;
+            letter-spacing: 0.02em;
+        }
+        .author-box-sub {
+            border-bottom: 1px solid #b0b0b0;
+            padding: 0.5rem 1rem;
+            font-size: 0.92rem;
+            color: #374151;
+            font-style: italic;
+        }
+        .author-box-body {
+            padding: 0.7rem 1rem 0.8rem 0.5rem;
+        }
+        .author-box-body ul {
+            margin: 0;
+            padding-left: 1.6rem;
+            list-style: disc;
+            display: block;
+        }
+        .author-box-body ul li {
+            margin-bottom: 0.45rem;
+            font-size: 0.92rem;
+            color: #1a1a1a;
+            line-height: 1.65;
+            display: list-item;
+        }
+        .author-box-body ul li:last-child { margin-bottom: 0; }
+
+        footer { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; text-align: center; padding: 2rem; margin-top: 0; }
+
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 1rem; }
+            nav ul { flex-direction: column; gap: 1rem; text-align: center; }
+            .page-banner { padding: 3.5rem 1rem 3rem; }
+            .page-banner h1 { font-size: 2rem; }
+            .sub-container { padding: 1.5rem 1rem; }
+            .content-body { padding: 1.4rem 1.3rem 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<section class="page-banner">
+    <h1>PAPER PUBLICATION AWARD</h1>
+    <p>NERCON 2026 — Recognising Excellence in Pathology Research</p>
+</section>
+
+<div class="sub-container">
+    <div class="content-area">
+        <div class="content-card">
+            <div class="content-body">
+
+                <!-- Intro -->
+                <h3 class="section-title">About the Award</h3>
+                <p class="intro-text">A hallmark of academic distinction, the Paper Publication Award at NERCON 2026 is instituted to recognize and honour exemplary original research published by contributors from the North Eastern region. This award underscores scientific rigor, originality, and meaningful contribution to the discipline of pathology.</p>
+
+                <!-- Eligibility -->
+                <h3 class="section-title">Eligibility Criteria</h3>
+                <div class="criteria-box">
+                    <div class="criteria-box-header">ELIGIBILITY CRITERIA</div>
+                    <div class="criteria-box-body">
+                        <ol>
+                            <li>Consideration is limited to original research articles published in indexed journals. Case reports, case series, and review articles are not eligible.</li>
+                            <li>The research must have been conducted within the North Eastern region.</li>
+                            <li>Submission is restricted to the first author or corresponding author.</li>
+                            <li>The submitting author must hold valid membership of NERC-IAPM. Non-members are advised to obtain membership at the earliest.</li>
+                            <li>NERCON 2026 registration is mandatory for all applicants.</li>
+                            <li>Eligible publications must fall within the period: <strong>1 September 2025 – 29 August 2026</strong></li>
+                            <li>Submission Deadline: <strong>30 August 2026</strong></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Submission Protocol -->
+                <h3 class="section-title">Submission Protocol</h3>
+                <div class="criteria-box">
+                    <div class="criteria-box-header">SUBMISSION PROTOCOL</div>
+                    <div class="criteria-box-body">
+                        <ol>
+                            <li>A soft copy of the complete published article must be submitted via email to:<br>
+                                <a href="mailto:papernercon2026@gmail.com" class="protocol-email">papernercon2026@gmail.com</a>
+                            </li>
+                            <li>Submissions through any alternate mode will not be entertained.</li>
+                            <li>The email subject line must strictly follow the format:<br>
+                                <span class="protocol-code">Paper Award – Delegate ID</span><br>
+                                <span style="font-size:0.88rem; color:#6b7280;">(Example: Paper Award – ID No. 12345)</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Author Details -->
+                <h3 class="section-title">Author Details</h3>
+                <div class="author-box">
+                    <div class="author-box-header">AUTHOR DETAILS (MANDATORY IN EMAIL BODY)</div>
+                    <div class="author-box-sub">Submissions must include the following details in the sequence specified:</div>
+                    <div class="author-box-body">
+                        <ul>
+                            <li>Delegate Registration ID</li>
+                            <li>NERC-IAPM Membership Number</li>
+                            <li>Name of Submitting Author</li>
+                            <li>Institutional Affiliation</li>
+                            <li>Address for Correspondence</li>
+                            <li>Mobile Number (WhatsApp)</li>
+                            <li>Email Address</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="./template-loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<style>
+    .nav-dropdown {
+        position: relative;
+    }
+    .nav-dropdown > a {
+        cursor: pointer;
+    }
+    .nav-dropdown > a::before {
+        content: '';
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 5px solid currentColor;
+        margin-right: 5px;
+        vertical-align: middle;
+        transition: transform 0.3s ease;
+    }
+    .nav-dropdown.open > a::before {
+        transform: rotate(180deg);
+    }
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        min-width: 240px;
+        border-radius: 8px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        border: 1px solid #e5e7eb;
+        padding: 0.5rem 0;
+        z-index: 200;
+    }
+    /* Invisible bridge to cover the gap between trigger and dropdown */
+    .dropdown-menu::after {
+        content: '';
+        position: absolute;
+        top: -12px;
+        left: 0;
+        width: 100%;
+        height: 12px;
+    }
+    .dropdown-menu::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 50%;
+        width: 12px;
+        height: 12px;
+        background: white;
+        border-left: 1px solid #e5e7eb;
+        border-top: 1px solid #e5e7eb;
+        transform: translateX(-50%) rotate(45deg);
+        z-index: 1;
+    }
+    .nav-dropdown.open .dropdown-menu {
+        display: block;
+    }
+    .dropdown-menu a {
+        display: block;
+        padding: 0.6rem 1.2rem;
+        text-decoration: none;
+        color: #1f2937;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .dropdown-menu a:hover {
+        background: #f0f9ff;
+        color: #0ea5e9;
+    }
+    .dropdown-menu a:after {
+        display: none !important;
+    }
+    nav ul li a.active {
+        color: #0ea5e9;
+    }
+    nav ul li a.active::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #0ea5e9;
+    }
+    .nav-dropdown > a.active::before {
+        border-top-color: #0ea5e9;
+    }
+    .logo-text {
+        font-size: 2.2rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+    .logo-text a {
+        color: inherit;
+        text-decoration: none;
+    }
+    .logo-text a:hover,
+    .logo-text a:focus,
+    .logo-text a:visited {
+        color: inherit;
+        text-decoration: none;
+    }
+    nav ul {
+        gap: 1.5rem !important;
+    }
+</style>
+<header>
+    <div class="nav-container">
+        <div class="logo-area">
+            <img src="./AIIMS%20Logo.jpeg" alt="AIIMS Guwahati Logo" class="header-logo">
+            <img src="./Nercon%20Logo.jpeg" alt="NERCON Logo" class="header-logo">
+            <div class="logo-text"><a href="./home.html">NERCON 2026</a></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="./organizing-committee.html">Committee</a></li>
+                <li class="nav-dropdown">
+                    <a href="#">Program</a>
+                    <div class="dropdown-menu">
+                        <a href="./scientific-program.html">Scientific Program</a>
+                        <a href="./workshops.html">Workshops</a>                        
+                    </div>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#">Submission</a>
+                    <div class="dropdown-menu">
+                        <a href="./abstract-guidelines.html">SUBMIT YOUR ABSTRACT</a>                        
+                        <a href="./paper-publication-guidelines.html">PAPER PUBLICATION AWARD - GUIDELINES</a>
+                    </div>
+                </li>
+                <li><a href="./registration-portal.html">Registration</a></li>                
+                <li class="nav-dropdown">
+                    <a href="#">Visitor Info</a>
+                    <div class="dropdown-menu">
+                        <a href="./help.html">Visitors Information</a>
+                        <a href="./local-attractions.html">Explore Guwahati</a>
+                        <a href="./accommodation.html">Nearby Hotels</a>
+                    </div>
+                </li>
+                <!-- <li class="nav-dropdown">
+                    <a href="#">Sponsors</a>
+                    <div class="dropdown-menu">
+                        <a href="./sponsors.html">Corporate Sponsors</a>
+                        <a href="./sponsorship-opportunities.html">Call For Sponsors</a>
+                    </div>
+                </li> -->
+                <li><a href="./contact-us.html">Contact</a></li>
+                <!-- <li class="nav-dropdown">
+                    <a href="#">About</a>
+                    <div class="dropdown-menu">
+                        <a href="./speakers.html">Speakers</a>
+                        <a href="./organizing-committee.html">Organizing Committee</a>
+                        <a href="./contact-us.html">Contact Us</a>
+                        <a href="./help.html">Help &amp; Direction</a>
+                    </div>
+                </li> -->
+            </ul>
+        </nav>
+    </div>
+</header>
+

@@ -1,0 +1,13 @@
+2026-05-18T16:16:55.723+05:30  INFO 20560 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : Starting NerconApplication using Java 23.0.2 with PID 20560 (D:\Karmicraft Workspace\nercon-web-local\target\classes started by Rupanjal Bhowmick in D:\Karmicraft Workspace\nercon-web-local)
+2026-05-18T16:16:55.741+05:30 DEBUG 20560 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-05-18T16:16:55.750+05:30  INFO 20560 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : No active profile set, falling back to 1 default profile: "default"
+2026-05-18T16:16:57.337+05:30  INFO 20560 --- [NERCON 2026 Registration System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-05-18T16:16:57.352+05:30  INFO 20560 --- [NERCON 2026 Registration System] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-18T16:16:57.352+05:30  INFO 20560 --- [NERCON 2026 Registration System] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-05-18T16:16:57.674+05:30  INFO 20560 --- [NERCON 2026 Registration System] [main] o.a.c.c.C.[.[localhost].[/nercon]        : Initializing Spring embedded WebApplicationContext
+2026-05-18T16:16:57.675+05:30  INFO 20560 --- [NERCON 2026 Registration System] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1768 ms
+2026-05-18T16:17:00.392+05:30  INFO 20560 --- [NERCON 2026 Registration System] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/nercon'
+2026-05-18T16:17:00.413+05:30  INFO 20560 --- [NERCON 2026 Registration System] [main] org.example.NerconApplication            : Started NerconApplication in 5.674 seconds (process running for 6.827)
+2026-05-18T16:17:10.768+05:30  INFO 20560 --- [NERCON 2026 Registration System] [http-nio-8080-exec-3] o.a.c.c.C.[.[localhost].[/nercon]        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-18T16:17:10.769+05:30  INFO 20560 --- [NERCON 2026 Registration System] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-18T16:17:10.773+05:30  INFO 20560 --- [NERCON 2026 Registration System] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
