@@ -1,6 +1,7 @@
 {
   "hosting": {
-    "public": "firebase_public",
+    "public": "public",
+
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -9,7 +10,11 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/home.html"
+        "run": {
+          "serviceId": "nercon-web",
+          "region": "asia-south1"
+        }
+
       }
     ]
   }

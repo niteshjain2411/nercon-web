@@ -22,6 +22,10 @@ public class RegistrationData implements Serializable {
     private String pgbonafideimg;
     private String synopsis;
 
+    private String registrationCategory;
+    private String creationTS;
+
+
     // Legacy fallback fields – present in Firestore docs saved before the nerconTrx split
     private String txnid;
     private String txndate;
@@ -108,6 +112,13 @@ public class RegistrationData implements Serializable {
 
     public String getSynopsis() { return synopsis; }
     public void setSynopsis(String synopsis) { this.synopsis = synopsis; }
+
+    public String getRegistrationCategory() { return registrationCategory; }
+    public void setRegistrationCategory(String registrationCategory) { this.registrationCategory = registrationCategory; }
+
+    public String getCreationTS() { return creationTS; }
+    public void setCreationTS(String creationTS) { this.creationTS = creationTS; }
+
 
     public String getTxnid() { return txnid; }
     public void setTxnid(String txnid) { this.txnid = txnid; }

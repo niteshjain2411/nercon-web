@@ -15,6 +15,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.ByteArrayOutputStream;
+import java.time.Instant;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,6 +80,10 @@ public class RegistrationController {
                     System.err.println("Warning: failed to save transaction: " + e.getMessage());
                 }
             }
+
+            // Set creation timestamp
+            registration.setCreationTS(Instant.now().toString());
+
 
             boolean saved = firestoreService.saveRegistration(registration);
 
@@ -234,13 +240,16 @@ public class RegistrationController {
             }
             firestoreService.updateRegistrationStatus(delegateId, status);
 
-            // When approved: fetch registration and dispatch async email
+            // When approved: fetch registration, dispatch async email, increment workshop slots
             boolean emailQueued = false;
             if ("approved".equals(status)) {
                 RegistrationData registration = firestoreService.getRegistrationById(delegateId);
-                if (registration != null && registration.getEmail() != null && !registration.getEmail().isBlank()) {
-                    emailService.sendApprovalEmail(registration); // runs async — exceptions logged in EmailService
-                    emailQueued = true;
+                if (registration != null) {
+                    if (registration.getEmail() != null && !registration.getEmail().isBlank()) {
+                        emailService.sendApprovalEmail(registration); // runs async — exceptions logged in EmailService
+                        emailQueued = true;
+                    }
+                    firestoreService.incrementWorkshopBookedSlots(registration.getWorkshops());
                 }
             }
 
@@ -288,10 +297,10 @@ public class RegistrationController {
     private byte[] buildExcel(List<RegistrationData> rows) throws Exception {
         String[] headers = {
             "Delegate ID", "Full Name", "Email", "Phone", "Gender",
-            "Institute", "City", "State", "Designation",
+            "Registration Category", "Institute", "City", "State", "Designation",
             "Med Council", "Med Council Reg No.", "Attend Workshop",
             "Workshops", "Accompany Count", "Total Amount",
-            "Reg Status", "Txn ID", "Txn Date", "Synopsis"
+            "Reg Status", "Txn ID", "Txn Date", "Synopsis", "Created At"
         };
         try (XSSFWorkbook wb = new XSSFWorkbook()) {
             Sheet sheet = wb.createSheet("Registrations");
@@ -322,13 +331,16 @@ public class RegistrationController {
                 }
                 String[] vals = {
                     r.getDelegateId(), r.getFullname(), r.getEmail(), r.getPhone(), r.getGender(),
+                    r.getRegistrationCategory() != null ? r.getRegistrationCategory() : "",
                     r.getInstitute(), r.getCity(), r.getState(), r.getDesignation(),
                     r.getMedcouncil(), r.getMedcouncilregnum(),
                     r.isAttendworkshop() ? "Yes" : "No",
                     r.getWorkshops() != null ? String.join(", ", r.getWorkshops()) : "",
                     String.valueOf(r.getAccompanycount()), "", "",
                     txnId, "",
-                    r.getSynopsis() != null ? r.getSynopsis() : ""
+                    r.getSynopsis() != null ? r.getSynopsis() : "",
+                    r.getCreationTS() != null ? r.getCreationTS() : ""
+
                 };
                 for (int i = 0; i < vals.length; i++) {
                     row.createCell(i).setCellValue(vals[i] != null ? vals[i] : "");
@@ -361,6 +373,8 @@ public class RegistrationController {
         r.setPgbonafideimg((String) body.getOrDefault("pgbonafideimg", ""));
         r.setSynopsis((String) body.getOrDefault("synopsis", ""));
         r.setDelegateId((String) body.get("delegateId"));
+        r.setRegistrationCategory((String) body.getOrDefault("category", ""));
+
 
         Object accompany = body.get("accompanycount");
         if (accompany instanceof Number n) {

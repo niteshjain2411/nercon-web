@@ -409,6 +409,108 @@
             font-weight: 700;
             color: var(--primary);
         }
+        /* Preview Modal */
+        .preview-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+        }
+        .preview-overlay.active { display: flex; align-items: flex-start; justify-content: center; }
+        .preview-modal {
+            background: #fff;
+            border-radius: 12px;
+            max-width: 760px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+            overflow: hidden;
+        }
+        .preview-modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.25rem 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .preview-modal-header h2 { margin: 0; font-size: 1.2rem; }
+        .preview-modal-body { padding: 1.75rem; }
+        .preview-section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--secondary);
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.4rem;
+            margin: 1.25rem 0 0.85rem;
+        }
+        .preview-section-title:first-child { margin-top: 0; }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem 1.5rem;
+        }
+        @media (max-width: 600px) { .preview-grid { grid-template-columns: 1fr; } }
+        .preview-field { font-size: 0.9rem; }
+        .preview-field .pf-label { color: #6b7280; font-size: 0.78rem; font-weight: 600; margin-bottom: 0.1rem; }
+        .preview-field .pf-value { color: var(--dark-text); font-weight: 500; word-break: break-word; }
+        .preview-field .pf-value.pf-empty { color: #9ca3af; font-style: italic; }
+        .preview-modal-footer {
+            display: flex;
+            gap: 1rem;
+            padding: 1.25rem 1.75rem;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+        }
+        .preview-modal-footer button { flex: 1; }
+        /* Submission Loading Overlay */
+        .submitting-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .submitting-overlay.active { display: flex; }
+        .submitting-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2.5rem 3rem;
+            text-align: center;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+            min-width: 280px;
+        }
+        @keyframes nercon-spin {
+            to { transform: rotate(360deg); }
+        }
+        .submitting-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #e5e7eb;
+            border-top-color: var(--primary, #1d4ed8);
+            border-radius: 50%;
+            animation: nercon-spin 0.85s linear infinite;
+            margin: 0 auto 1.4rem;
+        }
+        .submitting-text {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--dark-text, #1e293b);
+            margin: 0 0 0.45rem;
+        }
+        .submitting-sub {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin: 0;
+        }
         /* Footer */
         footer {
             background: linear-gradient(135deg, var(--primary), #1e40af);
@@ -486,7 +588,8 @@
                             <tr style="background: var(--primary); color: white;">
                                 <th style="padding: 0.65rem 0.9rem; text-align: left; border: 1px solid #c7d2fe;">Categories</th>
                                 <th style="padding: 0.65rem 0.9rem; text-align: center; border: 1px solid #c7d2fe;">Early Bird Registration<br><small>(by 15th June 2026)</small></th>
-                                <th style="padding: 0.65rem 0.9rem; text-align: center; border: 1px solid #c7d2fe;">Regular Registration<br><small>(by 30th October 2026)</small></th>
+                                <th style="padding: 0.65rem 0.9rem; text-align: center; border: 1px solid #c7d2fe;">Regular Registration<br><small>(by 31st October 2026)</small></th>
+
                                 <th style="padding: 0.65rem 0.9rem; text-align: center; border: 1px solid #c7d2fe;">Spot Registration<br><small>(After 31st October 2026)</small></th>
                             </tr>
                         </thead>
@@ -543,6 +646,7 @@
                             <li>Delegates opting for two non-overlapping half-day workshops simultaneously at the time of initial registration shall be eligible for a concession of <strong>&#8377;1,000</strong>.</li>
                             <li>This concession is applicable only at the time of <strong>combined registration</strong> for both workshops.</li>
                             <li>The concession shall <strong>not</strong> be applicable if a delegate registers for one half-day workshop initially and subsequently opts for another.</li>
+
                         </ul>
                     </li>
                 </ul>
@@ -561,6 +665,7 @@
                     <li style="margin-bottom: 0.75rem; color: var(--dark-text); font-size: 0.95rem;">Eligible cancellation requests will be eligible for <strong>50% refund</strong> of the amount paid.</li>
                     <li style="margin-bottom: 0.75rem; color: var(--dark-text); font-size: 0.95rem;">Refund will be processed <strong>two weeks after the conference</strong>.</li>
                 </ol>
+
             </div>
             <div class="button-group" style="margin-top: 2rem;">
                 <button type="button" class="btn-primary" onclick="proceedToRegistration()">PROCEED</button>
@@ -630,7 +735,8 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="category">Registration Category <span class="required">*</span></label>
-                        <select id="category" name="category" onchange="updateTotal()" required>
+                        <select id="category" name="category" onchange="updateTotal(); toggleHodRequired()" required>
+
                             <option value="">Select Category</option>
                             <option value="pg">PG Student</option>
                             <option value="delegate">Delegate</option>
@@ -745,7 +851,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="hoddoc">HOD Certificate (PG Students Only) <small style="color:#6b7280;font-weight:400;">(PDF/JPG/PNG, max 5 MB)</small></label>
+                        <label for="hoddoc" id="hoddocLabel">HOD Certificate (PG Students Only) <small style="color:#6b7280;font-weight:400;">(PDF/JPG/PNG, max 5 MB)</small></label>
                         <input type="file" id="hoddoc" name="hoddoc" accept=".pdf,.jpg,.jpeg,.png">
                     </div>
                     <div class="form-group">
@@ -757,9 +863,33 @@
                 <!-- Buttons -->
                 <div class="button-group">
                     <button type="button" class="btn-primary" onclick="backToTerms()" style="background: #6b7280;">BACK</button>
-                    <button type="submit" class="btn-primary">SUBMIT APPLICATION</button>
+                    <button type="button" class="btn-primary" onclick="showPreview()">REVIEW &amp; SUBMIT</button>
                 </div>
             </form>
+
+            <!-- Preview Modal -->
+            <div id="previewOverlay" class="preview-overlay" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+                <div class="preview-modal">
+                    <div class="preview-modal-header">
+                        <h2 id="previewTitle">&#128065; Review Your Application</h2>
+                        <button onclick="closePreview()" style="background:none;border:none;color:white;font-size:1.4rem;cursor:pointer;line-height:1;padding:0;flex:none;" aria-label="Close preview">&times;</button>
+                    </div>
+                    <div class="preview-modal-body" id="previewBody"></div>
+                    <div class="preview-modal-footer">
+                        <button type="button" class="btn-primary" onclick="closePreview()" style="background:#6b7280;">&#8592; Go Back &amp; Edit</button>
+                        <button type="button" class="btn-primary" id="confirmSubmitBtn" onclick="confirmSubmit()">&#10003; Confirm &amp; Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submission Loading Overlay -->
+        <div id="submittingOverlay" class="submitting-overlay" aria-live="assertive" role="status">
+            <div class="submitting-box">
+                <div class="submitting-spinner"></div>
+                <p class="submitting-text">Submitting your registration&hellip;</p>
+                <p class="submitting-sub">Please wait, do not close this page.</p>
+            </div>
         </div>
 
         <!-- Success Message -->
@@ -810,6 +940,7 @@
             });
 
             let wsCodeCounter = 1;
+
             let html = '';
             DURATION_ORDER.forEach(dt => {
                 const list = groups[dt];
@@ -834,7 +965,8 @@
                 list.forEach((w, idx) => {
                     const slotsLeft = Math.max(0, (w.maxSlots || 0) - (w.bookedSlots || 0));
                     const isFull = slotsLeft <= 0;
-                    const code = 'W-' + String(wsCodeCounter++).padStart(2, '0');
+                    const code = w.id || ('W-' + String(wsCodeCounter++).padStart(2, '0'));
+
                     const rowBg = idx % 2 === 0 ? '#ffffff' : '#f8fafc';
                     html += `
                             <tr style="background:${rowBg};${isFull ? 'opacity:0.55;' : ''}border-bottom:1px solid #e5e7eb;">
@@ -930,6 +1062,122 @@
         }
     }
 
+    // ---------------------------------------------------------------
+    // Preview
+    // ---------------------------------------------------------------
+    function val(id) {
+        const el = document.getElementById(id);
+        if (!el) return '';
+        if (el.tagName === 'SELECT') return el.options[el.selectedIndex]?.text || '';
+        return el.value || '';
+    }
+
+    function pf(label, value) {
+        const empty = !value || value.trim() === '';
+        return `<div class="preview-field"><div class="pf-label">${label}</div><div class="pf-value${empty ? ' pf-empty' : ''}">${empty ? 'Not provided' : escHtml(value)}</div></div>`;
+    }
+
+    function escHtml(s) {
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function showPreview() {
+        // Trigger native HTML5 validation first
+        const form = document.getElementById('registrationForm');
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+
+        // Additional PG bonafide check
+        const isCategoryPG = document.getElementById('category').value === 'pg';
+        const bonafideFile = document.getElementById('hoddoc').files[0];
+        if (isCategoryPG && !bonafideFile) {
+            alert('HOD Bonafide Certificate is mandatory for PG Students. Please upload the document.');
+            return;
+        }
+        const paymentFile = document.getElementById('paymentss').files[0];
+        if (!paymentFile) { alert('Please attach the payment screenshot.'); return; }
+
+        // Build selected workshops text
+        const selectedWsLabels = Array.from(
+            document.querySelectorAll("input[name='workshop']:checked")
+        ).map(cb => {
+            if (cb.id === 'ws0') return 'No workshop';
+            const ws = workshopData[cb.value];
+            return ws ? `${cb.value} — ${ws.content || ''}` : cb.value;
+        });
+
+        const hodFileName = bonafideFile ? bonafideFile.name : '';
+        const payFileName = paymentFile ? paymentFile.name : '';
+
+        let html = `
+            <div class="preview-section-title">Personal Information</div>
+            <div class="preview-grid">
+                ${pf('Full Name', val('fullname'))}
+                ${pf('Email', val('email'))}
+                ${pf('Mobile', val('phone'))}
+                ${pf('Gender', val('gender'))}
+                ${pf('Institute / Hospital', val('institute'))}
+                ${pf('City', val('city'))}
+                ${pf('State', val('state'))}
+                ${pf('Medical Council', val('medcouncil'))}
+                ${pf('Med. Council Reg. No.', val('registration'))}
+                ${pf('Designation', val('designation'))}
+                ${pf('Registration Category', val('category'))}
+            </div>
+            <div class="preview-section-title">Workshop Selection</div>
+            <div>${selectedWsLabels.length ? selectedWsLabels.map(w => `<div class="preview-field"><div class="pf-value">${escHtml(w)}</div></div>`).join('') : '<div class="preview-field"><div class="pf-value pf-empty">None selected</div></div>'}</div>
+            <div class="preview-section-title">Accompanying Persons &amp; Fee</div>
+            <div class="preview-grid">
+                ${pf('Accompanying Persons', val('accompany'))}
+                ${pf('Total Payable (Rs)', document.getElementById('totalAmount').textContent)}
+            </div>
+            <div class="preview-section-title">Payment &amp; Documents</div>
+            <div class="preview-grid">
+                ${pf('Transaction ID', val('txnid'))}
+                ${pf('Transaction Date', val('txndate'))}
+                ${pf('Payment Screenshot', payFileName)}
+                ${pf('HOD / Bonafide Certificate', hodFileName || (isCategoryPG ? '' : 'Not applicable'))}
+            </div>`;
+
+        document.getElementById('previewBody').innerHTML = html;
+        document.getElementById('previewOverlay').classList.add('active');
+        document.getElementById('previewOverlay').scrollTop = 0;
+    }
+
+    function closePreview() {
+        document.getElementById('previewOverlay').classList.remove('active');
+    }
+
+    // Close on backdrop click
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('previewOverlay').addEventListener('click', function (e) {
+            if (e.target === this) closePreview();
+        });
+    });
+
+    function confirmSubmit() {
+        closePreview();
+        document.getElementById('submittingOverlay').classList.add('active');
+        // Dispatch a real submit event on the form so handleSubmit runs
+        const form = document.getElementById('registrationForm');
+        const btn = document.getElementById('confirmSubmitBtn');
+        btn.disabled = true;
+        form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    }
+
+    function toggleHodRequired() {
+        const isPG = document.getElementById('category').value === 'pg';
+        const hodInput = document.getElementById('hoddoc');
+        const hodLabel = document.getElementById('hoddocLabel');
+        if (isPG) {
+            hodInput.setAttribute('required', 'required');
+            hodLabel.innerHTML = 'HOD Bonafide Certificate <span class="required">*</span> <small style="color:#6b7280;font-weight:400;">(PDF/JPG/PNG, max 5 MB)</small>';
+        } else {
+            hodInput.removeAttribute('required');
+            hodLabel.innerHTML = 'HOD Certificate (PG Students Only) <small style="color:#6b7280;font-weight:400;">(PDF/JPG/PNG, max 5 MB)</small>';
+        }
+    }
+
+
     function proceedToRegistration() {
         document.getElementById("page1").classList.remove("active");
         document.getElementById("page2").classList.add("active");
@@ -947,7 +1195,8 @@
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const earlyBirdCutoff = new Date('2026-06-15');
-        const regularCutoff   = new Date('2026-10-30');
+        const regularCutoff   = new Date('2026-10-31');
+
         if (today <= earlyBirdCutoff) return 'early';
         if (today <= regularCutoff)   return 'regular';
         return 'spot';
@@ -1021,9 +1270,8 @@
             return handleSubmitEdit(event);
         }
 
-        const submitBtn = event.target.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Submitting...';
+        const submitBtn = document.getElementById('confirmSubmitBtn');
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Submitting…'; }
 
         try {
             // Collect selected workshops (exclude ws0 = no-workshop option)
@@ -1039,14 +1287,12 @@
             const paymentFile = document.getElementById("paymentss").files[0];
             if (!paymentFile) {
                 alert("Please attach the payment screenshot.");
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'SUBMIT APPLICATION';
+                resetSubmitBtn(submitBtn);
                 return;
             }
             if (paymentFile.size > 5 * 1024 * 1024) {
                 alert("Payment screenshot exceeds the 5 MB limit. Please compress or crop the image and try again.");
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'SUBMIT APPLICATION';
+                resetSubmitBtn(submitBtn);
                 return;
             }
             const paymentForm = new FormData();
@@ -1063,13 +1309,18 @@
             }
             const paymentimgUrl = paymentJson.url;
 
-            // --- 2. Upload bonafide / HOD certificate (optional) ---
+            // --- 2. Upload bonafide / HOD certificate (required for PG, optional otherwise) ---
             let pgbonafideimgUrl = "";
             const bonafideFile = document.getElementById("hoddoc").files[0];
+            const isCategoryPG = document.getElementById("category").value === "pg";
+            if (isCategoryPG && !bonafideFile) {
+                alert("HOD Bonafide Certificate is mandatory for PG Students. Please upload the document.");
+                resetSubmitBtn(submitBtn);
+                return;
+            }
             if (bonafideFile && bonafideFile.size > 5 * 1024 * 1024) {
                 alert("HOD Certificate exceeds the 5 MB limit. Please use a smaller file and try again.");
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'SUBMIT APPLICATION';
+                resetSubmitBtn(submitBtn);
                 return;
             }
             if (bonafideFile) {
@@ -1123,6 +1374,7 @@
             }
 
             // --- 5. Show success ---
+            document.getElementById('submittingOverlay').classList.remove('active');
             document.getElementById("page2").classList.remove("active");
             document.getElementById("successMessage").style.display = "block";
             document.getElementById("delegateId").textContent = delegateId;
@@ -1131,9 +1383,15 @@
         } catch (error) {
             console.error('Registration error:', error);
             alert('Error submitting registration: ' + error.message + '\nPlease try again.');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'SUBMIT APPLICATION';
+            resetSubmitBtn(submitBtn);
         }
+    }
+
+    function resetSubmitBtn(btn) {
+        document.getElementById('submittingOverlay').classList.remove('active');
+        if (!btn) return;
+        btn.disabled = false;
+        btn.textContent = '\u2713 Confirm & Submit';
     }
 
     function checkWordCount(textarea) {

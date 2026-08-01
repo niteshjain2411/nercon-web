@@ -87,9 +87,9 @@
             margin: 0 auto;
         }
 
-        /* Two-column layout */
+        /* Content layout */
         .sub-container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 3rem 2rem 4.5rem;
             display: grid;
@@ -108,59 +108,19 @@
             opacity: 0.08;
             pointer-events: none;
             z-index: -1;
-        }
 
-        /* Left Sidebar */
-        .sidebar {
-            position: sticky;
-            top: 90px;
-            border-radius: 22px;
-            overflow: hidden;
-            box-shadow: 0 18px 42px rgba(30, 58, 138, 0.12);
-            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,251,255,0.96));
-            border: 1px solid rgba(229, 231, 235, 0.9);
         }
-        .sidebar-title {
-            background: linear-gradient(135deg, var(--primary), #1e40af 60%, var(--secondary));
-            color: white;
-            padding: 1.35rem 1.5rem;
-            font-family: 'Cinzel', 'Georgia', serif;
-            font-size: 1.15rem;
-            font-weight: 700;
-            text-align: center;
-            letter-spacing: 0.04em;
+        .sub-container::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
         }
-        .sidebar-menu {
-            list-style: none;
-            padding: 0.5rem 0;
-            background: transparent;
-        }
-        .sidebar-menu li { border-bottom: 1px solid rgba(229, 231, 235, 0.75); }
-        .sidebar-menu li:last-child { border-bottom: none; }
-        .sidebar-menu li a {
-            display: block;
-            padding: 1rem 1.35rem;
-            text-decoration: none;
-            color: var(--dark-text);
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.25s ease;
-        }
-        .sidebar-menu li a:hover {
-            background: linear-gradient(90deg, rgba(14, 165, 233, 0.10), rgba(14, 165, 233, 0.02));
-            color: var(--primary);
-            padding-left: 1.6rem;
-        }
-        .sidebar-menu li.active a {
-            background: linear-gradient(90deg, rgba(14, 165, 233, 0.16), rgba(14, 165, 233, 0.05));
-            color: var(--primary);
-            font-weight: 700;
-            border-left: 4px solid var(--secondary);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
-        }
-
-        /* Right Content Area */
-        .content-area { min-height: 400px; }
         .content-card {
             position: relative;
             background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(248,251,255,0.94));
@@ -253,6 +213,294 @@
             transform: rotate(-45deg);
         }
 
+        /* Section headings inside content-body */
+        .section-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 2rem 0 0.75rem;
+            padding-bottom: 0.35rem;
+            border-bottom: 2px solid rgba(14, 165, 233, 0.25);
+        }
+        .section-title:first-child { margin-top: 0; }
+
+        /* Info / warning box */
+        .info-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 0.85rem 1.1rem;
+            border-radius: 0 10px 10px 0;
+            margin: 0.6rem 0 1.4rem;
+            font-size: 0.94rem;
+            color: #78350f;
+            line-height: 1.75;
+        }
+        .info-box strong { color: #92400e; }
+
+        /* Format guidelines grid */
+        .format-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            margin: 0.6rem 0 1.6rem;
+        }
+        .abstract-format-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            margin: 0.6rem 0 1.6rem;
+        }
+        .abstract-format-table th,
+        .abstract-format-table td {
+            border: 1px solid #1a1a1a;
+            padding: 0.55rem 0.85rem;
+            vertical-align: top;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+        .abstract-format-table thead th {
+            font-weight: 700;
+            text-align: center;
+            background: #fff;
+        }
+        .abstract-format-table thead th:first-child {
+            background: #fff;
+            border: 1px solid #1a1a1a;
+        }
+        .abstract-format-table tbody td.row-label {
+            font-weight: 700;
+            white-space: nowrap;
+            background: #fff;
+        }
+        .abstract-format-table td.what-not-col {
+            vertical-align: middle;
+        }
+        .abstract-format-table td.what-not-col p {
+            margin: 0 0 0.75rem;
+            font-size: 0.91rem;
+        }
+        .abstract-format-table td.what-not-col p:last-child {
+            margin-bottom: 0;
+        }
+        .arrow-bullet {
+            font-weight: 700;
+            margin-right: 0.3rem;
+        }
+
+        /* Important Details box */
+        .important-box {
+            border: 1.5px solid #1a1a1a;
+            border-radius: 0;
+            margin: 0.6rem 0 1.6rem;
+            overflow: hidden;
+        }
+        .important-box-header {
+            background: #fff;
+            border-bottom: 1.5px solid #1a1a1a;
+            padding: 0.6rem 1rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #1a1a1a;
+            letter-spacing: 0.02em;
+        }
+        .important-box-deadline {
+            border-bottom: 1.5px solid #1a1a1a;
+            padding: 0.55rem 1rem;
+            font-size: 0.93rem;
+            color: #1a1a1a;
+        }
+        .important-box-body {
+            padding: 0.7rem 1rem 0.7rem 0.5rem;
+        }
+        .important-box-body ul {
+            margin: 0;
+            padding-left: 1.6rem;
+            list-style: disc;
+            display: block;
+        }
+        .important-box-body ul li {
+            margin-bottom: 0.45rem;
+            font-size: 0.92rem;
+            color: #1a1a1a;
+            line-height: 1.65;
+            background: none;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0;
+        }
+        .important-box-body ul li::before,
+        .important-box-body ul li::after {
+            display: none;
+        }
+        .important-box-body ul li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* How to Submit box */
+        .submit-box {
+            border: 1.5px solid #1a1a1a;
+            margin: 0.6rem 0 1.6rem;
+            overflow: hidden;
+        }
+        .submit-box-header {
+            background: #fff;
+            border-bottom: 1.5px solid #1a1a1a;
+            padding: 0.6rem 1rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #1a1a1a;
+            letter-spacing: 0.02em;
+        }
+        .submit-box-body {
+            padding: 0.7rem 1rem 0.7rem 0.5rem;
+        }
+        .submit-box-body > ul {
+            margin: 0;
+            padding-left: 1.6rem;
+            list-style: disc;
+            display: block;
+        }
+        .submit-box-body > ul > li {
+            margin-bottom: 0.45rem;
+            font-size: 0.92rem;
+            color: #1a1a1a;
+            line-height: 1.65;
+        }
+        .submit-box-body > ul > li:last-child { margin-bottom: 0; }
+        .submit-box-body ul li::before,
+        .submit-box-body ul li::after {
+            display: none;
+        }
+        .submit-box-body > ul > li {
+            background: none;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0;
+            padding-left: 0;
+        }
+        .submit-box-body .sub-list {
+            list-style: none;
+            padding-left: 1.2rem;
+            margin-top: 0.3rem;
+            display: block;
+        }
+        .submit-box-body .sub-list li {
+            position: relative;
+            padding: 0 0 0 1.4rem;
+            margin-bottom: 0.45rem;
+            font-size: 0.92rem;
+            color: #1a1a1a;
+            line-height: 1.65;
+            background: none;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+        }
+        .submit-box-body .sub-list li::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            font-size: 0.85rem;
+            font-weight: 700;
+            top: 0;
+            color: #1a1a1a;
+        }
+        .submit-box-body .sub-list .sub-sub-list {
+            list-style: none;
+            padding-left: 1.2rem;
+            margin-top: 0.3rem;
+            display: block;
+        }
+        .submit-box-body .sub-list .sub-sub-list li {
+            position: relative;
+            padding: 0 0 0 1.4rem;
+            margin-bottom: 0.45rem;
+            font-size: 0.92rem;
+            color: #1a1a1a;
+            line-height: 1.65;
+            background: none;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+        }
+        .submit-box-body .sub-list .sub-sub-list li::before {
+            content: "\25AA";
+            position: absolute;
+            left: 0;
+            font-size: 0.7rem;
+            top: 0.2em;
+        }
+
+        /* Awards two-column grid */
+        .awards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 0.7rem 0 1.4rem;
+        }
+        .award-box {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(14, 165, 233, 0.09));
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 12px;
+            padding: 1.1rem 1.2rem;
+        }
+        .award-box h4 {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.55rem;
+        }
+        .award-box ul {
+            list-style: disc;
+            padding-left: 1.3rem;
+            display: block;
+        }
+        .award-box ul li {
+            background: none;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0.1rem 0;
+            font-size: 0.9rem;
+            color: #374151;
+            list-style: disc;
+        }
+        .award-box ul li::before, .award-box ul li::after { display: none; }
+
+        /* Submission detail box (email fields) */
+        .detail-box {
+            background: var(--surface-tint);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.6rem 1.2rem;
+            margin-top: 0.8rem;
+        }
+        .detail-row {
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 0.92rem;
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-row .dlabel { font-weight: 600; color: var(--primary); }
+
+        .section-desc {
+            font-size: 0.95rem;
+            color: var(--muted-text);
+            margin-bottom: 0.65rem;
+        }
+        .note-line {
+            font-size: 0.9rem;
+            color: var(--muted-text);
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+
         /* Footer */
         footer { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; text-align: center; padding: 2rem; margin-top: 0; }
 
@@ -261,8 +509,7 @@
             nav ul { flex-direction: column; gap: 1rem; text-align: center; }
             .page-banner { padding: 3.5rem 1rem 3rem; }
             .page-banner h1 { font-size: 2rem; }
-            .sub-container { grid-template-columns: 1fr; padding: 1.5rem 1rem; }
-            .sidebar { position: static; }
+            .sub-container { padding: 1.5rem 1rem; }
             .content-header { padding: 1.6rem 1.3rem 1.25rem; }
             .content-body { padding: 1.4rem 1.3rem 1.6rem; }
             .content-body ul li { padding: 0.95rem 0.9rem 0.95rem 2.9rem; }
@@ -273,44 +520,148 @@
 <div id="header-placeholder"></div>
 
 <section class="page-banner">
-    <h1>Abstracts</h1>
-    <p>NERCON 2026 — 35th Annual Conference</p>
+    <h1>SUBMIT YOUR ABSTRACT</h1>
+    <p>Showcase your research at NERCON 2026</p>
 </section>
 
 <div class="sub-container">
-    <!-- Left Sidebar Navigation -->
-    <aside class="sidebar">
-        <div class="sidebar-title">NERCON 2026</div>
-        <ul class="sidebar-menu">
-            <li class="active"><a href="./abstract-guidelines.html">Abstracts Guidelines</a></li>
-            <li><a href="./awards.html">Awards</a></li>
-            <li><a href="./casequest.html">CaseQuest NERCON 2026</a></li>
-            <li><a href="./accepted-abstracts.html">Accepted Abstracts for Poster Session</a></li>
-            <li><a href="./submit-abstract.html">Submit Abstract</a></li>
-        </ul>
-    </aside>
-
-    <!-- Right Content Area -->
     <div class="content-area">
         <div class="content-card">
-            <div class="content-header">
-                <h2>Abstracts Guidelines</h2>
-                <p>Submission guidance for original research, case reports, and poster presentation review.</p>
-            </div>
+            
             <div class="content-body">
                 <p><strong>Abstracts must be original, related to Pathology / Diagnostics and should not have been published elsewhere.</strong></p>
+
+                <!-- Categories -->
+                <h3 class="section-title">Categories of Submission</h3>
+                <p class="section-desc">Abstracts are accepted under the following categories:</p>
+
                 <ul>
-                    <li>The presenting author is required to ensure that the co-authors are aware &amp; approve of the content.</li>
-                    <li>He/she should take responsibility for the accuracy of the results.</li>
-                    <li>The presenting author's name should be highlighted. His/her full name, institution, contact number and email address must be provided.</li>
-                    <li>An e-mail confirming the receipt of abstract, including an abstract number, will be sent to the submitting delegate. This number should be quoted for all further correspondence.</li>
-                    <li>Acceptance/rejection will be notified by email along with the guidelines for poster preparation.</li>
-                    <li>Selected abstracts will be presented as E-Posters.</li>
-                    <li>Selected E-Posters will be selected for podium presentation during the conference.</li>
-                    <li>Scientific Committee reserves the right to accept/reject your abstract based on scientific merit.</li>
-                    <li>For original research studies, the abstract should consist of the following sections: Background, Research Question, Methods, Results and Conclusion. Word limit: 250 words.</li>
-                    <li>For case reports &amp; case series the abstract should have a Background, Case Description, and the Learning Points as Conclusions. Word limit: 250 words.</li>
+                    <li>Oral Paper Presentation</li>
+                    <li>Poster Presentation</li>
                 </ul>
+
+                <!-- Subject Groups -->
+                <h3 class="section-title">Groups of Subjects</h3>
+                <p class="section-desc">Group of subjects ear-marked for Oral Paper / Poster:</p>
+                <ul>
+                    <li>Anatomic Pathology and Histopathology</li>
+                    <li>Haematology, Clinical Pathology, Blood Banking, Immunology and other</li>
+                    <li>Cytopathology</li>
+                </ul>
+
+                <!-- Abstract Format Guidelines -->
+                <h3 class="section-title">Abstract Format Guidelines</h3>
+                <div style="overflow-x:auto;">
+                <table class="abstract-format-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Oral papers/<br>Posters of<br>Original Study</th>
+                            <th>Posters of Case<br>report/Case series</th>
+                            <th>What not to include in abstract pdf?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="row-label">STRUCTURE</td>
+                            <td>Title, Objectives, Methods, Results, Conclusions, and Keywords</td>
+                            <td>Title, Background, Case Report/Case series (as applicable), Conclusions, and Keywords</td>
+                            <td class="what-not-col" rowspan="4">
+                                <p><span class="arrow-bullet">&#x27A4;</span> <strong>Any identifying information</strong> like names, phone number, institute name, delegate id etc. of any of the authors</p>
+                                <p><span class="arrow-bullet">&#x27A4;</span> <strong>Tables/images/graphs/references</strong></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">WORD COUNT</td>
+                            <td colspan="2" style="text-align:center;">Maximum 250 words</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">TYPOGRAPHY</td>
+                            <td colspan="2" style="text-align:center;">Font: Times New Roman<br>Font Size: 12</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">LAYOUT</td>
+                            <td colspan="2" style="text-align:center;">Double spacing</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+
+                <!-- Important Details -->
+                <h3 class="section-title">Important Details</h3>
+                <div class="important-box">
+                    <div class="important-box-header">IMPORTANT DETAILS</div>
+                    <div class="important-box-deadline">Submission deadline: 30/08/2026</div>
+                    <div class="important-box-body">
+                        <ul>
+                            <li>The presenting author must hold valid membership of NERC-IAPM. Non-members aspiring to present are encouraged to obtain membership at the earliest.</li>
+                            <li>Completion of registration for NERCON 2026 is a prerequisite for abstract submission.</li>
+                            <li>Each member is eligible for a single presentation only—either oral or poster.</li>
+                            <li>Submissions must represent original, unpublished research work.</li>
+                            <li>The final date for abstract submission is 30 August 2026.</li>
+                            <li>A select group of up to seven abstracts will be featured under the prestigious <em>Best Paper Presentation</em> category. Other high-quality submissions will be allocated to free oral or poster sessions by the review committee. While there is no age restriction for submission, eligibility for the <em>Best Paper Presentation</em> requires the presenting author to be below 35 years of age as on 31 December 2026.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Awards & Recognitions -->
+                <h3 class="section-title">Awards &amp; Recognitions</h3>
+                <div class="awards-grid">
+                    <div class="award-box">
+                        <h4>Prizes for Best Paper Presentation</h4>
+                        <ul>
+                            <li>1 prize — Anatomic Pathology and Histopathology</li>
+                            <li>1 prize — Haematopathology, Clinical Pathology, Blood Bank and others</li>
+                            <li>1 prize — Cytopathology</li>
+                        </ul>
+                    </div>
+                    <div class="award-box">
+                        <h4>Prizes for Best Poster Presentation</h4>
+                        <ul>
+                            <li>Two prizes — 1st and 2nd, irrespective of group</li>
+                        </ul>
+                    </div>
+                </div>
+                <ul>
+                    <li>All presenters will be honored with a <strong>Certificate of Presentation</strong>.</li>
+                    <li>Decision of the Review Committee shall be final and binding.</li>
+                </ul>
+
+                <!-- How to Submit -->
+                <h3 class="section-title">How to Submit Abstract?</h3>
+                <div class="submit-box">
+                    <div class="submit-box-header">HOW TO SUBMIT ABSTRACT?</div>
+                    <div class="submit-box-body">
+                        <ul>
+                            <li>Abstract for oral paper/poster presentation must be e-mailed to <a href="mailto:abstractnercon2026@gmail.com" style="color:#1a56db;">abstractnercon2026@gmail.com</a></li>
+                            <li><strong>Any other mode of submission is not acceptable.</strong></li>
+                            <li>Abstract must be submitted <strong>only in *.pdf format</strong>. The PDF file should be <strong>named as &lsquo;Oral/Poster (as applicable)- Delegate ID&rsquo;</strong></li>
+                            <li>Example: &lsquo;Oral- ID no.67890&rsquo; or &lsquo;Poster- ID no. 12345&rsquo;</li>
+                            <li><strong>EMAIL SUBJECT:</strong> The email subject should be mentioned as <strong>&lsquo;Abstract for Oral/Poster (as applicable)- Name of presenting author&rsquo;</strong>. Email subject of abstract from presenting author Dr Abc Xyz for oral paper shall be &lsquo;Abstract for Oral- Dr Abc Xyz&rsquo;, Email subject of abstract from presenting author Dr Def Uvw for poster shall be &lsquo;Abstract for Poster- Dr Def Uvw&rsquo;</li>
+                            <li><strong>EMAIL TEXT SHOULD INCLUDE:</strong>
+                                <ul class="sub-list">
+                                    <li><strong>Category of submission:</strong> ORAL/POSTER (as applicable)</li>
+                                    <li><strong>Title of the paper:</strong></li>
+                                    <li><strong>Relevant group of subjects for submission</strong>: Anatomic Pathology and Histopathology / Haematology, Clinical Pathology, Blood Banking and Immunology and other / Cytopathology (as applicable)</li>
+                                    <li><strong>Will the presenting author be less than 35 years of age as on 31<sup>st</sup> December 2026?</strong> YES/NO</li>
+                                    <li><strong>Identifying details in the following sequence:</strong>
+                                        <ul class="sub-sub-list">
+                                            <li>Delegate Registration ID:</li>
+                                            <li>NERC-IAPM membership number of the presenting author:</li>
+                                            <li>Title:</li>
+                                            <li>Name of the Presenting Author (underlined) and co-authors (if any):</li>
+                                            <li>Institutional affiliation(s):</li>
+                                            <li>Address for correspondence:</li>
+                                            <li>Mobile number (WhatsApp):</li>
+                                            <li>E-mail:</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

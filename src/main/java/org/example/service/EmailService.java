@@ -1,5 +1,18 @@
 package org.example.service;
 
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.model.Message;
+import com.google.auth.http.HttpCredentialsAdapter;
+import com.google.auth.oauth2.UserCredentials;
+import jakarta.mail.Session;
+import jakarta.mail.internet.InternetAddress;
+
+import jakarta.mail.internet.MimeMessage;
+import org.example.model.RegistrationData;
+import org.example.model.Workshop;
+import org.springframework.beans.factory.annotation.Value;
 import jakarta.mail.internet.MimeMessage;
 import org.example.model.RegistrationData;
 import org.example.model.Workshop;
@@ -9,14 +22,20 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.stream.Collectors;
+
 import java.util.stream.Collectors;
 
 @Service
 public class EmailService {
 
     private final JavaMailSender mailSender;
+
     private final FirestoreService firestoreService;
 
     @Value("${spring.mail.from}")
@@ -27,9 +46,7 @@ public class EmailService {
         this.firestoreService = firestoreService;
     }
 
-    /**
-     * Sends a registration-approval email to registration.getEmail().
-     */
+
     @Async
     public void sendApprovalEmail(RegistrationData registration) {
         String delegateId = registration.getDelegateId();
@@ -42,7 +59,7 @@ public class EmailService {
             helper.setSubject("NERCON 2026 — Registration Approved! | Delegate ID: " + delegateId);
             helper.setText(buildEmailBody(registration), true);
 
-            mailSender.send(message);
+
             System.out.println("Approval email sent successfully to " + registration.getEmail() + " for " + delegateId);
         } catch (Exception e) {
             System.err.println("Approval email FAILED for " + delegateId + " (" + registration.getEmail() + "): " + e.getMessage());

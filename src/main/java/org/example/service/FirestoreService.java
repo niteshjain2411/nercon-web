@@ -92,20 +92,21 @@ public class FirestoreService {
         RegistrationData reg = getRegistrationById(delegateId);
         if (reg == null) return;
 
-        boolean updatedAny = false;
-        if (reg.getTxndetails() != null && !reg.getTxndetails().isEmpty()) {
+        // Always update regstatus on the registration document itself
+        firestore.collection(COLLECTION_NAME).document(delegateId)
+                .set(Map.of("regstatus", status), com.google.cloud.firestore.SetOptions.merge()).get();
+
+        // Also update each linked transaction document (set+merge so missing docs don't throw)
+        if (reg.getTxndetails() != null) {
             for (String txnId : reg.getTxndetails()) {
                 if (txnId != null && !txnId.isBlank()) {
                     firestore.collection("nerconTrx").document(txnId)
-                            .update("regstatus", status).get();
-                    updatedAny = true;
+                            .set(Map.of("regstatus", status), com.google.cloud.firestore.SetOptions.merge()).get();
                 }
             }
         }
-        if (!updatedAny) {
-            // Legacy fallback: update regstatus directly on the registration document
-            firestore.collection(COLLECTION_NAME).document(delegateId)
-                    .update("regstatus", status).get();
+    }
+
         }
     }
 
@@ -258,6 +259,9 @@ public class FirestoreService {
         data.put("delegateId", reg.getDelegateId());
         data.put("pgbonafideimg", reg.getPgbonafideimg() != null ? reg.getPgbonafideimg() : "");
         data.put("synopsis", reg.getSynopsis() != null ? reg.getSynopsis() : "");
+        data.put("registrationCategory", reg.getRegistrationCategory() != null ? reg.getRegistrationCategory() : "");
+        data.put("creationTS", reg.getCreationTS() != null ? reg.getCreationTS() : "");
+
         data.put("txndetails", reg.getTxndetails() != null ? reg.getTxndetails() : List.of());
         return data;
     }
@@ -300,6 +304,8 @@ public class FirestoreService {
         }
         reg.setPgbonafideimg(getString(data, "pgbonafideimg"));
         reg.setSynopsis(getString(data, "synopsis"));
+        reg.setRegistrationCategory(getString(data, "registrationCategory"));
+        reg.setCreationTS(getString(data, "creationTS"));
 
         // txndetails: list of strings, or legacy map format
         Object txnRaw = data.get("txndetails");

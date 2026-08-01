@@ -3,5 +3,19 @@
     "nercon26": "nercon26-f8914"
   },
   "targets": {},
-  "etags": {}
+  "etags": {},
+  "hosting": {
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*"],
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "nercon-web",
+          "region": "asia-south1"
+        }
+      }
+    ]
+  }
+
 }

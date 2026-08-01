@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/nercon/Nercon%20Logo.jpeg" type="image/jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NERCON 2026 | Admin Panel</title>
     <style>
@@ -269,6 +270,7 @@
                     <th data-col="email">Email</th>
                     <th data-col="phone">Phone</th>
                     <th data-col="gender">Gender</th>
+                    <th data-col="registrationCategory">Category</th>
                     <th data-col="designation">Designation</th>
                     <th data-col="institute">Institute</th>
                     <th data-col="city">City</th>
@@ -293,6 +295,7 @@
                     <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="email"></th>
                     <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="phone"></th>
                     <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="gender"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="registrationCategory"></th>
                     <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="designation"></th>
                     <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="institute"></th>
                     <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="city"></th>
@@ -410,6 +413,14 @@
                 return r;
             });
 
+            // Sort newest-first by creationTS
+            allRecords.sort((a, b) => {
+                const ta = a.creationTS ? new Date(a.creationTS).getTime() : 0;
+                const tb = b.creationTS ? new Date(b.creationTS).getTime() : 0;
+                return tb - ta;
+            });
+
+
             applyFilters();
             updateStats();
         } catch (e) {
@@ -471,6 +482,7 @@
                 <td>${esc(r.email)}</td>
                 <td>${esc(r.phone)}</td>
                 <td>${esc(r.gender)}</td>
+                <td>${esc(r.registrationCategory || '')}</td>
                 <td>${esc(r.designation)}</td>
                 <td>${esc(r.institute)}</td>
                 <td>${esc(r.city)}</td>

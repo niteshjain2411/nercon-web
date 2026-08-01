@@ -67,11 +67,18 @@
             <version>3.5.3</version>
         </dependency>
 
-        <!-- Spring Boot Mail — approval emails -->
+        <!-- Jakarta Mail — for MimeMessage construction -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
             <version>3.2.0</version>
+        </dependency>
+
+        <!-- Gmail API — send emails via HTTPS (no SMTP) -->
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-gmail</artifactId>
+            <version>v1-rev20220404-2.0.0</version>
         </dependency>
 
         <!-- Test -->
