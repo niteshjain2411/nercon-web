@@ -8,17 +8,10 @@ import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.UserCredentials;
 import jakarta.mail.Session;
 import jakarta.mail.internet.InternetAddress;
-
 import jakarta.mail.internet.MimeMessage;
 import org.example.model.RegistrationData;
 import org.example.model.Workshop;
 import org.springframework.beans.factory.annotation.Value;
-import jakarta.mail.internet.MimeMessage;
-import org.example.model.RegistrationData;
-import org.example.model.Workshop;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -29,36 +22,58 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import java.util.stream.Collectors;
-
 @Service
 public class EmailService {
-
-    private final JavaMailSender mailSender;
 
     private final FirestoreService firestoreService;
 
     @Value("${spring.mail.from}")
     private String fromAddress;
 
-    public EmailService(JavaMailSender mailSender, FirestoreService firestoreService) {
-        this.mailSender = mailSender;
+    @Value("${gmail.client.id}")
+    private String clientId;
+
+    @Value("${gmail.client.secret}")
+    private String clientSecret;
+
+    @Value("${gmail.refresh.token}")
+    private String refreshToken;
+
+    public EmailService(FirestoreService firestoreService) {
         this.firestoreService = firestoreService;
     }
-
 
     @Async
     public void sendApprovalEmail(RegistrationData registration) {
         String delegateId = registration.getDelegateId();
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+            UserCredentials credentials = UserCredentials.newBuilder()
+                    .setClientId(clientId)
+                    .setClientSecret(clientSecret)
+                    .setRefreshToken(refreshToken)
+                    .build();
 
-            helper.setFrom(fromAddress);
-            helper.setTo(registration.getEmail());
-            helper.setSubject("NERCON 2026 — Registration Approved! | Delegate ID: " + delegateId);
-            helper.setText(buildEmailBody(registration), true);
+            Gmail gmailService = new Gmail.Builder(
+                    GoogleNetHttpTransport.newTrustedTransport(),
+                    GsonFactory.getDefaultInstance(),
+                    new HttpCredentialsAdapter(credentials))
+                    .setApplicationName("NERCON 2026")
+                    .build();
 
+            Session session = Session.getDefaultInstance(new Properties());
+            MimeMessage email = new MimeMessage(session);
+            email.setFrom(new InternetAddress(fromAddress));
+            email.addRecipient(jakarta.mail.Message.RecipientType.TO, new InternetAddress(registration.getEmail()));
+            email.setSubject("NERCON 2026 — Registration Approved! | Delegate ID: " + delegateId, "UTF-8");
+            email.setContent(buildEmailBody(registration), "text/html; charset=UTF-8");
+
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            email.writeTo(buffer);
+            String encodedEmail = Base64.getUrlEncoder().encodeToString(buffer.toByteArray());
+
+            Message message = new Message();
+            message.setRaw(encodedEmail);
+            gmailService.users().messages().send("me", message).execute();
 
             System.out.println("Approval email sent successfully to " + registration.getEmail() + " for " + delegateId);
         } catch (Exception e) {
