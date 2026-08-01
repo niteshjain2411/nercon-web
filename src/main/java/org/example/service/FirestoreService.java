@@ -183,6 +183,73 @@ public class FirestoreService {
     }
 
     /**
+     * Give back every workshop slot currently counted for a delegate, used when a
+     * registration is rejected after having been approved.
+     *
+     * Decrements bookedSlots for each workshop listed in countedWorkshops and then
+     * clears that list, so the registration holds no slots afterwards. Because the
+     * list is what drives the work, rejecting twice releases nothing the second
+     * time, and a delegate who is approved again is counted again from scratch:
+     * approve, reject, approve leaves bookedSlots exactly one higher, not two.
+     *
+     * bookedSlots is floored at zero so an already-corrupt counter cannot be driven
+     * negative, and a workshop with no nerconWS document is skipped rather than
+     * failing a rejection whose status has already been written.
+     *
+     * @return the workshop IDs actually released by this call
+     */
+    public List<String> releaseWorkshopBookedSlots(String delegateId)
+            throws ExecutionException, InterruptedException {
+        if (delegateId == null || delegateId.isBlank()) return List.of();
+        DocumentReference regRef = firestore.collection(COLLECTION_NAME).document(delegateId);
+
+        return firestore.runTransaction(txn -> {
+            DocumentSnapshot regSnap = txn.get(regRef).get();
+            if (!regSnap.exists()) return List.<String>of();
+
+            // Only slots this delegate actually holds are given back
+            List<String> held = new ArrayList<>();
+            Set<String> seen = new HashSet<>();
+            Object counted = regSnap.get(COUNTED_WORKSHOPS_FIELD);
+            if (counted instanceof List<?> countedList) {
+                for (Object id : countedList) {
+                    if (id == null) continue;
+                    String wsId = id.toString();
+                    if (wsId.isBlank() || !seen.add(wsId)) continue;
+                    held.add(wsId);
+                }
+            }
+            if (held.isEmpty()) return List.<String>of();
+
+            // A Firestore transaction requires every read before any write
+            Map<String, Long> currentSlots = new LinkedHashMap<>();
+            for (String wsId : held) {
+                DocumentSnapshot wsSnap = txn.get(firestore.collection("nerconWS").document(wsId)).get();
+                if (wsSnap.exists()) {
+                    Object booked = wsSnap.get("bookedSlots");
+                    currentSlots.put(wsId, booked instanceof Number n ? n.longValue() : 0L);
+                } else {
+                    System.err.println("Skipping unknown workshop '" + wsId + "' while releasing " + delegateId);
+                }
+            }
+
+            List<String> released = new ArrayList<>();
+            for (Map.Entry<String, Long> entry : currentSlots.entrySet()) {
+                // Explicit floored value rather than increment(-1): the read above makes
+                // this atomic within the transaction and keeps the counter non-negative
+                txn.update(firestore.collection("nerconWS").document(entry.getKey()),
+                        "bookedSlots", Math.max(0L, entry.getValue() - 1));
+                released.add(entry.getKey());
+            }
+
+            // Clear the ledger even if some workshops were skipped, so the registration
+            // is not left holding slots that can never be released
+            txn.update(regRef, COUNTED_WORKSHOPS_FIELD, List.of());
+            return released;
+        }).get();
+    }
+
+    /**
      * Update workshops and append a new transaction ID for an existing registration.
      * Personal details are NOT touched.
      */

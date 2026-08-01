@@ -238,9 +238,11 @@ public class RegistrationController {
             }
             firestoreService.updateRegistrationStatus(delegateId, status);
 
-            // When approved: fetch registration, dispatch async email, increment workshop slots
+            // When approved: fetch registration, dispatch async email, increment workshop slots.
+            // When rejected: give back any slots the delegate was holding.
             boolean emailQueued = false;
             List<String> countedWorkshops = List.of();
+            List<String> releasedWorkshops = List.of();
             if ("approved".equals(status)) {
                 RegistrationData registration = firestoreService.getRegistrationById(delegateId);
                 if (registration != null) {
@@ -252,6 +254,9 @@ public class RegistrationController {
                     countedWorkshops = firestoreService
                             .incrementWorkshopBookedSlots(delegateId, registration.getWorkshops());
                 }
+            } else if ("rejected".equals(status)) {
+                // Idempotent: releases only the slots currently counted, then clears them
+                releasedWorkshops = firestoreService.releaseWorkshopBookedSlots(delegateId);
             }
 
             Map<String, Object> res = new HashMap<>();
@@ -260,6 +265,7 @@ public class RegistrationController {
             res.put("status", status);
             res.put("emailQueued", emailQueued);
             res.put("workshopSlotsCounted", countedWorkshops);
+            res.put("workshopSlotsReleased", releasedWorkshops);
             return ResponseEntity.ok(res);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
