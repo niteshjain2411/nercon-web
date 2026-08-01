@@ -107,8 +107,6 @@ public class FirestoreService {
         }
     }
 
-        }
-    }
 
     /**
      * Update workshops and append a new transaction ID for an existing registration.
