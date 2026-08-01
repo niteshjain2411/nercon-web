@@ -1,7 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/nercon/Nercon%20Logo.jpeg" type="image/jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NERCON 2026 | Help</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -71,6 +72,18 @@
             grid-template-columns: 1.05fr 0.95fr;
             gap: 2rem;
             align-items: start;
+            position: relative;
+        }
+        .help-container::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
         }
         .help-card {
             background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(248,251,255,0.94));
@@ -234,7 +247,7 @@
             <h2>Getting To AIIMS Guwahati</h2>
         </div>
         <div class="card-body">
-            <img class="route-image" src="./GYPSICON%202026_files/Help/Getting%20to%20aiims%20guwahati.jpeg" alt="Getting to AIIMS Guwahati">
+            <img class="route-image" src="./Nercon%202026_files/Help/Getting%20to%20aiims%20guwahati.jpeg" alt="Getting to AIIMS Guwahati">
             <div class="image-caption">Reference travel image showing approximate distance from the airport and Kamakhya railway station.</div>
         </div>
     </div>

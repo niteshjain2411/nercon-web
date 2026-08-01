@@ -1,64 +1,80 @@
 package org.example.service;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.oned.Code128Writer;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.model.Message;
+import com.google.auth.http.HttpCredentialsAdapter;
+import com.google.auth.oauth2.UserCredentials;
+import jakarta.mail.Session;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import org.example.model.RegistrationData;
+import org.example.model.Workshop;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.stream.Collectors;
 
 @Service
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    private final FirestoreService firestoreService;
 
     @Value("${spring.mail.from}")
     private String fromAddress;
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    @Value("${gmail.client.id}")
+    private String clientId;
+
+    @Value("${gmail.client.secret}")
+    private String clientSecret;
+
+    @Value("${gmail.refresh.token}")
+    private String refreshToken;
+
+    public EmailService(FirestoreService firestoreService) {
+        this.firestoreService = firestoreService;
     }
 
-    /**
-     * Generates a CODE-128 barcode PNG for the given delegateId.
-     */
-    public byte[] generateBarcode(String delegateId) throws Exception {
-        Code128Writer writer = new Code128Writer();
-        BitMatrix matrix = writer.encode(delegateId, BarcodeFormat.CODE_128, 700, 175);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        MatrixToImageWriter.writeToStream(matrix, "PNG", out);
-        return out.toByteArray();
-    }
-
-    /**
-     * Generates a barcode for registration.getDelegateId() and sends a
-     * registration-approval email to registration.getEmail() with the
-     * barcode attached as "food-coupon-barcode.png".
-     */
     @Async
     public void sendApprovalEmail(RegistrationData registration) {
         String delegateId = registration.getDelegateId();
         try {
-            byte[] barcodeBytes = generateBarcode(delegateId);
+            UserCredentials credentials = UserCredentials.newBuilder()
+                    .setClientId(clientId)
+                    .setClientSecret(clientSecret)
+                    .setRefreshToken(refreshToken)
+                    .build();
 
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            Gmail gmailService = new Gmail.Builder(
+                    GoogleNetHttpTransport.newTrustedTransport(),
+                    GsonFactory.getDefaultInstance(),
+                    new HttpCredentialsAdapter(credentials))
+                    .setApplicationName("NERCON 2026")
+                    .build();
 
-            helper.setFrom(fromAddress);
-            helper.setTo(registration.getEmail());
-            helper.setSubject("NERCON 2026 — Registration Approved! | Delegate ID: " + delegateId);
-            helper.setText(buildEmailBody(registration), true);
-            helper.addAttachment("food-coupon-barcode.png", new ByteArrayResource(barcodeBytes));
+            Session session = Session.getDefaultInstance(new Properties());
+            MimeMessage email = new MimeMessage(session);
+            email.setFrom(new InternetAddress(fromAddress));
+            email.addRecipient(jakarta.mail.Message.RecipientType.TO, new InternetAddress(registration.getEmail()));
+            email.setSubject("NERCON 2026 — Registration Approved! | Delegate ID: " + delegateId, "UTF-8");
+            email.setContent(buildEmailBody(registration), "text/html; charset=UTF-8");
 
-            mailSender.send(message);
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            email.writeTo(buffer);
+            String encodedEmail = Base64.getUrlEncoder().encodeToString(buffer.toByteArray());
+
+            Message message = new Message();
+            message.setRaw(encodedEmail);
+            gmailService.users().messages().send("me", message).execute();
+
             System.out.println("Approval email sent successfully to " + registration.getEmail() + " for " + delegateId);
         } catch (Exception e) {
             System.err.println("Approval email FAILED for " + delegateId + " (" + registration.getEmail() + "): " + e.getMessage());
@@ -66,68 +82,67 @@ public class EmailService {
     }
 
     private String buildEmailBody(RegistrationData r) {
-        return """
-                <html>
-                <body style="font-family: Arial, sans-serif; color: #1f2937; max-width: 620px; margin: 0 auto; padding: 0;">
-                  <div style="background: #1e3a8a; padding: 1.5rem 2rem;">
-                    <h1 style="color: white; margin: 0; font-size: 1.4rem;">NERCON 2026</h1>
-                    <p style="color: #bfdbfe; margin: 0.25rem 0 0; font-size: 0.9rem;">35th Annual Conference of NERCON</p>
-                  </div>
-                  <div style="padding: 2rem;">
-                    <h2 style="color: #059669; margin-top: 0;">Registration Approved ✓</h2>
-                    <p style="margin-bottom: 1.4rem;">Dear <strong>%s</strong>,</p>
-                    <p>We are delighted to inform you that your registration for <strong>NERCON 2026</strong> has been
-                       successfully reviewed and <strong>approved</strong>.</p>
+        // Build a workshop ID -> name lookup map from Firestore
+        Map<String, String> workshopNames;
+        try {
+            List<Workshop> allWorkshops = firestoreService.getAllWorkshops();
+            workshopNames = allWorkshops.stream()
+                    .collect(Collectors.toMap(Workshop::getId, w -> w.getContent() != null ? w.getContent() : w.getId()));
+        } catch (Exception e) {
+            workshopNames = Map.of();
+        }
 
-                    <table style="border-collapse: collapse; width: 100%%; margin: 1.5rem 0; background: #f0f9ff;
-                                  border-radius: 8px; overflow: hidden;">
-                      <tr>
-                        <td style="padding: 0.7rem 1rem; color: #6b7280; font-weight: 600; width: 40%%;">Delegate ID</td>
-                        <td style="padding: 0.7rem 1rem; font-weight: 700; color: #1e3a8a; font-size: 1rem; letter-spacing: 0.04em;">%s</td>
-                      </tr>
-                      <tr style="background: #e0f2fe;">
-                        <td style="padding: 0.7rem 1rem; color: #6b7280; font-weight: 600;">Name</td>
-                        <td style="padding: 0.7rem 1rem;">%s</td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 0.7rem 1rem; color: #6b7280; font-weight: 600;">Email</td>
-                        <td style="padding: 0.7rem 1rem;">%s</td>
-                      </tr>
-                      <tr style="background: #e0f2fe;">
-                        <td style="padding: 0.7rem 1rem; color: #6b7280; font-weight: 600;">Total Amount</td>
-                        <td style="padding: 0.7rem 1rem;">₹ %s</td>
-                      </tr>
-                    </table>
+        // Build workshops list HTML
+        List<String> workshops = r.getWorkshops();
+        boolean hasWorkshops = workshops != null && !workshops.isEmpty()
+                && !(workshops.size() == 1 && "ws0".equalsIgnoreCase(workshops.get(0)));
 
-                    <div style="background: #fef9c3; border-left: 4px solid #d97706; padding: 1rem 1.2rem;
-                                border-radius: 0 6px 6px 0; margin: 1.5rem 0;">
-                      <strong style="color: #92400e;">🍽 Food Coupon Barcode Attached</strong>
-                      <p style="margin: 0.5rem 0 0; color: #78350f; font-size: 0.9rem;">
-                        Your food coupon barcode is attached to this email as
-                        <em>food-coupon-barcode.png</em>. Please carry a printout or a digital copy
-                        of this barcode to the conference venue. It will be scanned at the meal
-                        counters and the banquet dinner to grant you access to catering services.
-                      </p>
-                    </div>
+        // Accompanying persons
+        long accompany = r.getAccompanycount();
+        String accompanyText = accompany > 0 ? String.valueOf(accompany) : "None";
 
-                    <p style="font-size: 0.9rem;">We look forward to welcoming you at NERCON 2026. Should you have any
-                    questions, please reach out to us at
-                    <a href="mailto:nercon2026@gmail.com" style="color: #1e3a8a;">nercon2026@gmail.com</a>.</p>
+        // Build the full HTML using StringBuilder to avoid .formatted() scope issues
+        StringBuilder html = new StringBuilder();
+        html.append("<html><body style=\"font-family: Arial, sans-serif; color: #1f2937; max-width: 620px; margin: 0 auto; padding: 0;\">");
+        html.append("<div style=\"background: #1e3a8a; padding: 1.5rem 2rem;\">");
+        html.append("<h1 style=\"color: white; margin: 0; font-size: 1.4rem;\">NERCON 2026</h1>");
+        html.append("<p style=\"color: #bfdbfe; margin: 0.25rem 0 0; font-size: 0.9rem;\">35th Annual Conference of NERCON</p>");
+        html.append("</div>");
+        html.append("<div style=\"padding: 2rem;\">");
+        html.append("<p style=\"font-size: 1rem; font-weight: 700; color: #1e3a8a; margin-top: 0;\">Greetings from NERCON 2026!</p>");
+        html.append("<p>Dear <strong>").append(escHtml(r.getFullname())).append("</strong>,</p>");
+        html.append("<p>Thank you for registering for the conference. We are delighted to confirm your participation, and the details of your registration are as follows:</p>");
+        html.append("<ol style=\"line-height: 1.9; padding-left: 1.4rem; margin: 1.2rem 0;\">");
+        html.append("<li style=\"margin-bottom:0.5rem;\"><strong>Conference:</strong> NERCON 2026 (13\u201314 November 2026)</li>");
 
-                    <p>Warm regards,<br>
-                    <strong>NERCON 2026 Organising Committee</strong></p>
-                  </div>
-                  <div style="background: #f3f4f6; padding: 1rem 2rem; font-size: 0.78rem; color: #9ca3af; text-align: center;">
-                    This is an automated message. Please do not reply to this email.
-                  </div>
-                </body>
-                </html>
-                """.formatted(
-                        r.getFullname(),
-                        r.getDelegateId(),
-                        r.getFullname(),
-                        r.getEmail(),
-                        r.getTotalAmount() != null ? r.getTotalAmount() : "—"
-                );
+        if (hasWorkshops) {
+            html.append("<li style=\"margin-bottom:0.5rem;\"><strong>Pre-Conference Workshops (12 November 2026):</strong>");
+            html.append("<ul style=\"margin:0.4rem 0 0 1.2rem; padding:0; list-style-type:disc;\">");
+            final Map<String, String> wsNames = workshopNames;
+            for (String wsId : workshops) {
+                String displayName = wsNames.getOrDefault(wsId, wsId);
+                html.append("<li style=\"margin-bottom:0.3rem;\">").append(escHtml(displayName)).append("</li>");
+            }
+            html.append("</ul></li>");
+        } else {
+            html.append("<li style=\"margin-bottom:0.5rem;\"><strong>Pre-Conference Workshops:</strong> None</li>");
+        }
+
+        html.append("<li style=\"margin-bottom:0.5rem;\"><strong>Accompanying Persons:</strong> ").append(escHtml(accompanyText)).append("</li>");
+        html.append("</ol>");
+        html.append("<p>Your Delegate ID is <strong style=\"color: #1e3a8a; font-size: 1rem; letter-spacing: 0.04em;\">")
+            .append(escHtml(r.getDelegateId())).append("</strong>.</p>");
+        html.append("<p>We sincerely appreciate your interest and look forward to welcoming you. We are confident that the conference will provide a valuable and enriching experience.</p>");
+        html.append("<p style=\"margin-bottom: 0;\">Warm regards,<br><strong>Registration Committee</strong><br>NERCON 2026</p>");
+        html.append("</div>");
+        html.append("<div style=\"background: #f3f4f6; padding: 1rem 2rem; font-size: 0.78rem; color: #9ca3af; text-align: center;\">This is an automated message. Please do not reply to this email.</div>");
+        html.append("</body></html>");
+
+        return html.toString();
+    }
+
+    private static String escHtml(String s) {
+        if (s == null) return "";
+        return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
     }
 }

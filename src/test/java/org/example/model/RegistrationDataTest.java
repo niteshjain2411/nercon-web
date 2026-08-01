@@ -23,16 +23,15 @@ class RegistrationDataTest {
     void allArgsConstructor_setsAllFields() {
         // Arrange
         List<String> workshops = Arrays.asList("WS1", "WS2");
-        java.util.Map<String, org.example.model.Transaction> txns = new java.util.LinkedHashMap<>();
-        txns.put("t1", new org.example.model.Transaction("TXN789", "2026-04-09"));
+        List<String> txns = Arrays.asList("TXN789");
 
         // Act
         RegistrationData data = new RegistrationData(
                 "Jane Doe", "jane@example.com", "9876543210", "Female",
                 "AIIMS", "Delhi", "Delhi", "Professor",
-                "MC123", "Active", "REG456",
+                "MC123", "REG456",
                 true, workshops, 2L,
-                txns, "5000", "DEL001", "http://pay.img", null);
+                txns, "DEL001", null);
 
         // Assert
         assertEquals("Jane Doe", data.getFullname());
@@ -43,16 +42,13 @@ class RegistrationDataTest {
         assertEquals("Delhi", data.getCity());
         assertEquals("Delhi", data.getState());
         assertEquals("MC123", data.getMedcouncil());
-        assertEquals("Active", data.getRegstatus());
         assertEquals("REG456", data.getMedcouncilregnum());
         assertEquals("Professor", data.getDesignation());
         assertTrue(data.isAttendworkshop());
         assertEquals(workshops, data.getWorkshops());
         assertEquals(2L, data.getAccompanycount());
         assertEquals(txns, data.getTxndetails());
-        assertEquals("5000", data.getTotalAmount());
         assertEquals("DEL001", data.getDelegateId());
-        assertEquals("http://pay.img", data.getPaymentimg());
     }
 
     @Test
@@ -113,9 +109,9 @@ class RegistrationDataTest {
 
     @Test
     void setRegstatus_updatesValue() {
+        // regstatus has been moved to Transaction model — no-op test
         RegistrationData data = new RegistrationData();
-        data.setRegstatus("Active");
-        assertEquals("Active", data.getRegstatus());
+        assertNotNull(data); // field no longer exists on RegistrationData
     }
 
     @Test
@@ -157,18 +153,17 @@ class RegistrationDataTest {
     @Test
     void setTxndetails_updatesValue() {
         RegistrationData data = new RegistrationData();
-        java.util.Map<String, org.example.model.Transaction> txns = new java.util.LinkedHashMap<>();
-        txns.put("t1", new org.example.model.Transaction("TXN123", "2026-04-09"));
+        List<String> txns = Arrays.asList("TXN123", "TXN456");
         data.setTxndetails(txns);
-        assertEquals("TXN123", data.getTxndetails().get("t1").getTxnid());
-        assertEquals("2026-04-09", data.getTxndetails().get("t1").getTxndate());
+        assertEquals("TXN123", data.getTxndetails().get(0));
+        assertEquals("TXN456", data.getTxndetails().get(1));
     }
 
     @Test
     void setPaymentimg_updatesValue() {
+        // paymentimg has been moved to Transaction model — no-op test
         RegistrationData data = new RegistrationData();
-        data.setPaymentimg("http://example.com/pay.jpg");
-        assertEquals("http://example.com/pay.jpg", data.getPaymentimg());
+        assertNotNull(data);
     }
 
     @Test
@@ -180,9 +175,9 @@ class RegistrationDataTest {
 
     @Test
     void setTotalAmount_updatesValue() {
+        // totalAmount has been moved to Transaction model — no-op test
         RegistrationData data = new RegistrationData();
-        data.setTotalAmount("7500");
-        assertEquals("7500", data.getTotalAmount());
+        assertNotNull(data);
     }
 
     @Test

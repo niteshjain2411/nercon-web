@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/nercon/Nercon%20Logo.jpeg" type="image/jpeg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NERCON 2026 | Pre-Conference Workshops</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0ea5e9;
+            --accent: #059669;
+            --light-bg: #f0f9ff;
+            --dark-text: #1f2937;
+            --border-color: #e5e7eb;
+            --danger: #dc2626;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-text);
+            background: #ffffff;
+        }
+        header { background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; }
+        .logo-text { font-weight: 700; font-size: 1.8rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .logo-area { display: flex; align-items: center; gap: 0.75rem; }
+        .header-logo { width: 48px; height: 48px; object-fit: contain; border-radius: 50%; }
+        nav ul { list-style: none; display: flex; gap: 2.5rem; }
+        nav ul li a { text-decoration: none; color: var(--dark-text); font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease; position: relative; }
+        nav ul li a:after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--secondary); transition: width 0.3s ease; }
+        nav ul li a:hover:after { width: 100%; }
+
+        .page-banner { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 3rem 2rem; text-align: center; }
+        .page-banner h1 { font-size: 2.5rem; font-weight: 700; font-family: 'Cinzel', 'Georgia', serif; margin-bottom: 0.5rem; }
+        .page-banner p { font-size: 1.1rem; opacity: 0.9; }
+
+        .content-wrapper {
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 3rem 2rem 4rem;
+            position: relative;
+        }
+        .content-wrapper::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('./Nercon%202026_files/awesome_assam.png');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Policy card */
+        .policy-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        .policy-card .card-header {
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            color: white;
+            padding: 1.25rem 2rem;
+        }
+        .policy-card .card-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.15rem;
+        }
+        .policy-card .card-header p {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            margin: 0;
+        }
+        .policy-card .card-body {
+            padding: 1.75rem 2rem;
+        }
+
+        .policy-section {
+            margin-bottom: 1.5rem;
+        }
+        .policy-section:last-child {
+            margin-bottom: 0;
+        }
+        .policy-section h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .policy-section h3::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 1.1em;
+            background: var(--secondary);
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        .policy-section ol {
+            margin-left: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+        .policy-section ol li {
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+        }
+        .policy-section ul {
+            margin-left: 1.6rem;
+            margin-bottom: 0.4rem;
+            list-style-type: disc;
+        }
+        .policy-section ul li {
+            margin-bottom: 0.3rem;
+            font-size: 0.93rem;
+            color: #374151;
+        }
+        .discount-note {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 0.75rem 1rem;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.9rem;
+            margin: 0.5rem 0 0;
+            color: #78350f;
+        }
+
+        /* Workshop list card */
+        .workshops-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+        .workshops-card .card-header {
+            background: var(--light-bg);
+            padding: 1.25rem 2rem;
+            border-bottom: 2px solid var(--secondary);
+        }
+        .workshops-card .card-header h2 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .workshops-card .card-body {
+            padding: 1.75rem 2rem;
+        }
+
+        .ws-section-label {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.93rem;
+            margin: 1.2rem 0 0.6rem;
+            padding: 0.5rem 0.75rem;
+            background: #e0f2fe;
+            border-radius: 6px;
+            border-left: 4px solid var(--secondary);
+        }
+        .ws-section-label:first-child {
+            margin-top: 0;
+        }
+
+        table.ws-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        table.ws-table thead tr {
+            background: var(--primary);
+            color: white;
+        }
+        table.ws-table thead th {
+            padding: 0.65rem 0.85rem;
+            white-space: nowrap;
+        }
+        table.ws-table thead th:first-child { text-align: center; }
+        table.ws-table thead th:nth-child(2) { text-align: left; }
+        table.ws-table thead th:nth-child(3) { text-align: left; }
+        table.ws-table thead th:last-child { text-align: center; }
+        table.ws-table tbody tr {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        table.ws-table tbody tr.full-row {
+            opacity: 0.55;
+        }
+        table.ws-table tbody td {
+            padding: 0.75rem 0.85rem;
+            vertical-align: top;
+        }
+        table.ws-table tbody td:first-child {
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+        table.ws-table tbody td:last-child {
+            text-align: center;
+            white-space: nowrap;
+        }
+        .slots-full { color: var(--danger); font-weight: 700; }
+        .slots-avail { color: var(--accent); font-weight: 600; }
+
+        .loading-msg {
+            color: #6b7280;
+            font-style: italic;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        .error-msg {
+            color: var(--danger);
+            padding: 1rem 0;
+        }
+
+        footer { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; text-align: center; padding: 2rem; margin-top: 0; }
+        footer a { color: white; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 1rem; }
+            nav ul { flex-direction: column; gap: 1rem; text-align: center; }
+            .page-banner h1 { font-size: 1.8rem; }
+            .content-wrapper { padding: 1.5rem 1rem; }
+            .policy-card .card-body,
+            .workshops-card .card-body { padding: 1.25rem 1rem; }
+            table.ws-table { font-size: 0.82rem; }
+        }
+    </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+
+<section class="page-banner">
+    <h1>Pre-Conference Workshops</h1>
+    <p>NERCON 2026 — Thursday, 12 November 2026</p>
+</section>
+
+<div class="content-wrapper">
+
+    <!-- Registration Policy Card -->
+    <div class="policy-card">
+        <div class="card-header">
+            <h2>PRE-CONFERENCE WORKSHOPS (Thursday, 12.11.26)</h2>
+            <p>Registration Policy</p>
+        </div>
+        <div class="card-body">
+
+            <div class="policy-section">
+                <h3>Workshop Selection Rules</h3>
+                <ol>
+                    <li>Delegates may register for either
+                        <ul>
+                            <li>one Full-Day Workshop,</li>
+                            <li>or a maximum of two non-overlapping Half-Day Workshops.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Concessional Registration for Two Half-Day Workshops:</strong>
+                        <ul>
+                            <li>Delegates selecting two non-overlapping half-day workshops simultaneously during registration will receive a discount of ₹500 per workshop (total ₹1000).</li>                            
+                        </ul>
+                        <div class="discount-note">💡 Register for both half-day workshops together to avail the ₹1,000 combined discount.</div>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="policy-section">
+                <h3>Sign Out with the Expert</h3>
+                <ul>
+                    <li>Structured academic session featuring self-review of glass slides on diverse pathological entities provided by eminent International and National Faculty.</li>
+                    <li>Followed by a high-yield interactive sign-out discussion with the expert.</li>
+                </ul>
+            </div>
+
+            <div class="policy-section">
+                <h3>Perinatal and Placental Pathology</h3>
+                <ul>
+                    <li>Hands-on training module focused on standardized placental and fetal grossing techniques.</li>
+                    <li>Delivered through structured, case-based interactive discussion with the expert focused on clinical relevance.</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Workshop List Card -->
+    <div class="workshops-card">
+        <div class="card-header">
+            <h2>Available Workshops</h2>
+        </div>
+        <div class="card-body">
+            <div id="workshop-container">
+                <div class="loading-msg">Loading workshops…</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="./template-loader.js"></script>
+<script>
+    const FULL_DAY  = 'FULL DAY WORKSHOPS (9 AM \u2013 4 PM)';
+    const HALF_MORN = 'HALF DAY WORKSHOP- MORNING (9 AM \u2013 12 NOON)';
+    const HALF_AFT  = 'HALF DAY WORKSHOP- AFTERNOON (1 PM \u2013 4 PM)';
+    const DURATION_ORDER = [FULL_DAY, HALF_MORN, HALF_AFT];
+
+    async function loadWorkshops() {
+        const container = document.getElementById('workshop-container');
+        try {
+            const res = await fetch('/nercon/api/workshop/all');
+            if (!res.ok) {
+                let detail = '';
+                try { detail = (await res.text()).substring(0, 200); } catch (_) {}
+                throw new Error('HTTP ' + res.status + ': ' + detail);
+            }
+            const json = await res.json();
+            const workshops = json.data || [];
+
+            const groups = {};
+            DURATION_ORDER.forEach(dt => groups[dt] = []);
+            workshops.forEach(w => {
+                if (groups[w.durationType] !== undefined) groups[w.durationType].push(w);
+            });
+
+            let html = '';
+            DURATION_ORDER.forEach(dt => {
+                const list = groups[dt];
+                if (!list.length) return;
+                html += `
+                <div style="margin-bottom:1.75rem;">
+                    <div class="ws-section-label">${dt}</div>
+                    <div style="overflow-x:auto;">
+                    <table class="ws-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;">Code</th>
+                                <th style="text-align:left;">Content</th>
+                                <th style="text-align:left;">Resource Person(s)</th>
+                                <th style="text-align:center;">Fee (₹)</th>
+                                <th style="text-align:center;">Available Slots</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+                list.forEach((w, idx) => {
+                    const slotsLeft = Math.max(0, (w.maxSlots || 0) - (w.bookedSlots || 0));
+                    const isFull = slotsLeft <= 0;
+                    const code = escHtml(w.id || '—');
+                    const rowBg = idx % 2 === 0 ? '#ffffff' : '#f8fafc';
+                    html += `
+                            <tr class="${isFull ? 'full-row' : ''}" style="background:${rowBg};">
+                                <td>${code}</td>
+                                <td>${escHtml(w.content || '—')}</td>
+                                <td>${escHtml(w.resourcePerson || '—')}</td>
+                                <td style="text-align:center;">2,500</td>
+                                <td>${isFull
+                                    ? '<span class="slots-full">FULL</span>'
+                                    : `<span class="slots-avail">${slotsLeft}</span>`}
+                                </td>
+                            </tr>`;
+                });
+
+                html += `
+                        </tbody>
+                    </table>
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html || '<div class="loading-msg">No workshops available at this time.</div>';
+        } catch (e) {
+            console.error('Workshop load error:', e);
+            container.innerHTML = '<div class="error-msg">Failed to load workshops. Please refresh the page.</div>';
+        }
+    }
+
+    function escHtml(s) {
+        if (!s) return '';
+        return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadWorkshops);
+</script>
+</body>
+</html>

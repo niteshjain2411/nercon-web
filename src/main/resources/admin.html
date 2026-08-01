@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/nercon/Nercon%20Logo.jpeg" type="image/jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NERCON 2026 | Admin Panel</title>
     <style>
@@ -269,6 +270,7 @@
                     <th data-col="email">Email</th>
                     <th data-col="phone">Phone</th>
                     <th data-col="gender">Gender</th>
+                    <th data-col="registrationCategory">Category</th>
                     <th data-col="designation">Designation</th>
                     <th data-col="institute">Institute</th>
                     <th data-col="city">City</th>
@@ -293,6 +295,7 @@
                     <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="email"></th>
                     <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="phone"></th>
                     <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="gender"></th>
+                    <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="registrationCategory"></th>
                     <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="designation"></th>
                     <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="institute"></th>
                     <th><input type="text" placeholder="Filter…" oninput="applyFilters()" data-col="city"></th>
@@ -339,7 +342,9 @@
     // ---------------------------------------------------------------
     // State
     // ---------------------------------------------------------------
-    let allRecords   = [];   // raw from API
+    let allRecords   = [];   // raw from API, enriched with _txn
+    let txnMap       = {};   // txnId → Transaction object
+    let wsNameMap    = {};   // workshopId → content string
     let filtered     = [];   // after column filters
     let currentPage  = 1;
     let pageSize     = 10;
@@ -367,9 +372,54 @@
         document.getElementById('loading').style.display = 'block';
         document.getElementById('table-body').innerHTML = '';
         try {
-            const res  = await fetch(`${BASE}/api/registration/all`);
-            const json = await res.json();
-            allRecords = json.data || [];
+            const [regRes, trxRes, wsRes] = await Promise.all([
+                fetch(`${BASE}/api/registration/all`),
+                fetch(`${BASE}/api/trx/all`),
+                fetch(`${BASE}/api/workshop/all`)
+            ]);
+            const regJson = await regRes.json();
+            const trxJson = await trxRes.json();
+            const wsJson  = await wsRes.json();
+
+            // Build workshopId → content map
+            wsNameMap = {};
+            (wsJson.data || []).forEach(w => { if (w.id) wsNameMap[w.id] = w.content || w.id; });
+
+            // Build txnId → Transaction lookup map
+            txnMap = {};
+            (trxJson.data || []).forEach(t => { txnMap[t.txnid] = t; });
+
+            // Enrich each registration with its latest resolved transaction
+            allRecords = (regJson.data || []).map(r => {
+                const ids  = r.txndetails || [];
+                const txns = ids.map(id => txnMap[id]).filter(Boolean);
+                if (txns.length) {
+                    r._txn = txns[txns.length - 1];
+                } else {
+                    // Legacy fallback: transaction fields stored directly on old registration documents
+                    const legacyTxnId = ids[0] || r.txnid || null;
+                    if (legacyTxnId || r.totalAmount || r.regstatus) {
+                        r._txn = {
+                            txnid:       legacyTxnId   || '',
+                            txndate:     r.txndate     || '',
+                            totalAmount: r.totalAmount || '',
+                            regstatus:   r.regstatus   || 'pending',
+                            paymentimg:  r.paymentimg  || ''
+                        };
+                    } else {
+                        r._txn = null;
+                    }
+                }
+                return r;
+            });
+
+            // Sort newest-first by creationTS
+            allRecords.sort((a, b) => {
+                const ta = a.creationTS ? new Date(a.creationTS).getTime() : 0;
+                const tb = b.creationTS ? new Date(b.creationTS).getTime() : 0;
+                return tb - ta;
+            });
+
             applyFilters();
             updateStats();
         } catch (e) {
@@ -394,16 +444,16 @@
                 if (!val) continue;
                 let cellVal = '';
                 if (col === 'txnid') {
-                    cellVal = txnId(r).toLowerCase();
+                    cellVal = (r.txndetails || []).join(', ').toLowerCase();
                 } else if (col === 'workshops') {
-                    cellVal = (r.workshops || []).join(', ').toLowerCase();
+                    cellVal = (r.workshops || []).map(id => wsNameMap[id] || id).join(', ').toLowerCase();
                 } else {
                     cellVal = String(r[col] || '').toLowerCase();
                 }
                 if (!cellVal.includes(val)) return false;
             }
             // status dropdown filter
-            if (statusFilter && String(r.regstatus || '').toLowerCase() !== statusFilter) return false;
+            if (statusFilter && String(r._txn?.regstatus || '').toLowerCase() !== statusFilter) return false;
             return true;
         });
 
@@ -431,26 +481,29 @@
                 <td>${esc(r.email)}</td>
                 <td>${esc(r.phone)}</td>
                 <td>${esc(r.gender)}</td>
+                <td>${esc(r.registrationCategory || '')}</td>
                 <td>${esc(r.designation)}</td>
                 <td>${esc(r.institute)}</td>
                 <td>${esc(r.city)}</td>
                 <td>${esc(r.state)}</td>
                 <td>${esc(r.medcouncil)}</td>
                 <td>${esc(r.medcouncilregnum)}</td>
-                <td>${esc((r.workshops || []).join(', '))}</td>
+                <td>${esc((r.workshops || []).map(id => wsNameMap[id] || id).join(', '))}</td>
                 <td style="text-align:center;">${r.accompanycount ?? 0}</td>
-                <td style="text-align:right;">₹${esc(r.totalAmount)}</td>
-                <td>${esc(txnId(r))}</td>
-                <td>${esc(txnDate(r))}</td>
-                <td>${statusBadge(r.regstatus)}</td>
+                <td style="text-align:right;">₹${esc(r._txn?.totalAmount || '')}</td>
+                <td>${esc((r.txndetails || []).join(', '))}</td>
+                <td>${esc(r._txn?.txndate || '')}</td>
+                <td>${statusBadge(r._txn?.regstatus)}</td>
                 <td>${synopsisCell(r)}</td>
-                <td>${imgBtn(r.paymentimg, 'Payment')}</td>
+                <td>${imgBtn(r._txn?.paymentimg, 'Payment')}</td>
                 <td>${imgBtn(r.pgbonafideimg, 'Bonafide')}</td>
                 <td>
-                    <div class="action-group">
+                    ${(r._txn?.regstatus || '').toLowerCase() === 'approved'
+                        ? '<span style="color:var(--success);font-weight:600;">✓ Approved</span>'
+                        : `<div class="action-group">
                         <button class="btn btn-success btn-sm" onclick="updateStatus('${esc(r.delegateId)}', 'approved')">✓ Approve</button>
                         <button class="btn btn-danger btn-sm" onclick="updateStatus('${esc(r.delegateId)}', 'rejected')">✕ Reject</button>
-                    </div>
+                    </div>`}
                 </td>`;
             tbody.appendChild(tr);
         });
@@ -482,13 +535,7 @@
                 </a>`;
     }
 
-    function txnId(r)   { return firstTxn(r)?.txnid   || ''; }
-    function txnDate(r) { return firstTxn(r)?.txndate  || ''; }
-    function firstTxn(r) {
-        if (!r.txndetails) return null;
-        const keys = Object.keys(r.txndetails);
-        return keys.length ? r.txndetails[keys[0]] : null;
-    }
+
 
     // ---------------------------------------------------------------
     // Pagination
@@ -550,8 +597,8 @@
     // ---------------------------------------------------------------
     function updateStats() {
         const total    = allRecords.length;
-        const approved = allRecords.filter(r => r.regstatus === 'approved').length;
-        const rejected = allRecords.filter(r => r.regstatus === 'rejected').length;
+        const approved = allRecords.filter(r => r._txn?.regstatus === 'approved').length;
+        const rejected = allRecords.filter(r => r._txn?.regstatus === 'rejected').length;
         const pending  = total - approved - rejected;
         document.getElementById('stats-bar').innerHTML =
             `Total: <strong>${total}</strong> &nbsp;|&nbsp;
@@ -587,7 +634,7 @@
             if (json.success) {
                 // Update local cache so UI reflects immediately without full reload
                 const rec = allRecords.find(r => r.delegateId === delegateId);
-                if (rec) rec.regstatus = status;
+                if (rec && rec._txn) rec._txn.regstatus = status;
                 applyFilters();
                 showToast(`${delegateId} marked as ${status}`);
             } else {
