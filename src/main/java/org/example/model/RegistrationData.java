@@ -25,7 +25,6 @@ public class RegistrationData implements Serializable {
     private String registrationCategory;
     private String creationTS;
 
-
     // Legacy fallback fields – present in Firestore docs saved before the nerconTrx split
     private String txnid;
     private String txndate;
@@ -118,7 +117,6 @@ public class RegistrationData implements Serializable {
 
     public String getCreationTS() { return creationTS; }
     public void setCreationTS(String creationTS) { this.creationTS = creationTS; }
-
 
     public String getTxnid() { return txnid; }
     public void setTxnid(String txnid) { this.txnid = txnid; }

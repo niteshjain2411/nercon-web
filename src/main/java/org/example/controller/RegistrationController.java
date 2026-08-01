@@ -16,7 +16,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.ByteArrayOutputStream;
 import java.time.Instant;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +82,6 @@ public class RegistrationController {
 
             // Set creation timestamp
             registration.setCreationTS(Instant.now().toString());
-
 
             boolean saved = firestoreService.saveRegistration(registration);
 
@@ -340,7 +338,6 @@ public class RegistrationController {
                     txnId, "",
                     r.getSynopsis() != null ? r.getSynopsis() : "",
                     r.getCreationTS() != null ? r.getCreationTS() : ""
-
                 };
                 for (int i = 0; i < vals.length; i++) {
                     row.createCell(i).setCellValue(vals[i] != null ? vals[i] : "");
@@ -374,7 +371,6 @@ public class RegistrationController {
         r.setSynopsis((String) body.getOrDefault("synopsis", ""));
         r.setDelegateId((String) body.get("delegateId"));
         r.setRegistrationCategory((String) body.getOrDefault("category", ""));
-
 
         Object accompany = body.get("accompanycount");
         if (accompany instanceof Number n) {

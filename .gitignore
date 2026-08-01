@@ -14,7 +14,6 @@ firebase-service-account.json
 .idea/compiler.xml
 .idea/libraries/
 *.iws
-firebase_public/
 *.iml
 *.ipr
 

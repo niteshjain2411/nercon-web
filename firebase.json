@@ -1,7 +1,6 @@
 {
   "hosting": {
     "public": "public",
-
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -14,7 +13,6 @@
           "serviceId": "nercon-web",
           "region": "asia-south1"
         }
-
       }
     ]
   }

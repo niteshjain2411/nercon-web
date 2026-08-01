@@ -51,10 +51,8 @@
         .portal-heading p { color: #6b7280; font-size: 1rem; }
 
         .portal-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-
+            display: flex;
+            justify-content: center;
         }
         .portal-card {
             background: white;
@@ -69,7 +67,6 @@
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
             max-width: 420px;
             width: 100%;
-
         }
         .portal-card:hover { border-color: var(--secondary); box-shadow: 0 8px 28px rgba(14,165,233,0.15); }
         .portal-card .card-icon { font-size: 3.5rem; margin-bottom: 1.2rem; }
@@ -116,8 +113,6 @@
 
         footer { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; text-align: center; padding: 2rem; }
         @media (max-width: 650px) {
-            .portal-cards { grid-template-columns: 1fr; }
-
             .page-banner h1 { font-size: 1.8rem; }
             .nav-container { flex-direction: column; gap: 1rem; }
             nav ul { flex-direction: column; gap: 1rem; text-align: center; }
@@ -133,83 +128,18 @@
 </section>
 
 <div class="portal-wrapper">
-    <div class="portal-heading">
-        <h2>How would you like to proceed?</h2>
-        <p>Choose an option below — register fresh or update an existing registration to add workshops.</p>
-    </div>
-
-
     <div class="portal-cards">
         <!-- NEW REGISTRATION -->
         <div class="portal-card">
             <div class="card-icon">📋</div>
             <h3>New Registration</h3>
+            <p>Register for NERCON 2026 for the first time. You will receive a unique <strong>Delegate ID</strong> upon successful submission.</p>
+            <a href="./registration.html" class="btn-primary">START REGISTRATION</a>
         </div>
-
-        <!-- UPDATE REGISTRATION -->
-        <div class="portal-card">
-            <div class="card-icon">✏️</div>
-            <h3>Update Existing Registration</h3>
-            <p>Already registered? Enter your <strong>Delegate ID</strong> to retrieve your details and add workshop registrations you may have missed earlier.</p>
-            <div class="lookup-form">
-                <input
-                    type="text"
-                    id="delegateIdInput"
-                    class="lookup-input"
-                    placeholder="e.g. NERCON-AB12CD34-Rg-1"
-                    autocomplete="off"
-                    onkeydown="if(event.key==='Enter') lookupRegistration()"
-                >
-                <div id="lookupError" class="error-msg"></div>
-                <button class="btn-primary" onclick="lookupRegistration()">CONTINUE TO UPDATE</button>
-                <div id="lookupSpinner" class="spinner">Verifying Delegate ID…</div>
-            </div>
-        </div>
-
     </div>
 </div>
 
 <div id="footer-placeholder"></div>
 <script src="./template-loader.js"></script>
-<script>
-    async function lookupRegistration() {
-        const input = document.getElementById('delegateIdInput');
-        const errorDiv = document.getElementById('lookupError');
-        const spinner = document.getElementById('lookupSpinner');
-        const delegateId = input.value.trim();
-
-        errorDiv.style.display = 'none';
-        errorDiv.textContent = '';
-
-        if (!delegateId) {
-            errorDiv.textContent = 'Please enter your Delegate ID.';
-            errorDiv.style.display = 'block';
-            input.focus();
-            return;
-        }
-
-        spinner.classList.add('active');
-
-        try {
-            const res = await fetch('/nercon/api/registration/fetch/' + encodeURIComponent(delegateId));
-            const json = await res.json();
-
-            if (res.ok && json.success) {
-                // Valid registration — redirect to edit mode
-                window.location.href = './registration.html?mode=edit&delegateId=' + encodeURIComponent(delegateId);
-            } else {
-                errorDiv.textContent = json.message || 'No registration found. Please check the Delegate ID and try again.';
-                errorDiv.style.display = 'block';
-                input.focus();
-            }
-        } catch (err) {
-            errorDiv.textContent = 'Could not connect to the server. Please try again.';
-            errorDiv.style.display = 'block';
-        } finally {
-            spinner.classList.remove('active');
-        }
-    }
-</script>
-
 </body>
 </html>

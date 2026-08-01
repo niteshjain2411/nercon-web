@@ -272,7 +272,6 @@ public class FirestoreService {
         data.put("synopsis", reg.getSynopsis() != null ? reg.getSynopsis() : "");
         data.put("registrationCategory", reg.getRegistrationCategory() != null ? reg.getRegistrationCategory() : "");
         data.put("creationTS", reg.getCreationTS() != null ? reg.getCreationTS() : "");
-
         data.put("txndetails", reg.getTxndetails() != null ? reg.getTxndetails() : List.of());
         return data;
     }
