@@ -107,6 +107,19 @@ public class FirestoreService {
         }
     }
 
+    /**
+     * Increment bookedSlots by 1 for each workshop the delegate selected.
+     * ws0 ("no workshop" sentinel) is skipped.
+     */
+    public void incrementWorkshopBookedSlots(List<String> workshopIds)
+            throws ExecutionException, InterruptedException {
+        if (workshopIds == null || workshopIds.isEmpty()) return;
+        for (String wsId : workshopIds) {
+            if (wsId == null || wsId.isBlank() || "ws0".equals(wsId)) continue;
+            firestore.collection("nerconWS").document(wsId)
+                    .update("bookedSlots", FieldValue.increment(1)).get();
+        }
+    }
 
     /**
      * Update workshops and append a new transaction ID for an existing registration.
