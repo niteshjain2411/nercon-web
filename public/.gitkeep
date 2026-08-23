@@ -1,0 +1,4 @@
+# Hosting serves no static files: firebase.json rewrites ** to the Cloud Run
+# service "nercon-web". This directory exists only because Firebase Hosting
+# requires the configured "public" directory to be present at deploy time.
+# Do not add index.html here - a static file would shadow the Cloud Run app.
