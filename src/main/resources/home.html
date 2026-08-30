@@ -447,10 +447,78 @@
                 padding: 2rem 0;
             }
         }
+        /* Deadline announcement marquee */
+        .deadline-marquee {
+            background: var(--primary);
+            color: #ffffff;
+            overflow: hidden;
+            padding: 0.55rem 0;
+            position: relative;
+            z-index: 99;
+        }
+        .deadline-marquee-track {
+            display: inline-flex;
+            white-space: nowrap;
+            font-size: 0.95rem;
+            font-weight: 600;
+            animation: deadline-scroll 26s linear infinite;
+            will-change: transform;
+        }
+        /* Spacing lives inside each copy, not in a gap: the -50% loop is only
+           seamless when the track is an exact run of identical units. */
+        .deadline-marquee-track > span {
+            padding-right: 4rem;
+        }
+        /* Pausing on hover/focus lets the link be clicked and satisfies WCAG 2.2.2 */
+        .deadline-marquee:hover .deadline-marquee-track,
+        .deadline-marquee:focus-within .deadline-marquee-track {
+            animation-play-state: paused;
+        }
+        .deadline-marquee a {
+            color: #fff5c0;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        @keyframes deadline-scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .deadline-marquee-track {
+                animation: none;
+                width: 100%;
+                justify-content: center;
+                white-space: normal;
+                text-align: center;
+                padding: 0 1rem;
+            }
+            .deadline-marquee-track span[aria-hidden="true"] {
+                display: none;
+            }
+            .deadline-marquee-track > span {
+                padding-right: 0;
+            }
+        }
+        @media (max-width: 768px) {
+            .deadline-marquee-track {
+                font-size: 0.85rem;
+            }
+            .deadline-marquee-track > span {
+                padding-right: 3rem;
+            }
+        }
     </style>
 </head>
 <body>
 <div id="header-placeholder"></div>
+<div class="deadline-marquee">
+    <div class="deadline-marquee-track">
+        <span>&#9733;&nbsp; Important: Abstract submission deadline extended to <strong>15th September 2026</strong> &mdash; <a href="./abstract-guidelines.html">view guidelines</a></span>
+        <span aria-hidden="true">&#9733;&nbsp; Important: Abstract submission deadline extended to <strong>15th September 2026</strong> &mdash; <a href="./abstract-guidelines.html" tabindex="-1">view guidelines</a></span>
+        <span aria-hidden="true">&#9733;&nbsp; Important: Abstract submission deadline extended to <strong>15th September 2026</strong> &mdash; <a href="./abstract-guidelines.html" tabindex="-1">view guidelines</a></span>
+        <span aria-hidden="true">&#9733;&nbsp; Important: Abstract submission deadline extended to <strong>15th September 2026</strong> &mdash; <a href="./abstract-guidelines.html" tabindex="-1">view guidelines</a></span>
+    </div>
+</div>
 <section class="hero">
     <div class="hero-content">       
         <h1>NERCON 2026</h1>
