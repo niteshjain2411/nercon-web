@@ -447,6 +447,115 @@
                 padding: 2rem 0;
             }
         }
+        /* Scientific program announcement popup */
+        .program-popup {
+            /* The page's "* { margin: 0 }" reset removes the margin:auto the
+               browser uses to centre a modal dialog; put it back. */
+            margin: auto;
+            border: none;
+            padding: 0;
+            width: 100%;
+            max-width: min(460px, calc(100vw - 2rem));
+            border-radius: 16px;
+            overflow: hidden;
+            background: #ffffff;
+            color: var(--dark-text);
+            box-shadow: 0 24px 60px rgba(8, 24, 58, 0.35);
+        }
+        .program-popup[open] {
+            animation: program-popup-in 0.25s ease-out;
+        }
+        .program-popup::backdrop {
+            background: rgba(8, 24, 58, 0.55);
+        }
+        @keyframes program-popup-in {
+            from { opacity: 0; transform: translateY(12px) scale(0.98); }
+            to { opacity: 1; transform: none; }
+        }
+        .program-popup-head {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #ffffff;
+            text-align: center;
+            padding: 1.6rem 1.75rem 1.4rem;
+        }
+        .program-popup-eyebrow {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #bae6fd;
+            margin-bottom: 0.35rem;
+        }
+        .program-popup-head h2 {
+            font-family: 'Cinzel', 'Georgia', serif;
+            font-size: 1.45rem;
+            line-height: 1.25;
+            color: #fff5c0;
+            text-wrap: balance;
+        }
+        .program-popup-body {
+            padding: 1.5rem 1.75rem 1.75rem;
+            text-align: center;
+        }
+        .program-popup-body p {
+            color: #4b5563;
+            font-size: 0.98rem;
+            line-height: 1.65;
+            margin-bottom: 1.4rem;
+        }
+        .program-popup-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .program-popup-go,
+        .program-popup-close {
+            font: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 0.8rem 1.6rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-position 0.3s ease, background-color 0.2s ease;
+        }
+        .program-popup-go {
+            background: linear-gradient(135deg, #f5d060 0%, #d4a017 50%, #f5d060 100%);
+            background-size: 200% auto;
+            color: #1a1a00;
+            text-decoration: none;
+            border: none;
+        }
+        .program-popup-go:hover {
+            background-position: right center;
+        }
+        .program-popup-close {
+            background: transparent;
+            color: var(--primary);
+            border: 1.5px solid var(--border-color);
+            font-weight: 600;
+        }
+        .program-popup-close:hover {
+            background: var(--light-bg);
+        }
+        .program-popup-go:focus-visible,
+        .program-popup-close:focus-visible {
+            outline: 3px solid var(--secondary);
+            outline-offset: 2px;
+        }
+        @media (max-width: 480px) {
+            .program-popup-go,
+            .program-popup-close {
+                flex: 1 1 100%;
+                text-align: center;
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .program-popup[open] {
+                animation: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -664,6 +773,19 @@
     </section>
 
 </div>
+<dialog id="program-popup" class="program-popup" aria-labelledby="program-popup-title" aria-describedby="program-popup-text">
+    <div class="program-popup-head">
+        <span class="program-popup-eyebrow">NERCON 2026</span>
+        <h2 id="program-popup-title">Scientific Program Now Available</h2>
+    </div>
+    <div class="program-popup-body">
+        <p id="program-popup-text">The day-wise schedule is ready &mdash; workshops on 12&nbsp;November and scientific sessions on 13&ndash;14&nbsp;November, with faculty, chairpersons and timings for every session.</p>
+        <div class="program-popup-actions">
+            <a href="./scientific-program.html" class="program-popup-go">View Scientific Program</a>
+            <button type="button" class="program-popup-close">Close</button>
+        </div>
+    </div>
+</dialog>
 <div id="footer-placeholder"></div>
 <script src="./template-loader.js"></script>
 <script>
@@ -691,6 +813,38 @@
 
         tick();
         setInterval(tick, 1000);
+    })();
+
+    // Scientific program announcement: shown once per browser session.
+    (function () {
+        const dialog = document.getElementById('program-popup');
+        if (!dialog || typeof dialog.showModal !== 'function') return;
+
+        const KEY = 'nercon-program-popup-seen';
+        try {
+            if (sessionStorage.getItem(KEY)) return;
+        } catch (e) { /* storage blocked: show it anyway */ }
+
+        function remember() {
+            try { sessionStorage.setItem(KEY, '1'); } catch (e) { /* ignore */ }
+        }
+
+        dialog.querySelector('.program-popup-close').addEventListener('click', function () {
+            dialog.close();
+        });
+        // A click on the dialog element itself (not its content) is a backdrop click.
+        dialog.addEventListener('click', function (e) {
+            if (e.target === dialog) dialog.close();
+        });
+        dialog.addEventListener('close', remember);
+        dialog.querySelector('.program-popup-go').addEventListener('click', remember);
+
+        // Not on window 'load': that waits for the async Twitter embed, which
+        // can take 20s+, popping the dialog up mid-scroll. This script sits at
+        // the end of <body>, so the dialog is already in the DOM.
+        setTimeout(function () {
+            if (!dialog.open) dialog.showModal();
+        }, 600);
     })();
 </script>
 </body>
