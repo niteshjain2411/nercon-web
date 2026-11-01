@@ -38,7 +38,7 @@
         .page-banner p { font-size: 1.1rem; opacity: 0.9; }
 
         .content-wrapper {
-            max-width: 900px; margin: 0 auto; padding: 3rem 2rem 4rem;
+            max-width: 1180px; margin: 0 auto; padding: 3rem 2rem 4rem;
             position: relative;
         }
         .content-wrapper::before {
@@ -56,15 +56,70 @@
         .content-header { background: var(--light-bg); padding: 1.5rem 2rem; border-bottom: 2px solid var(--secondary); }
         .content-header h2 { font-size: 1.5rem; color: var(--primary); font-weight: 700; }
         .content-body { padding: 2rem; }
-        .coming-soon-box { text-align: center; padding: 4rem 2rem; }
-        .coming-soon-box .icon { font-size: 4rem; margin-bottom: 1.5rem; }
-        .coming-soon-box h3 { font-size: 1.8rem; color: var(--primary); margin-bottom: 1rem; }
-        .coming-soon-box p { font-size: 1.1rem; color: #6b7280; max-width: 550px; margin: 0 auto 1rem; line-height: 1.8; }
-        .coming-soon-box .highlight { color: var(--secondary); font-weight: 600; }
-        .teaser-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; margin-top: 2rem; max-width: 650px; margin-left: auto; margin-right: auto; }
-        .teaser-item { background: var(--light-bg); padding: 1.2rem; border-radius: 8px; border-left: 4px solid var(--secondary); text-align: left; }
-        .teaser-item h4 { color: var(--primary); margin-bottom: 0.3rem; font-size: 0.95rem; }
-        .teaser-item p { font-size: 0.85rem; color: #6b7280; margin: 0; }
+        /* Day-wise program */
+        .program { display: flex; flex-direction: column; gap: 2.75rem; }
+        .program-day { display: flex; flex-direction: column; gap: 1rem; }
+        .day-title {
+            font-size: 1.15rem; font-weight: 700; color: var(--primary);
+            background: var(--light-bg); border-left: 4px solid var(--secondary);
+            border-radius: 6px; padding: 0.75rem 1rem; line-height: 1.4;
+        }
+        .scroll-hint { display: none; font-size: 0.8rem; color: #6b7280; margin-top: -0.4rem; }
+
+        .table-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px; }
+        .schedule { width: 100%; min-width: 820px; border-collapse: collapse; font-size: 0.9rem; line-height: 1.5; }
+        .schedule-workshops { min-width: 620px; }
+        .schedule .c-time { width: 13%; }
+        .schedule .c-activity { width: 29%; }
+        .schedule .c-people { width: 36%; }
+        .schedule .c-chair { width: 22%; }
+        .schedule-workshops .c-workshop { width: 40%; }
+        .schedule-workshops .c-people { width: 60%; }
+        .schedule th, .schedule td {
+            padding: 0.75rem 0.9rem; text-align: left; vertical-align: top;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .schedule td + td { border-left: 1px solid var(--border-color); }
+        .schedule tbody tr:last-child > * { border-bottom: none; }
+        .schedule thead th {
+            background: var(--primary); color: #fff; font-size: 0.75rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.07em;
+        }
+        .schedule .row-session th {
+            background: #e0f2fe; color: var(--primary); font-size: 0.85rem;
+            font-weight: 700; letter-spacing: 0.03em; padding: 0.55rem 0.9rem;
+        }
+        .schedule .row-note td { background: #f9fafb; color: #4b5563; font-style: italic; }
+        .schedule .row-wide .col-activity { font-weight: 500; }
+        .schedule .row-break td { background: #f9fafb; color: #6b7280; font-size: 0.85rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .schedule .row-break .col-time,
+        .schedule .row-break .col-activity { font-weight: 400; color: #6b7280; }
+
+        .col-time { white-space: nowrap; font-weight: 600; color: var(--primary); font-variant-numeric: tabular-nums; }
+        .schedule .line { display: block; }
+        .col-people .line { color: #4b5563; font-size: 0.84rem; }
+        .col-people .line.name { color: var(--dark-text); font-size: 0.9rem; font-weight: 600; }
+        .col-people .line:not(.name):not(.label) + .line.name { margin-top: 0.6rem; }
+        .col-people .line.label {
+            color: var(--secondary); font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.15rem;
+        }
+        .ws-code {
+            display: inline-block; background: var(--primary); color: #fff;
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
+            padding: 0.1rem 0.45rem; border-radius: 4px;
+        }
+        .ws-title { display: block; margin-top: 0.4rem; font-weight: 600; color: var(--dark-text); }
+
+        .event-banner {
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-align: center; color: #fff; border-radius: 10px; padding: 1.2rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+        }
+        .event-time { font-size: 0.85rem; font-weight: 600; color: #bae6fd; letter-spacing: 0.03em; }
+        .event-name { font-size: 1.35rem; font-weight: 700; color: #fff5c0; letter-spacing: 0.05em; }
+        .event-venue { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.06em; }
+        .event-note { font-size: 0.85rem; opacity: 0.9; max-width: 60ch; margin-top: 0.3rem; }
 
         footer { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; text-align: center; padding: 2rem; margin-top: 0; }
         @media (max-width: 768px) {
@@ -72,7 +127,8 @@
             nav ul { flex-direction: column; gap: 1rem; text-align: center; }
             .page-banner h1 { font-size: 1.8rem; }
             .content-wrapper { padding: 1.5rem 1rem; }
-            .teaser-grid { grid-template-columns: 1fr; }
+            .content-body { padding: 1rem; }
+            .scroll-hint { display: block; }
         }
     </style>
 </head>
@@ -90,12 +146,286 @@
             <h2>Scientific Program Schedule</h2>
         </div>
         <div class="content-body">
-            <div class="coming-soon-box">
-                <div class="icon">🔬</div>
-                <h3>Coming Soon...</h3>
-                <p>The full scientific program for NERCON 2026 is being carefully curated by our esteemed organizing committee.</p>
-                <p>The detailed day-wise schedule with speaker profiles and session timings will be published here. Check back soon!</p>
-                
+            <div class="program">
+                <section class="program-day">
+                    <h3 class="day-title">12.11.2026 (Thursday): WORKSHOPS and INAUGURATION</h3>
+                    <p class="scroll-hint">Swipe sideways to see all columns &rarr;</p>
+                    <div class="table-scroll">
+                        <table class="schedule schedule-workshops">
+                            <colgroup><col class="c-workshop"><col class="c-people"></colgroup>
+                            <tbody>
+                                <tr class="row-note"><td colspan="2">8:00 AM &#8211; 9:00 AM: Registration (at respective workshop venues)</td></tr>
+                                <tr class="row-session"><th colspan="2" scope="colgroup">FULL DAY WORKSHOPS (9:00 AM &#8211; 4:00 PM)</th></tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WFD-01</span><span class="ws-title">FISH</span></td>
+                                    <td class="col-people"><span class="line name">Prof Dr Asit Ranjan Mridha</span><span class="line">Professor, Department of Pathology, AIIMS New Delhi</span><span class="line name">Dr Adarsh Barwad</span><span class="line">MD FRCPath</span><span class="line">Additional Professor, Department of Pathology, AIIMS New Delhi</span><span class="line name">Dr Biswajit Dey</span><span class="line">Associate Professor, Department of Pathology, NEIGRIHMS, Shillong</span><span class="line name">Dr Priyavadhana B</span><span class="line">Associate Professor, Department of Pathology and Lab Medicine, AIIMS Rishikesh</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WFD-02</span><span class="ws-title">Workup of Autoimmune Haemolytic Anaemia &#8211; Immunohematology Workshop</span></td>
+                                    <td class="col-people"><span class="line name">Dr Priyanka Gogoi</span><span class="line">Associate Professor, Department of Transfusion Medicine and Blood Centre, AIIMS Guwahati</span><span class="line name">Dr Ranjita Sarma</span><span class="line">Associate Professor and In-Charge, Department of Transfusion Medicine, Dr Bhubaneswar Borooah Cancer Institute, Guwahati</span><span class="line name">Dr Gopal Krushna Ray</span><span class="line">Assistant Professor, Department of Transfusion Medicine and Blood Centre, AIIMS Guwahati</span><span class="line name">Dr Joyisa Deb</span><span class="line">Consultant, Transfusion Medicine and In-charge, Blood Centre, Apollo Excelcare Hospital, Guwahati</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WFD-03</span><span class="ws-title">Immunohistochemistry</span></td>
+                                    <td class="col-people"><span class="line name">Prof Dr Shiraj Ahmed</span><span class="line">Professor, Department of Oncopathology, Dr Bhubaneswar Borooah Cancer Institute, Guwahati</span><span class="line name">Dr Lopa Mudra Kakoti</span><span class="line">Associate Professor, Department of Oncopathology, Dr Bhubaneswar Borooah Cancer Institute, Guwahati</span></td>
+                                </tr>
+                                <tr class="row-session"><th colspan="2" scope="colgroup">HALF DAY WORKSHOPS - MORNING (9:00 AM &#8211; 12:00 NOON)</th></tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WHM-01</span><span class="ws-title">Sign out with the expert &#8211; An approach to upper Gastrointestinal biopsy</span></td>
+                                    <td class="col-people"><span class="line name">Prof Michael Vieth</span><span class="line">Director, Institute of Pathology, Friedrich-Alexander-Universit&#228;t Erlangen-N&#252;rnberg, Klinikum Bayreuth, Germany</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WHM-02</span><span class="ws-title">Sign out with the expert &#8211; Lower GI Biopsies Made Simple: Patterns, Pearls &amp; Pitfalls</span></td>
+                                    <td class="col-people"><span class="line name">Rifat Mannan, MD</span><span class="line">Associate Clinical Professor, Department of Pathology, City of Hope National Cancer Center, Duarte, California, USA</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WHM-03</span><span class="ws-title">Sign out with the expert &#8211; Emerging and recently established soft tissue entities</span></td>
+                                    <td class="col-people"><span class="line name">Prof Abbas Agaimy</span><span class="line">Professor of Pathology &amp; Deputy Director, Institute of Pathology, Friedrich-Alexander-University Erlangen-Nuremberg, University Hospital Erlangen, Germany</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WHM-04</span><span class="ws-title">Sign out with the expert &#8211; Haematopathology</span></td>
+                                    <td class="col-people"><span class="line name">Dr Pankhi Dutta</span><span class="line">DM Haematopathology (AIIMS New Delhi)</span><span class="line">Consultant Haematopathologist</span><span class="line">Medical Lead, Haematology Laboratory, Dubai Hospital (Dubai Health), Dubai, UAE</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WHM-05</span><span class="ws-title">Immunofluorescence</span></td>
+                                    <td class="col-people"><span class="line name">Dr Adarsh Barwad</span><span class="line">MD FRCPath</span><span class="line">Additional Professor, Department of Pathology, AIIMS New Delhi</span><span class="line name">Dr Ashok Singh</span><span class="line">Additional Professor, Department of Pathology and Lab Medicine, AIIMS Rishikesh</span><span class="line name">Dr Ravi Phulware</span><span class="line">MD Pathology, PGDM Executive (NIHFW) Hospital Management</span><span class="line">Associate Professor, Department of Pathology and Lab Medicine, AIIMS Rishikesh</span></td>
+                                </tr>
+                                <tr class="row-session"><th colspan="2" scope="colgroup">HALF DAY WORKSHOPS - AFTERNOON (1:00 PM &#8211; 4:00 PM)</th></tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WHA-01</span><span class="ws-title">Perinatal and placental pathology- insights into adverse pregnancy outcomes</span></td>
+                                    <td class="col-people"><span class="line name">Sunil Jaiman, MD</span><span class="line">Associate Professor of Pathology; Course Director, Human Disease Foundations I; Pathology Discipline Director, Wayne State University School of Medicine, Detroit, Michigan, USA</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WHA-02</span><span class="ws-title">Sign out with the expert &#8211; Gynaec-pathology (Cytology and Histopathology)</span></td>
+                                    <td class="col-people"><span class="line name">Prof Dr Nalini Gupta</span><span class="line">MD (Path), DNB (Path), MNAMS</span><span class="line">Professor and Head</span><span class="line">Department of Cytology and Gynecological Pathology</span><span class="line">PGIMER, Chandigarh</span><span class="line">Secretary, Indian Academy of Cytologists</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WHA-03</span><span class="ws-title">Sign out with the expert &#8211; SQUASH smears</span></td>
+                                    <td class="col-people"><span class="line name">Prof Dr Nandeesh BN</span><span class="line">Professor &amp; Head, Department of Neuropathology, NIMHANS, Bengaluru</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WHA-04</span><span class="ws-title">Sign out with the expert &#8211; Salivary gland and Thyroid cytology</span></td>
+                                    <td class="col-people"><span class="line name">Prof Dr SP Sinhasan</span><span class="line">MD (Path), DNB (Path), MNAMS</span><span class="line">Professor and Head, Department of Pathology &amp; Lab Medicine, AIIMS Guwahati</span><span class="line">Former Dean (Examination), AIIMS Guwahati</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WHA-05</span><span class="ws-title">Sign out with the expert &#8211; Lymph node biopsy</span></td>
+                                    <td class="col-people"><span class="line name">Dr Prashant Ramteke</span><span class="line">MD, FRCPath (Histopathology), MIAC</span><span class="line">Associate Professor, Department of Pathology, AIIMS Nagpur</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-workshop"><span class="ws-code">WHA-06</span><span class="ws-title">Flow cytometry in diagnosis of leukaemias</span></td>
+                                    <td class="col-people"><span class="line name">Prof Dr Rajkumari Banashree Devi</span><span class="line">MD Pathology (MU), DM Hematopathology (PGIMER, Chandigarh)</span><span class="line">Professor, Department of Pathology, Jawaharlal Nehru Institute of Medical Sciences, Imphal</span><span class="line name">Dr Riju Rani Deka</span><span class="line">DM Hematopathology (PGIMER, Chandigarh)</span><span class="line">Associate Professor, Department of Pathology, Gauhati Medical College, Guwahati</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="event-banner">
+                        <span class="event-time">4:00 PM onwards</span>
+                        <span class="event-name"><em>INAUGURAL FUNCTION</em></span>
+                        <span class="event-venue">HALL A, AUDITORIUM COMPLEX, AIIMS GUWAHATI</span>
+                    </div>
+                </section>
+                <section class="program-day">
+                    <h3 class="day-title">13.11.26 (Friday): Day 1 (AUDITORUM COMPLEX, AIIMS GUWAHATI)</h3>
+                    <p class="scroll-hint">Swipe sideways to see all columns &rarr;</p>
+                    <div class="table-scroll">
+                        <table class="schedule">
+                            <colgroup><col class="c-time"><col class="c-activity"><col class="c-people"><col class="c-chair"></colgroup>
+                            <thead><tr><th scope="col">Time</th><th scope="col">Scientific activity</th><th scope="col">Faculty</th><th scope="col">Chairpersons</th></tr></thead>
+                            <tbody>
+                                <tr class="row-session"><th colspan="4" scope="colgroup">SESSION I (Hall A)</th></tr>
+                                <tr>
+                                    <td class="col-time">9:00 AM &#8211; 9:20 AM</td>
+                                    <td class="col-activity"><span class="line">Ethics in Laboratory Medicine</span></td>
+                                    <td class="col-people"><span class="line name">Dr Gazi Naseem Ahmed</span><span class="line">Consultant Pathologist, North East Cancer Hospital and Research Institute, Guwahati</span></td>
+                                    <td class="col-people"><span class="line name">Dr Bhupen Barman</span><span class="line name">Dr Ena Dowerah</span><span class="line name">Dr Devajit Nath</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-time">9:20 AM &#8211; 9:25 AM</td>
+                                    <td class="col-activity" colspan="2" rowspan="2"><span class="line">Prof B.D. Baruah Oration (Oration Prologue)</span></td>
+                                    <td class="col-people"><span class="line name">Dr Ronica Baruah</span><span class="line">(Introduction of Prof B.D. Baruah)</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-time">9:25 AM &#8211; 9:30 AM</td>
+                                    <td class="col-people"><span class="line name">Dr SP Sinhasan</span><span class="line">(Introduction of Orator)</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-time">9:30 AM &#8211; 10:10 AM</td>
+                                    <td class="col-activity"><span class="line"><strong>Prof B.D. Baruah Oration</strong></span></td>
+                                    <td class="col-people" colspan="2"><span class="line name">Prof Dr Deepak K Mishra</span><span class="line">Director, Bagchi Sri Shankara Cancer Centre &amp; Research Institute, Bhubaneswar, Odisha</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-time">10:10 AM &#8211; 10:15 AM</td>
+                                    <td class="col-activity" colspan="2"><span class="line">Closing remarks</span></td>
+                                    <td class="col-people"><span class="line name">Dr Rajendra Baruah</span></td>
+                                </tr>
+                                <tr class="row-session"><th colspan="4" scope="colgroup">SESSION II (Hall A)</th></tr>
+                                <tr>
+                                    <td class="col-time">10:15 AM &#8211; 10:40 AM</td>
+                                    <td class="col-activity"><span class="line">Diagnostic dilemmas in Liquid Hematopathology &#8211; swimming through the crocodiles and reaching the shore</span></td>
+                                    <td class="col-people"><span class="line name">Dr Pankhi Dutta</span><span class="line">DM Haematopathology (AIIMS New Delhi)</span><span class="line">Consultant Haematopathologist</span><span class="line">Medical Lead, Haematology Laboratory</span><span class="line">Dubai Hospital (Dubai Health), Dubai, UAE</span></td>
+                                    <td class="col-people"><span class="line name">Dr Yookarin Khonglah</span><span class="line name">Dr Barnali Das</span><span class="line name">Dr Riju Rani Deka</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-time">10:40 AM &#8211; 11:05 AM</td>
+                                    <td class="col-activity"><span class="line">Gestational Trophoblastic Disease: Contemporary Insights into Diagnosis and Pathology</span></td>
+                                    <td class="col-people"><span class="line name">Sunil Jaiman, MD</span><span class="line">Associate Professor of Pathology; Course Director, Human Disease Foundations I; Pathology Discipline Director, Wayne State University School of Medicine, Detroit, Michigan, USA</span></td>
+                                    <td class="col-people"><span class="line name">Dr Sudheer Arava</span><span class="line name">Dr Pranita Medhi</span><span class="line name">Dr Arvind Kumar</span></td>
+                                </tr>
+                                <tr class="row-wide row-break">
+                                    <td class="col-time">11:05 AM &#8211; 11:15 AM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Conclusion of the session</span></td>
+                                </tr>
+                                <tr class="row-session"><th colspan="4" scope="colgroup">SESSION III (Hall A)</th></tr>
+                                <tr>
+                                    <td class="col-time">11:15 AM &#8211; 11:40 AM</td>
+                                    <td class="col-activity"><span class="line">When squamous is not squamous: the emerging genetic landscape of Head and Neck neoplasms with squamous immunophenotype</span></td>
+                                    <td class="col-people"><span class="line name">Prof Abbas Agaimy</span><span class="line">Professor of Pathology &amp; Deputy Director, Institute of Pathology, Friedrich-Alexander-University Erlangen-Nuremberg, University Hospital Erlangen, Germany</span></td>
+                                    <td class="col-people"><span class="line name">Dr Asit Ranjan Mridha</span><span class="line name">Dr Sushma Khuraijam</span><span class="line name">Dr Zachariah Chowdhury</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-time">11:40 AM &#8211; 12:40 PM</td>
+                                    <td class="col-activity"><span class="line">Panel discussion: One Degree, Many Destinies: Career Diversity for the Next Generation (<em>Sequencers</em>)</span></td>
+                                    <td class="col-people"><span class="line name">Prof Abbas Agaimy</span><span class="line">Professor of Pathology &amp; Deputy Director, Institute of Pathology, Friedrich-Alexander-University Erlangen-Nuremberg, University Hospital Erlangen, Germany</span><span class="line name">Prof Michael Vieth</span><span class="line">Director, Institute of Pathology, Friedrich-Alexander-Universit&#228;t Erlangen-N&#252;rnberg, Klinikum Bayreuth, Germany</span><span class="line name">Sunil Jaiman, MD</span><span class="line">Associate Professor of Pathology; Course Director, Human Disease Foundations I; Pathology Discipline Director, Wayne State University School of Medicine, Detroit, Michigan, USA</span><span class="line name">Rifat Mannan, MD</span><span class="line">Associate Clinical Professor, Department of Pathology, City of Hope National Cancer Center, Duarte, California, USA</span><span class="line name">Dr Mrinal Kumar Baruah</span><span class="line">Chief Pathologist, Madonna Diagnostic &amp; Research Centre, Dibrugarh</span><span class="line name">Dr Debajit Nath, APS</span><span class="line">Deputy Commissioner of Police (Crime), Guwahati</span><span class="line name">Dr Ranjith AR</span><span class="line">Founder, RxDx</span></td>
+                                    <td class="col-people"><span class="line label">Moderators</span><span class="line name">Prof Aseema Das</span><span class="line name">Dr Bifica S Lyngdoh</span><span class="line name">Dr Pakesh Baishya</span></td>
+                                </tr>
+                                <tr class="row-wide row-break">
+                                    <td class="col-time">12:40 PM &#8211; 12:50 PM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Conclusion of the session</span></td>
+                                </tr>
+                                <tr class="row-wide">
+                                    <td class="col-time">12:50 PM &#8211; 1:00 PM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Industry Insight &#8211; Gold Sponsor (One Exclusive Slot)</span></td>
+                                </tr>
+                                <tr class="row-wide row-break">
+                                    <td class="col-time">1:00 PM &#8211; 1:45 PM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Lunch</span></td>
+                                </tr>
+                                <tr class="row-session"><th colspan="4" scope="colgroup">SESSION IV (Hall A)</th></tr>
+                                <tr>
+                                    <td class="col-time">1:45 PM &#8211; 2:10 PM</td>
+                                    <td class="col-activity"><span class="line">From morphology to diagnosis &#8211; a case based practical approach to yeast and yeastlike structures in tissue</span></td>
+                                    <td class="col-people"><span class="line name">Prof Dr Sateesh Chavan S</span><span class="line">Professor, Department of Pathology, Karnataka Medical College &amp; Research Institute (KMCRI), Hubballi</span></td>
+                                    <td class="col-people"><span class="line name">Dr Yanglem Mohen Singh</span><span class="line name">Dr Kaberee Bhuyan Medhi</span><span class="line name">Dr Moanaro Longchar</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-time">2:10 PM &#8211; 2:35 PM</td>
+                                    <td class="col-activity"><span class="line">Ancillary techniques in Cytopathology: A case-based approach</span></td>
+                                    <td class="col-people"><span class="line name">Prof Dr Nalini Gupta</span><span class="line">MD (Path), DNB (Path), MNAMS</span><span class="line">Professor and Head</span><span class="line">Department of Cytology and Gynecological Pathology</span><span class="line">PGIMER, Chandigarh</span><span class="line">Secretary, Indian Academy of Cytologists</span></td>
+                                    <td class="col-people"><span class="line name">Dr RG Wiseman Pinto</span><span class="line name">Dr Usha Sarma</span><span class="line name">Dr Leena Talukdar</span></td>
+                                </tr>
+                                <tr class="row-wide row-break">
+                                    <td class="col-time">2:35 PM &#8211; 2:45 PM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Conclusion of the session</span></td>
+                                </tr>
+                                <tr class="row-session"><th colspan="4" scope="colgroup">SESSION V (Hall A)</th></tr>
+                                <tr>
+                                    <td class="col-time">2:45 PM &#8211; 3:45 PM</td>
+                                    <td class="col-activity"><span class="line">CaseQuest &#8211; Day 1</span></td>
+                                    <td class="col-people"><span class="line name">Dr Manjula Choudhury</span><span class="line">Professor, Department of Pathology, Gauhati Medical College &amp; Hospital, Guwahati</span><span class="line name">Dr Jagannath Dev Sharma</span><span class="line">Professor and Consultant, Department of Oncopathology, State Cancer Institute, Guwahati</span><span class="line name">Dr Sucheta Devi Khuraijam</span><span class="line">Professor, Department of Pathology, Regional Institute of Medical Sciences, Imphal</span><span class="line name">Dr Gayatri Gogoi</span><span class="line">Professor, Department of Pathology, Assam Medical College &amp; Hospital, Dibrugarh</span><span class="line name">Dr Rajkumari Banashree Devi</span><span class="line">Professor, Department of Pathology, Jawaharlal Nehru Institute of Medical Sciences, Imphal</span></td>
+                                    <td class="col-people"><span class="line name">Dr Adity Sharma</span><span class="line name">Dr Laishram Rajesh Singh</span><span class="line name">Dr Bedanta Bhuyan</span><span class="line name">Dr Naushad Shah</span><span class="line name">Dr Shabnam Akhtar Ahmed</span><span class="line name">Dr Ahmed Omar Sherif</span></td>
+                                </tr>
+                                <tr class="row-wide row-break">
+                                    <td class="col-time">3:45 PM &#8211; 4:00 PM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Tea break</span></td>
+                                </tr>
+                                <tr class="row-session"><th colspan="4" scope="colgroup">SESSION VI</th></tr>
+                                <tr class="row-wide">
+                                    <td class="col-time">3:00 PM &#8211; 5:00 PM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Oral paper presentation: Two parallel sessions (Halls B and C)</span><span class="line">Poster presentation (In front of Foyer)</span></td>
+                                </tr>
+                                <tr class="row-wide">
+                                    <td class="col-time">4:00 PM &#8211; 5:00 PM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Corporate presentations in Hall A</span></td>
+                                </tr>
+                                <tr class="row-session"><th colspan="4" scope="colgroup">SESSION VII (Hall A)</th></tr>
+                                <tr class="row-wide">
+                                    <td class="col-time">5:00 PM &#8211; 6:00 PM</td>
+                                    <td class="col-activity" colspan="3"><span class="line"><strong>GENERAL BODY MEETING (GBM)</strong></span><span class="line"><strong>NERC IAPM (North-Eastern Regional Chapter, Indian Association of Pathologists &amp; Microbiologists)</strong></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="event-banner">
+                        <span class="event-time">7:00 PM &#8211; 10:00 PM</span>
+                        <span class="event-name"><em>BANQUET DINNER</em></span>
+                        <span class="event-venue">GUEST HOUSE LAWN, AIIMS GUWAHATI</span>
+                        <span class="event-note">As a token of our appreciation for your gracious presence, Drop-off transportation will be arranged following the banquet dinner</span>
+                    </div>
+                </section>
+                <section class="program-day">
+                    <h3 class="day-title">14.11.26 (Saturday): Day 2 (HALL A, AUDITORUM COMPLEX, AIIMS GUWAHATI)</h3>
+                    <p class="scroll-hint">Swipe sideways to see all columns &rarr;</p>
+                    <div class="table-scroll">
+                        <table class="schedule">
+                            <colgroup><col class="c-time"><col class="c-activity"><col class="c-people"><col class="c-chair"></colgroup>
+                            <thead><tr><th scope="col">Time</th><th scope="col">Scientific activity</th><th scope="col">Faculty</th><th scope="col">Chairpersons</th></tr></thead>
+                            <tbody>
+                                <tr class="row-session"><th colspan="4" scope="colgroup">SESSION I</th></tr>
+                                <tr class="row-wide">
+                                    <td class="col-time">8:00 AM &#8211; 9:00 AM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Award Paper Presentation (For Syed Fatehul Mannan Memorial Best Paper Presentation Award, NERCON 2026)</span></td>
+                                </tr>
+                                <tr class="row-session"><th colspan="4" scope="colgroup">SESSION II</th></tr>
+                                <tr>
+                                    <td class="col-time">9:00 AM &#8211; 10:00 AM</td>
+                                    <td class="col-activity"><span class="line">CaseQuest &#8211; Day 2</span></td>
+                                    <td class="col-people"><span class="line name">Dr Anupam Sarma</span><span class="line">Professor and Head, Dr Bhubaneswar Borooah Cancer Institute, Guwahati</span><span class="line name">Dr Zachariah Chowdhury</span><span class="line">Professor and Head, Department of Oncopathology, Tata Memorial Centre, Varanasi</span><span class="line name">Dr Mingma Sherpa</span><span class="line">Professor and Head, Department of Pathology, Sikkim Manipal Institute of Medical Sciences, Gangtok</span><span class="line name">Dr Riju Rani Deka</span><span class="line">Associate Professor, Department of Pathology, Gauhati Medical College &amp; Hospital, Guwahati</span><span class="line name">Dr Lopa Mudra Kakoti</span><span class="line">Associate Professor, Department of Oncopathology, Dr Bhubaneswar Borooah Cancer Institute, Guwahati</span><span class="line name">Dr Utpal Dutta</span><span class="line">Assistant Professor, Department of Pathology, Assam Medical College &amp; Hospital, Dibrugarh</span></td>
+                                    <td class="col-people"><span class="line name">Dr Tirtha Chaliha</span><span class="line name">Dr Shah Alam Sheikh</span><span class="line name">Dr Junu Devi</span><span class="line name">Dr Rashmi Rekha Goswami</span><span class="line name">Dr Soram Gayatri Gatphoh</span><span class="line name">Dr Sucheta Devi Khuraijam</span><span class="line name">Dr Atul Kumar Agarwal</span></td>
+                                </tr>
+                                <tr class="row-session"><th colspan="4" scope="colgroup">SESSION III</th></tr>
+                                <tr>
+                                    <td class="col-time">10:00 AM &#8211; 10:25 AM</td>
+                                    <td class="col-activity"><span class="line">Gastritis risk stratification: Are OLGA and OLGIM a game changer?</span></td>
+                                    <td class="col-people"><span class="line name">Prof Michael Vieth</span><span class="line">Director, Institute of Pathology, Friedrich-Alexander-Universit&#228;t Erlangen-N&#252;rnberg, Klinikum Bayreuth, Germany</span></td>
+                                    <td class="col-people"><span class="line name">Dr Geetanjali Gogoi</span><span class="line name">Dr Muktanjalee Deka</span><span class="line name">Dr Abhijit Datta</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-time">10:25 AM &#8211; 10:50 AM</td>
+                                    <td class="col-activity"><span class="line">What's New in the WHO 6th Edition of GI Tumors: Key Updates for Practicing Pathologists</span></td>
+                                    <td class="col-people"><span class="line name">Rifat Mannan, MD</span><span class="line">Associate Clinical Professor, Department of Pathology, City of Hope National Cancer Center, Duarte, California, USA</span></td>
+                                    <td class="col-people"><span class="line name">Dr Mondita Borgohain</span><span class="line name">Dr Anupam Sarma</span><span class="line name">Dr Mingma Sherpa</span></td>
+                                </tr>
+                                <tr class="row-wide row-break">
+                                    <td class="col-time">10:50 AM &#8211; 11:00 AM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Conclusion of the session</span></td>
+                                </tr>
+                                <tr class="row-wide row-break">
+                                    <td class="col-time">11:00 AM &#8211; 11:10 AM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Tea break</span></td>
+                                </tr>
+                                <tr class="row-session"><th colspan="4" scope="colgroup">SESSION IV</th></tr>
+                                <tr>
+                                    <td class="col-time">11:10 AM &#8211; 11:35 AM</td>
+                                    <td class="col-activity"><span class="line">Approach to diagnosis of CNS tumors in accordance with current WHO classification</span></td>
+                                    <td class="col-people"><span class="line name">Prof Dr Nandeesh BN</span><span class="line">Professor &amp; Head, Department of Neuropathology, NIMHANS, Bengaluru</span></td>
+                                    <td class="col-people"><span class="line name">Dr Manjula Choudhury</span><span class="line name">Dr Rasadhar Deka</span><span class="line name">Dr SP Sinhasan</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-time">11:35 AM &#8211; 12:00 Noon</td>
+                                    <td class="col-activity"><span class="line">M vs M or M+M? The power of integrative morphomolecular approach in surgical Pathology highlighted by challenging cases.</span></td>
+                                    <td class="col-people"><span class="line name">Prof Abbas Agaimy</span><span class="line">Professor of Pathology &amp; Deputy Director, Institute of Pathology, Friedrich-Alexander-University Erlangen-Nuremberg, University Hospital Erlangen, Germany</span></td>
+                                    <td class="col-people"><span class="line name">Dr Jagannath Dev Sharma</span><span class="line name">Dr Aparna Langthasa</span><span class="line name">Dr Aseema Das</span></td>
+                                </tr>
+                                <tr class="row-wide row-break">
+                                    <td class="col-time">12:00 Noon &#8211; 12:10 PM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Conclusion of the session</span></td>
+                                </tr>
+                                <tr class="row-session"><th colspan="4" scope="colgroup">SESSION V</th></tr>
+                                <tr class="row-wide">
+                                    <td class="col-time">12:10 PM &#8211; 12:40 PM</td>
+                                    <td class="col-activity" colspan="3"><span class="line"><strong><em>The NERCON 2026 Grand Scientific Quiz for all delegates</em></strong></span><span class="line"><strong><em>(Based on all the scientific sessions)</em></strong></span><span class="line"><strong><em>Did Your Retina See it, Cochlea Hear it &amp; Cortex Retain it?</em></strong></span><span class="line"><strong>Interesting prizes in KAHOOT &#8211; Come and play, one and all!!!</strong></span><span class="line"><strong>Dr Prasad Dange</strong></span><span class="line"><strong>Dr Roopam Deka</strong></span></td>
+                                </tr>
+                                <tr class="row-wide">
+                                    <td class="col-time">12:40 PM &#8211; 1:00 PM</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Valedictory Function and prize distribution</span></td>
+                                </tr>
+                                <tr class="row-wide row-break">
+                                    <td class="col-time">1:00 PM onwards</td>
+                                    <td class="col-activity" colspan="3"><span class="line">Lunch</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
             </div>
         </div>
     </div>
