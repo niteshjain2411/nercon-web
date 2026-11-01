@@ -465,6 +465,11 @@
         .program-popup[open] {
             animation: program-popup-in 0.25s ease-out;
         }
+        /* The dialog box itself isn't a control; its buttons keep their rings. */
+        .program-popup:focus,
+        .program-popup:focus-visible {
+            outline: none;
+        }
         .program-popup::backdrop {
             background: rgba(8, 24, 58, 0.55);
         }
@@ -829,15 +834,26 @@
             try { sessionStorage.setItem(KEY, '1'); } catch (e) { /* ignore */ }
         }
 
+        // Only the Close button dismisses the popup (or leaving via the link).
+        let closedByButton = false;
+
         dialog.querySelector('.program-popup-close').addEventListener('click', function () {
+            closedByButton = true;
+            remember();
             dialog.close();
         });
-        // A click on the dialog element itself (not its content) is a backdrop click.
-        dialog.addEventListener('click', function (e) {
-            if (e.target === dialog) dialog.close();
-        });
-        dialog.addEventListener('close', remember);
         dialog.querySelector('.program-popup-go').addEventListener('click', remember);
+
+        // Block Esc, which a modal <dialog> otherwise honours natively.
+        dialog.addEventListener('cancel', function (e) { e.preventDefault(); });
+        dialog.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') e.preventDefault();
+        });
+        // Some browsers won't let a page cancel a repeated Esc; if the dialog
+        // closes any way other than the button, reopen it straight away.
+        dialog.addEventListener('close', function () {
+            if (!closedByButton) dialog.showModal();
+        });
 
         // Not on window 'load': that waits for the async Twitter embed, which
         // can take 20s+, popping the dialog up mid-scroll. This script sits at
