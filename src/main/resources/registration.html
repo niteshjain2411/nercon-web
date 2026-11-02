@@ -964,7 +964,7 @@
                                 </td>
                                 <td style="padding:0.7rem 0.75rem;text-align:center;font-weight:700;color:var(--primary);white-space:nowrap;">${code}</td>
                                 <td style="padding:0.7rem 0.75rem;">${w.content || '—'}</td>
-                                <td style="padding:0.7rem 0.75rem;color:#374151;">${w.resourcePerson || '—'}</td>
+                                <td style="padding:0.7rem 0.75rem;color:#374151;white-space:pre-line;">${escHtml(w.resourcePerson || '—')}</td>
                                 <td style="padding:0.7rem 0.75rem;text-align:center;">
                                     ${isFull
                                         ? '<span style="color:var(--danger);font-weight:700;">FULL</span>'
