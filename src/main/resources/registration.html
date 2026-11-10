@@ -964,7 +964,7 @@
                                 </td>
                                 <td style="padding:0.7rem 0.75rem;text-align:center;font-weight:700;color:var(--primary);white-space:nowrap;">${code}</td>
                                 <td style="padding:0.7rem 0.75rem;">${w.content || '—'}</td>
-                                <td style="padding:0.7rem 0.75rem;color:#374151;white-space:pre-line;">${escHtml(w.resourcePerson || '—')}</td>
+                                <td style="padding:0.7rem 0.75rem;color:#374151;white-space:pre-line;">${formatPeople(w.resourcePerson || '—')}</td>
                                 <td style="padding:0.7rem 0.75rem;text-align:center;">
                                     ${isFull
                                         ? '<span style="color:var(--danger);font-weight:700;">FULL</span>'
@@ -1065,6 +1065,13 @@
 
     function escHtml(s) {
         return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // Resource persons: names are marked **like this** in Firestore. Escape
+    // first so stored markup never runs, then bold the marked spans. "." does
+    // not match a newline, so an unclosed ** can't bold the rest of the cell.
+    function formatPeople(s) {
+        return escHtml(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     }
 
     function showPreview() {

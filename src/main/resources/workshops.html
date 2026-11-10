@@ -367,7 +367,7 @@
                             <tr class="${isFull ? 'full-row' : ''}" style="background:${rowBg};">
                                 <td>${code}</td>
                                 <td>${escHtml(w.content || '—')}</td>
-                                <td class="ws-people">${escHtml(w.resourcePerson || '—')}</td>
+                                <td class="ws-people">${formatPeople(w.resourcePerson || '—')}</td>
                                 <td style="text-align:center;">2,500</td>
                                 <td>${isFull
                                     ? '<span class="slots-full">FULL</span>'
@@ -393,6 +393,13 @@
     function escHtml(s) {
         if (!s) return '';
         return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // Resource persons: names are marked **like this** in Firestore. Escape
+    // first so stored markup never runs, then bold the marked spans. "." does
+    // not match a newline, so an unclosed ** can't bold the rest of the cell.
+    function formatPeople(s) {
+        return escHtml(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     }
 
     document.addEventListener('DOMContentLoaded', loadWorkshops);
